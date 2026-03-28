@@ -69,7 +69,8 @@ export default function SiteFooter() {
 
   return (
     <footer
-      className="relative z-20 overflow-hidden border-t border-white/10 bg-gradient-to-b from-[#060608] via-[#08080a] to-[#030304]"
+      id="contact"
+      className="relative z-20 scroll-mt-24 overflow-hidden border-t border-white/10 bg-gradient-to-b from-[#060608] via-[#08080a] to-[#030304] md:scroll-mt-28"
       aria-labelledby="footer-heading"
     >
       {/* Match site chrome: soft highlight + violet accent (same family as links / glass hover) */}

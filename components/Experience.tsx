@@ -6,7 +6,8 @@ import { experience, links } from "@/lib/site-content";
 export default function Experience() {
   return (
     <AnimatedSection
-      className="relative z-20 border-t border-white/10 bg-[#0a0a10] px-6 py-24 md:px-12 md:py-28"
+      id="experience"
+      className="relative z-20 scroll-mt-24 border-t border-white/10 bg-[#0a0a10] px-6 py-24 md:scroll-mt-28 md:px-12 md:py-28"
       aria-labelledby="experience-heading"
     >
       <div className="mx-auto max-w-6xl">

@@ -6,7 +6,8 @@ import { links, projects } from "@/lib/site-content";
 export default function Projects() {
   return (
     <AnimatedSection
-      className="relative z-20 border-t border-white/10 bg-gradient-to-b from-[#060608] via-[#08080c] to-[#0a0a10] px-6 py-24 md:px-12 md:py-32"
+      id="work"
+      className="relative z-20 scroll-mt-24 border-t border-white/10 bg-gradient-to-b from-[#060608] via-[#08080c] to-[#0a0a10] px-6 py-24 md:scroll-mt-28 md:px-12 md:py-32"
       aria-labelledby="projects-heading"
     >
       <div className="mx-auto max-w-6xl">

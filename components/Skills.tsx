@@ -6,7 +6,8 @@ import { links, skillGroups } from "@/lib/site-content";
 export default function Skills() {
   return (
     <AnimatedSection
-      className="relative z-20 border-t border-white/10 bg-gradient-to-b from-[#0a0a10] to-[#060608] px-6 py-24 md:px-12 md:py-28"
+      id="skills"
+      className="relative z-20 scroll-mt-24 border-t border-white/10 bg-gradient-to-b from-[#0a0a10] to-[#060608] px-6 py-24 md:scroll-mt-28 md:px-12 md:py-28"
       aria-labelledby="skills-heading"
     >
       <div className="mx-auto max-w-6xl">

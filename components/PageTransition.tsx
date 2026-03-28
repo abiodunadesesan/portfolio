@@ -8,6 +8,7 @@ export default function PageTransition({ children }: { children: ReactNode }) {
 
   return (
     <motion.main
+      id="top"
       className="min-h-screen bg-[#08080a] text-white"
       initial={reduce ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}

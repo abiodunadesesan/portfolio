@@ -127,10 +127,12 @@ export default function SiteFooter() {
               <motion.div variants={fadeUp} className="relative">
                 <p
                   id="footer-heading"
-                  className="font-display text-[clamp(2rem,5.5vw,3.35rem)] font-semibold leading-[0.95] tracking-[-0.02em] text-zinc-900 antialiased dark:text-white"
+                  className="font-footer-signature text-[clamp(2.75rem,9vw,4.75rem)] font-normal leading-[1.02] tracking-wide text-zinc-900 dark:text-white"
                 >
                   <span className="block">{line1}</span>
-                  {line2 ? <span className="block">{line2}</span> : null}
+                  {line2 ? (
+                    <span className="block -mt-1 pl-[0.04em] md:-mt-2 md:pl-[0.08em]">{line2}</span>
+                  ) : null}
                 </p>
                 {!reduceMotion && (
                   <motion.span

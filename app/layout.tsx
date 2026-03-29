@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { DM_Sans, Syne } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { DM_Sans, Mr_De_Haviland, Syne } from "next/font/google";
 import Script from "next/script";
 import PortfolioHeader from "@/components/PortfolioHeader";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -14,6 +15,14 @@ const syne = Syne({
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+/** Flowing pen-style script for the footer name (signature aesthetic). */
+const footerSignature = Mr_De_Haviland({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-footer-signature",
   display: "swap",
 });
 
@@ -62,12 +71,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth dark" suppressHydrationWarning>
       <body
-        className={`${syne.variable} ${dmSans.variable} liquid-glass-body font-sans antialiased`}
+        className={`${syne.variable} ${dmSans.variable} ${footerSignature.variable} liquid-glass-body font-sans antialiased`}
       >
         <ThemeProvider>
           <PortfolioHeader />
           {children}
         </ThemeProvider>
+        <Analytics />
         <Script id="noupe-ai" src={noupeScriptSrc} strategy="lazyOnload" />
       </body>
     </html>

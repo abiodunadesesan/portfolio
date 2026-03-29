@@ -19,39 +19,39 @@ const introContainer = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.085, delayChildren: 0.15 },
+    transition: { staggerChildren: 0.038, delayChildren: 0.05 },
   },
 };
 
 const wordReveal = {
   hidden: {
     opacity: 0,
-    y: 48,
-    rotateX: -18,
-    filter: "blur(14px)",
+    y: 40,
+    rotateX: -16,
+    filter: "blur(12px)",
   },
   show: {
     opacity: 1,
     y: 0,
     rotateX: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.95, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.52, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
 const subReveal = {
-  hidden: { opacity: 0, y: 24, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 18, filter: "blur(8px)" },
   show: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.75, delay: 0.35, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.42, delay: 0.14, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
 function ScrollCue({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const op = useTransform(scrollYProgress, [0, 0.07, 0.13], [1, 1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.13], [0, 12]);
+  const op = useTransform(scrollYProgress, [0, 0.035, 0.07], [1, 1, 0]);
+  const y = useTransform(scrollYProgress, [0, 0.07], [0, 14]);
 
   return (
     <motion.div
@@ -70,12 +70,12 @@ function ScrollCue({ scrollYProgress }: { scrollYProgress: MotionValue<number> }
             "0 0 0 0 rgba(139, 92, 246, 0)",
           ],
         }}
-        transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 2.1, repeat: Infinity, ease: "easeInOut" }}
       >
         <motion.span
           className="absolute top-2 h-1.5 w-1.5 rounded-full bg-violet-600 dark:bg-violet-300"
           animate={{ y: [0, 16, 0] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: [0.45, 0, 0.55, 1] }}
+          transition={{ duration: 1.45, repeat: Infinity, ease: [0.45, 0, 0.55, 1] }}
         />
       </motion.div>
     </motion.div>
@@ -86,32 +86,53 @@ export default function Overlay({
   scrollYProgress,
   reduceMotion,
 }: OverlayProps) {
-  const yHero = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? -28 : -120]);
-  const yMid = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? -16 : -72]);
-  const yEnd = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? -12 : -52]);
+  /** Scroll curves: most motion in the first ~12–18% of the hero track so it feels snappier. */
+  const yHero = useTransform(scrollYProgress, (v) => {
+    if (reduceMotion) return -28 * v;
+    const eased = 1 - Math.pow(1 - v, 1.85);
+    return -120 * eased;
+  });
+  const yMid = useTransform(scrollYProgress, (v) => {
+    if (reduceMotion) return -16 * v;
+    const eased = 1 - Math.pow(1 - v, 1.55);
+    return -72 * eased;
+  });
+  const yEnd = useTransform(scrollYProgress, (v) => {
+    if (reduceMotion) return -12 * v;
+    const eased = 1 - Math.pow(1 - v, 1.45);
+    return -52 * eased;
+  });
 
-  const blurHero = useTransform(scrollYProgress, [0, 0.14], [0, reduceMotion ? 0 : 11]);
-  const scaleHero = useTransform(scrollYProgress, [0, 0.18], [1, reduceMotion ? 1 : 0.93]);
+  const blurHero = useTransform(scrollYProgress, (v) => {
+    if (reduceMotion) return 0;
+    const t = Math.min(1, v / 0.085);
+    return Math.pow(t, 0.88) * 11;
+  });
+  const scaleHero = useTransform(scrollYProgress, (v) => {
+    if (reduceMotion) return 1;
+    const t = Math.min(1, v / 0.105);
+    return 1 - 0.07 * Math.pow(t, 0.82);
+  });
   const heroFilter = useMotionTemplate`blur(${blurHero}px)`;
 
-  const ringScale = useTransform(scrollYProgress, [0, 0.5], [0.88, 1.35]);
-  const ringOpacity = useTransform(scrollYProgress, [0, 0.25], [0.55, 0]);
-  const tiltInner = useTransform(scrollYProgress, [0, 0.15], [0, 6]);
+  const ringScale = useTransform(scrollYProgress, [0, 0.32], [0.88, 1.35]);
+  const ringOpacity = useTransform(scrollYProgress, [0, 0.14], [0.55, 0]);
+  const tiltInner = useTransform(scrollYProgress, [0, 0.075], [0, 6]);
   const lineGlow = useTransform(scrollYProgress, [0, 1], [0.4, 1]);
 
   const opHero = useTransform(
     scrollYProgress,
-    [0, 0.08, 0.18, 0.28],
-    [1, 1, 0.45, 0]
+    [0, 0.04, 0.1, 0.17],
+    [1, 1, 0.42, 0]
   );
   const opMid = useTransform(
     scrollYProgress,
-    [0.16, 0.26, 0.36, 0.46],
+    [0.1, 0.17, 0.24, 0.32],
     [0, 1, 1, 0]
   );
   const opEnd = useTransform(
     scrollYProgress,
-    [0.46, 0.56, 0.64, 0.76],
+    [0.28, 0.36, 0.44, 0.54],
     [0, 1, 1, 0]
   );
 
@@ -144,7 +165,7 @@ export default function Overlay({
                   ? undefined
                   : { opacity: [0.5, 0.85, 0.5], scale: [0.98, 1.02, 0.98] }
               }
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.h1
               variants={introContainer}
@@ -178,7 +199,7 @@ export default function Overlay({
             <motion.p
               initial={reduceMotion ? false : { opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: reduceMotion ? 0 : 0.85, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: reduceMotion ? 0 : 0.38, duration: 0.4, ease: [0.22, 1, 0.36, 1] as const }}
               className="mx-auto mt-6 max-w-lg text-sm font-medium leading-relaxed text-zinc-600/95 dark:mt-8 dark:text-white/45 md:text-base"
             >
               Full-stack · TypeScript · ML systems — I ship interfaces people feel and backends that scale.

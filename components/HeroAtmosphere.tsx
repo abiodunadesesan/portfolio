@@ -13,9 +13,9 @@ type Props = {
 
 /** Cinematic layers above the canvas: mesh lights, vignette, film grain. */
 export default function HeroAtmosphere({ scrollYProgress, reduceMotion }: Props) {
-  const vignetteOp = useTransform(scrollYProgress, [0, 0.35, 0.7], [0.55, 0.72, 0.88]);
-  const meshOp = useTransform(scrollYProgress, [0, 0.25], [1, 0.35]);
-  const orbScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+  const vignetteOp = useTransform(scrollYProgress, [0, 0.22, 0.5], [0.55, 0.76, 0.9]);
+  const meshOp = useTransform(scrollYProgress, [0, 0.14], [1, 0.32]);
+  const orbScale = useTransform(scrollYProgress, (v) => 1 + 0.08 * (1 - Math.pow(1 - v, 1.4)));
 
   return (
     <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden">
@@ -30,7 +30,7 @@ export default function HeroAtmosphere({ scrollYProgress, reduceMotion }: Props)
                 y: [0, -12, 0],
               }
         }
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute -right-1/4 bottom-0 h-[min(70vh,600px)] w-[min(70vh,600px)] rounded-full bg-fuchsia-500/20 blur-[90px] dark:bg-fuchsia-500/25"
@@ -43,7 +43,7 @@ export default function HeroAtmosphere({ scrollYProgress, reduceMotion }: Props)
                 y: [0, 14, 0],
               }
         }
-        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute left-1/2 top-1/3 h-[min(50vh,480px)] w-[min(50vh,480px)] -translate-x-1/2 rounded-full bg-amber-400/10 blur-[80px] dark:bg-violet-400/15"
@@ -55,7 +55,7 @@ export default function HeroAtmosphere({ scrollYProgress, reduceMotion }: Props)
                 scale: [1, 1.06, 1],
               }
         }
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
       />
 
       <motion.div

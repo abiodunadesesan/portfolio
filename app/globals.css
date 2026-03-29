@@ -61,10 +61,23 @@ body.liquid-glass-body {
       color-mix(in srgb, var(--background) 92%, #8b5cf6) 100%
     );
   background-attachment: fixed;
+  background-position:
+    0% 0%,
+    100% 0%,
+    50% 100%,
+    85% 55%,
+    0% 0%;
+  background-size: auto, auto, auto, auto, auto;
   transition: background-color 0.45s ease, color 0.35s ease;
 }
 
 html.dark body.liquid-glass-body {
+  background-position:
+    0% 0%,
+    100% 0%,
+    50% 100%,
+    85% 55%,
+    0% 0%;
   background-image: radial-gradient(
       ellipse 130% 100% at 0% -15%,
       var(--liquid-mesh-a),
@@ -111,6 +124,8 @@ body.liquid-glass-body::after {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  transform-origin: 45% 25%;
+  will-change: transform, opacity;
   background: linear-gradient(
     165deg,
     var(--liquid-sheen) 0%,
@@ -132,14 +147,65 @@ html.dark body.liquid-glass-body::after {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  body.liquid-glass-body {
+    animation: liquid-mesh-flow 26s ease-in-out infinite alternate;
+  }
+
   body.liquid-glass-body::before {
-    animation: liquid-noise-drift 20s linear infinite;
+    animation:
+      liquid-noise-drift 12s linear infinite,
+      liquid-noise-breathe 9s ease-in-out infinite alternate;
+  }
+
+  body.liquid-glass-body::after {
+    animation: liquid-glass-sheen 10.5s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes liquid-mesh-flow {
+  0% {
+    background-position:
+      0% 0%,
+      100% 0%,
+      50% 100%,
+      85% 55%,
+      0% 0%;
+  }
+  100% {
+    background-position:
+      6% 5%,
+      94% 6%,
+      47% 97%,
+      90% 52%,
+      3% 2%;
   }
 }
 
 @keyframes liquid-noise-drift {
   to {
     background-position: 240px 240px;
+  }
+}
+
+@keyframes liquid-noise-breathe {
+  0% {
+    opacity: var(--liquid-noise-opacity);
+    transform: scale(1);
+  }
+  100% {
+    opacity: calc(var(--liquid-noise-opacity) * 1.45);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes liquid-glass-sheen {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(2.5%, -2%, 0) scale(1.045);
+    opacity: 0.9;
   }
 }
 

@@ -8,7 +8,12 @@ import {
   useMotionValueEvent,
 } from "framer-motion";
 import { drawImageCover } from "@/lib/canvas-draw";
-import { getFrameSrc, SEQUENCE_FRAME_COUNT } from "@/lib/sequence";
+import {
+  getFrameSrc,
+  SEQUENCE_FRAME_COUNT,
+  SEQUENCE_SOURCE_CROP,
+} from "@/lib/sequence";
+import HeroAtmosphere from "./HeroAtmosphere";
 import Overlay from "./Overlay";
 
 /** Cinematic fill when frames are missing or still loading — no on-canvas copy. */
@@ -85,7 +90,7 @@ export default function ScrollyCanvas() {
       ctx.clearRect(0, 0, cssW, cssH);
       const img = imagesRef.current[index];
       if (img?.complete && img.naturalWidth > 0) {
-        drawImageCover(ctx, img, cssW, cssH);
+        drawImageCover(ctx, img, cssW, cssH, SEQUENCE_SOURCE_CROP);
       } else {
         drawPlaceholder(ctx, cssW, cssH);
       }
@@ -180,15 +185,19 @@ export default function ScrollyCanvas() {
       className="relative h-[500vh] w-full"
       aria-label="Scroll-driven image sequence"
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#08080a]">
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-zinc-100 transition-colors duration-500 dark:bg-[#08080a]">
         <canvas
           ref={canvasRef}
-          className="absolute inset-0 h-full w-full touch-pan-y"
+          className="absolute inset-0 z-0 h-full w-full touch-pan-y"
           aria-hidden
+        />
+        <HeroAtmosphere
+          scrollYProgress={scrollYProgress}
+          reduceMotion={!!reduceMotion}
         />
         <Overlay scrollYProgress={scrollYProgress} reduceMotion={!!reduceMotion} />
         <motion.div
-          className="pointer-events-none absolute bottom-0 left-0 z-[5] h-[2px] w-full origin-left bg-gradient-to-r from-violet-500/90 via-fuchsia-500/70 to-transparent"
+          className="pointer-events-none absolute bottom-0 left-0 z-[5] h-[2px] w-full origin-left bg-gradient-to-r from-violet-600/90 via-fuchsia-600/75 to-transparent dark:from-violet-500/90 dark:via-fuchsia-500/70"
           style={{ scaleX: scrollYProgress }}
           aria-hidden
         />

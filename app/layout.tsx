@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Great_Vibes, Syne } from "next/font/google";
 import Script from "next/script";
 import PortfolioHeader from "@/components/PortfolioHeader";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
 const syne = Syne({
@@ -66,12 +67,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth dark" suppressHydrationWarning>
       <body
         className={`${syne.variable} ${dmSans.variable} ${signature.variable} font-sans antialiased`}
       >
-        <PortfolioHeader />
-        {children}
+        <ThemeProvider>
+          <PortfolioHeader />
+          {children}
+        </ThemeProvider>
         <Script id="noupe-ai" src={noupeScriptSrc} strategy="lazyOnload" />
       </body>
     </html>

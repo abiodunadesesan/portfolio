@@ -38,15 +38,15 @@ export function StaggerProjectCards({ items }: { items: readonly ProjectItem[] }
             href={p.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="block h-full outline-none ring-violet-500/40 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080c]"
+            className="block h-full outline-none ring-violet-500/40 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#08080c]"
           >
             <GlassCard className="group h-full cursor-pointer">
               <div className="flex flex-col gap-3">
                 <NanoChip>{p.tag}</NanoChip>
-                <h3 className="font-display text-xl font-semibold text-white transition-colors group-hover:text-violet-100 md:text-2xl">
+                <h3 className="font-display text-xl font-semibold text-zinc-900 transition-colors group-hover:text-violet-800 md:text-2xl dark:text-white dark:group-hover:text-violet-100">
                   {p.title}
                 </h3>
-                <p className="text-sm leading-relaxed text-white/55 md:text-[15px]">{p.blurb}</p>
+                <p className="text-sm leading-relaxed text-zinc-600 md:text-[15px] dark:text-white/55">{p.blurb}</p>
               </div>
             </GlassCard>
           </a>

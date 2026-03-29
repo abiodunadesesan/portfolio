@@ -70,19 +70,16 @@ export default function SiteFooter() {
   return (
     <footer
       id="contact"
-      className="relative z-20 scroll-mt-24 overflow-hidden border-t border-white/10 bg-gradient-to-b from-[#060608] via-[#08080a] to-[#030304] md:scroll-mt-28"
+      className="relative z-20 scroll-mt-24 overflow-hidden border-t border-zinc-200/70 bg-gradient-to-b from-zinc-100 via-stone-50 to-zinc-200/80 md:scroll-mt-28 dark:border-white/10 dark:from-[#060608] dark:via-[#08080a] dark:to-[#030304]"
       aria-labelledby="footer-heading"
     >
       {/* Match site chrome: soft highlight + violet accent (same family as links / glass hover) */}
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-30%,rgba(139,92,246,0.14),transparent_55%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-30%,rgba(139,92,246,0.11),transparent_55%)] dark:bg-[radial-gradient(ellipse_120%_80%_at_50%_-30%,rgba(139,92,246,0.14),transparent_55%)]"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage: `radial-gradient(ellipse 90% 50% at 50% -15%, rgba(255,255,255,0.45), transparent)`,
-        }}
+        className="pointer-events-none absolute inset-0 opacity-[0.35] bg-[radial-gradient(ellipse_90%_50%_at_50%_-15%,rgba(255,255,255,0.95),transparent)] dark:opacity-[0.06] dark:bg-[radial-gradient(ellipse_90%_50%_at_50%_-15%,rgba(255,255,255,0.45),transparent)]"
         aria-hidden
       />
 
@@ -97,17 +94,12 @@ export default function SiteFooter() {
               className="space-y-6"
             >
               <motion.div variants={fadeUp} id="footer-heading" className="relative">
-                <p
-                  className="font-signature text-[clamp(2.25rem,7vw,3.75rem)] leading-[1.05] tracking-wide text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.25)]"
-                  style={{
-                    textShadow: "0 1px 0 rgba(255,255,255,0.06)",
-                  }}
-                >
+                <p className="font-signature text-[clamp(2.25rem,7vw,3.75rem)] leading-[1.05] tracking-wide text-zinc-900 drop-shadow-[0_2px_24px_rgba(0,0,0,0.08)] dark:text-white dark:drop-shadow-[0_2px_24px_rgba(0,0,0,0.25)]">
                   {person.displayName}
                 </p>
                 {!reduceMotion && (
                   <motion.span
-                    className="absolute -bottom-1 left-0 h-px w-0 bg-white/25"
+                    className="absolute -bottom-1 left-0 h-px w-0 bg-zinc-400/50 dark:bg-white/25"
                     initial={{ width: 0 }}
                     whileInView={{ width: "min(12rem, 40%)" }}
                     viewport={{ once: true }}
@@ -115,20 +107,20 @@ export default function SiteFooter() {
                   />
                 )}
                 {reduceMotion && (
-                  <span className="absolute -bottom-1 left-0 block h-px w-[min(12rem,40%)] bg-white/25" />
+                  <span className="absolute -bottom-1 left-0 block h-px w-[min(12rem,40%)] bg-zinc-400/50 dark:bg-white/25" />
                 )}
               </motion.div>
 
               <motion.p
                 variants={fadeUp}
-                className="font-display text-sm font-medium uppercase tracking-[0.2em] text-white/75"
+                className="font-display text-sm font-medium uppercase tracking-[0.2em] text-zinc-600 dark:text-white/75"
               >
-                {person.role} <span className="text-white/40">·</span> {person.tagline}
+                {person.role} <span className="text-zinc-400 dark:text-white/40">·</span> {person.tagline}
               </motion.p>
 
               <motion.p
                 variants={fadeUp}
-                className="text-base leading-relaxed text-white/90 md:text-[1.05rem] md:leading-[1.65]"
+                className="text-base leading-relaxed text-zinc-700 md:text-[1.05rem] md:leading-[1.65] dark:text-white/90"
               >
                 {footerBio.body}
               </motion.p>
@@ -147,7 +139,7 @@ export default function SiteFooter() {
             transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.15, ease: [0.22, 1, 0.36, 1] }}
             className="flex shrink-0 flex-col gap-6 lg:items-end lg:pt-2"
           >
-            <p className="font-display text-xs font-semibold uppercase tracking-[0.25em] text-white/40">
+            <p className="font-display text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500 dark:text-white/40">
               Connect
             </p>
             <ul className="flex flex-wrap gap-3 lg:justify-end">
@@ -160,7 +152,7 @@ export default function SiteFooter() {
                     aria-label={label}
                     whileHover={reduceMotion ? undefined : { scale: 1.06, y: -2 }}
                     whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-                    className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-white/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-sm transition-all duration-300 hover:border-violet-400/35 hover:bg-violet-500/[0.08] hover:text-white hover:shadow-[0_0_28px_-6px_rgba(139,92,246,0.45)]"
+                    className="flex h-12 w-12 items-center justify-center rounded-2xl border border-zinc-200/90 bg-white/70 text-zinc-700 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition-all duration-300 hover:border-violet-400/50 hover:bg-violet-500/[0.08] hover:text-violet-700 hover:shadow-[0_0_28px_-6px_rgba(139,92,246,0.35)] dark:border-white/10 dark:bg-white/[0.04] dark:text-white/85 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] dark:hover:border-violet-400/35 dark:hover:text-white dark:hover:shadow-[0_0_28px_-6px_rgba(139,92,246,0.45)]"
                   >
                     <Icon className="h-5 w-5" />
                   </motion.a>
@@ -175,7 +167,7 @@ export default function SiteFooter() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: reduceMotion ? 0 : 0.35, duration: 0.5 }}
-          className="mt-14 border-t border-white/[0.07] pt-8 text-center text-xs text-white/35 md:text-left"
+          className="mt-14 border-t border-zinc-200/80 pt-8 text-center text-xs text-zinc-500 md:text-left dark:border-white/[0.07] dark:text-white/35"
         >
           © {new Date().getFullYear()} {person.displayName}. Built with Next.js.
         </motion.p>

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { analyticsFallback } from "@/lib/site-content";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 /**
  * Each Vercel deployment gets a unique ID — we namespace Redis keys so counts
@@ -38,6 +39,29 @@ function getRedis(): Redis | null {
   return new Redis({ url, token });
 }
 
+/** In-memory fallback when Redis env is not set (dev + single warm serverless instance). */
+type MemStore = { pageviews: number; visits: number; visitorIds: Set<string> };
+
+function getMemoryStore(): MemStore {
+  const g = globalThis as unknown as { __portfolioAnalytics?: MemStore };
+  if (!g.__portfolioAnalytics) {
+    g.__portfolioAnalytics = {
+      pageviews: 0,
+      visits: 0,
+      visitorIds: new Set<string>(),
+    };
+  }
+  return g.__portfolioAnalytics;
+}
+
+function jsonResponse(data: object) {
+  return NextResponse.json(data, {
+    headers: {
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+    },
+  });
+}
+
 function fallbackPayload() {
   return {
     totalVisitors: Number(
@@ -54,43 +78,54 @@ function fallbackPayload() {
   };
 }
 
+function memoryPayload() {
+  const m = getMemoryStore();
+  return {
+    totalVisitors: m.visitorIds.size,
+    totalVisits: m.visits,
+    pageViews: m.pageviews,
+    asOfLabel: analyticsAsOfLabel(),
+    source: "memory" as const,
+  };
+}
+
+function applyVisitToMemory(visitorId: string, sessionVisit: boolean) {
+  const m = getMemoryStore();
+  m.pageviews += 1;
+  if (sessionVisit) m.visits += 1;
+  m.visitorIds.add(visitorId);
+}
+
 export async function GET() {
   const redis = getRedis();
   if (!redis) {
-    return NextResponse.json(fallbackPayload());
+    return jsonResponse(memoryPayload());
   }
 
   const KEYS = getKeys();
 
   try {
     const [pageViewsRaw, visitsRaw, totalVisitors] = await Promise.all([
-      redis.get<number>(KEYS.pageviews),
-      redis.get<number>(KEYS.visits),
+      redis.get<string | number>(KEYS.pageviews),
+      redis.get<string | number>(KEYS.visits),
       redis.scard(KEYS.visitorSet),
     ]);
 
-    return NextResponse.json({
-      totalVisitors: totalVisitors ?? 0,
-      totalVisits: Number(visitsRaw) || 0,
-      pageViews: Number(pageViewsRaw) || 0,
+    return jsonResponse({
+      totalVisitors: Number(totalVisitors) || 0,
+      totalVisits: Number(visitsRaw ?? 0) || 0,
+      pageViews: Number(pageViewsRaw ?? 0) || 0,
       asOfLabel: analyticsAsOfLabel(),
       source: "redis" as const,
     });
   } catch {
-    return NextResponse.json(fallbackPayload());
+    return jsonResponse(fallbackPayload());
   }
 }
 
 type Body = { visitorId?: string; sessionVisit?: boolean };
 
 export async function POST(req: Request) {
-  const redis = getRedis();
-  if (!redis) {
-    return NextResponse.json({ ok: true, skipped: true });
-  }
-
-  const KEYS = getKeys();
-
   let body: Body;
   try {
     body = (await req.json()) as Body;
@@ -107,16 +142,24 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "visitorId required" }, { status: 400 });
   }
 
-  try {
-    const sessionVisit = Boolean(body.sessionVisit);
+  const sessionVisit = Boolean(body.sessionVisit);
 
+  const redis = getRedis();
+  if (!redis) {
+    applyVisitToMemory(visitorId, sessionVisit);
+    return jsonResponse({ ok: true, source: "memory" as const });
+  }
+
+  const KEYS = getKeys();
+
+  try {
     await redis.incr(KEYS.pageviews);
     if (sessionVisit) {
       await redis.incr(KEYS.visits);
     }
     await redis.sadd(KEYS.visitorSet, visitorId);
 
-    return NextResponse.json({ ok: true });
+    return jsonResponse({ ok: true, source: "redis" as const });
   } catch {
     return NextResponse.json({ ok: false }, { status: 500 });
   }

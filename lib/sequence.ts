@@ -7,6 +7,15 @@
  */
 export const SEQUENCE_FRAME_COUNT = 120;
 
+/**
+ * Crop scroll-sequence frames before cover-fit to hide typical bottom-right tool marks
+ * (e.g. small logo text). Slight zoom-in; tune 0–1 if a sliver remains or framing feels tight.
+ */
+export const SEQUENCE_SOURCE_CROP = {
+  cropSourceRight: 0.1,
+  cropSourceBottom: 0.08,
+} as const;
+
 const FRAME_SUFFIX = "_delay-0.066s.png";
 
 export function getFrameSrc(frameIndex: number): string {

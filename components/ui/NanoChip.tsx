@@ -7,7 +7,7 @@ type NanoChipProps = {
 export function NanoChip({ children, className = "" }: NanoChipProps) {
   return (
     <span
-      className={`inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white/60 ${className}`}
+      className={`inline-flex items-center rounded-full border border-zinc-300/80 bg-zinc-900/[0.04] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-500 dark:border-white/15 dark:bg-white/5 dark:text-white/60 ${className}`}
     >
       {children}
     </span>

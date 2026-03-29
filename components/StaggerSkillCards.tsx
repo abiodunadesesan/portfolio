@@ -38,13 +38,13 @@ export function StaggerSkillCards({ groups }: { groups: readonly SkillGroup[] })
       {groups.map((group) => (
         <motion.div key={group.label} variants={card}>
           <GlassCard>
-            <h3 className="font-display text-sm font-semibold uppercase tracking-[0.2em] text-white/45">
+            <h3 className="font-display text-sm font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-white/45">
               {group.label}
             </h3>
             <ul className="mt-4 flex flex-wrap gap-2">
               {group.items.map((s) => (
                 <li key={s}>
-                  <span className="inline-flex rounded-full border border-white/12 bg-white/[0.03] px-3 py-1.5 text-xs text-white/75 md:text-[13px]">
+                  <span className="inline-flex rounded-full border border-zinc-200/90 bg-white/80 px-3 py-1.5 text-xs text-zinc-700 md:text-[13px] dark:border-white/12 dark:bg-white/[0.03] dark:text-white/75">
                     {s}
                   </span>
                 </li>

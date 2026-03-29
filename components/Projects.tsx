@@ -7,7 +7,7 @@ export default function Projects() {
   return (
     <AnimatedSection
       id="work"
-      className="relative z-20 scroll-mt-24 border-t border-white/10 bg-gradient-to-b from-[#060608] via-[#08080c] to-[#0a0a10] px-6 py-24 md:scroll-mt-28 md:px-12 md:py-32"
+      className="relative z-20 scroll-mt-24 border-t border-zinc-200/60 bg-gradient-to-b from-zinc-50 via-neutral-50 to-stone-100/90 px-6 py-24 dark:border-white/10 dark:from-[#060608] dark:via-[#08080c] dark:to-[#0a0a10] md:scroll-mt-28 md:px-12 md:py-32"
       aria-labelledby="projects-heading"
     >
       <div className="mx-auto max-w-6xl">
@@ -16,11 +16,11 @@ export default function Projects() {
             <NanoChip>GitHub · Case studies</NanoChip>
             <h2
               id="projects-heading"
-              className="font-display mt-4 text-3xl font-semibold tracking-tight text-white md:text-4xl"
+              className="font-display mt-4 text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl dark:text-white"
             >
               Selected projects
             </h2>
-            <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/55 md:text-base">
+            <p className="mt-3 max-w-lg text-sm leading-relaxed text-zinc-600 md:text-base dark:text-white/55">
               Public repos spanning TypeScript, JavaScript, PHP, and applied ML —
               dashboards, commerce, microservices, and NLP research.
             </p>
@@ -28,7 +28,7 @@ export default function Projects() {
               href={links.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex text-sm font-medium text-violet-300/90 underline-offset-4 transition hover:text-white hover:underline"
+              className="mt-4 inline-flex text-sm font-medium text-violet-700 underline-offset-4 transition hover:text-zinc-900 hover:underline dark:text-violet-300/90 dark:hover:text-white"
             >
               View all on GitHub →
             </a>

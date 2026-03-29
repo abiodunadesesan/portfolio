@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { DM_Sans, Great_Vibes, Syne } from "next/font/google";
 import Script from "next/script";
 import PortfolioHeader from "@/components/PortfolioHeader";
-import WhatsAppButton from "@/components/WhatsAppButton";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
@@ -75,7 +74,6 @@ export default function RootLayout({
         <ThemeProvider>
           <PortfolioHeader />
           {children}
-          <WhatsAppButton />
         </ThemeProvider>
         <Script id="noupe-ai" src={noupeScriptSrc} strategy="lazyOnload" />
       </body>

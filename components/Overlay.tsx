@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { ChevronDown, Mouse } from "lucide-react";
 import {
   motion,
   useMotionTemplate,
@@ -32,6 +33,8 @@ function introCfg(tier: BreakpointTier) {
         glowDur: 2.2,
         cuePulse: 1.75,
         cueWheel: 1.15,
+        wordBlurHidden: 6,
+        subBlurHidden: 4,
       };
     case "tablet":
       return {
@@ -45,6 +48,8 @@ function introCfg(tier: BreakpointTier) {
         glowDur: 2.85,
         cuePulse: 1.9,
         cueWheel: 1.28,
+        wordBlurHidden: 8,
+        subBlurHidden: 5,
       };
     default:
       return {
@@ -58,6 +63,8 @@ function introCfg(tier: BreakpointTier) {
         glowDur: 3.2,
         cuePulse: 2.05,
         cueWheel: 1.35,
+        wordBlurHidden: 11,
+        subBlurHidden: 7,
       };
   }
 }
@@ -66,8 +73,9 @@ function scrollCfg(tier: BreakpointTier) {
   switch (tier) {
     case "mobile":
       return {
-        blurSpan: 0.052,
-        scaleSpan: 0.064,
+        /* Wider spans = less early blur/scale — keeps hero copy readable on small screens */
+        blurSpan: 0.1,
+        scaleSpan: 0.1,
         yPow: 2.35,
         midPow: 1.85,
         endPow: 1.65,
@@ -79,6 +87,7 @@ function scrollCfg(tier: BreakpointTier) {
         endOp: [0.2, 0.27, 0.35, 0.45],
         cueOp: [0, 0.028, 0.055],
         cueY: [0, 0.055],
+        blurMax: 6,
       };
     case "tablet":
       return {
@@ -95,6 +104,7 @@ function scrollCfg(tier: BreakpointTier) {
         endOp: [0.24, 0.31, 0.39, 0.49],
         cueOp: [0, 0.032, 0.062],
         cueY: [0, 0.062],
+        blurMax: 9,
       };
     default:
       return {
@@ -111,6 +121,7 @@ function scrollCfg(tier: BreakpointTier) {
         endOp: [0.26, 0.33, 0.41, 0.51],
         cueOp: [0, 0.038, 0.075],
         cueY: [0, 0.075],
+        blurMax: 11,
       };
   }
 }
@@ -118,41 +129,95 @@ function scrollCfg(tier: BreakpointTier) {
 function ScrollCue({
   scrollYProgress,
   tier,
+  reduceMotion,
 }: {
   scrollYProgress: MotionValue<number>;
   tier: BreakpointTier;
+  reduceMotion: boolean;
 }) {
   const s = scrollCfg(tier);
   const op = useTransform(scrollYProgress, s.cueOp, [1, 1, 0]);
   const y = useTransform(scrollYProgress, s.cueY, [0, 14]);
   const pulse = introCfg(tier).cuePulse;
   const wheel = introCfg(tier).cueWheel;
+  const touchFirst = tier !== "desktop";
+
+  if (reduceMotion) {
+    return (
+      <motion.div
+        style={{ opacity: op, y }}
+        className="pointer-events-auto absolute bottom-4 left-1/2 z-20 flex w-[min(100%,20rem)] -translate-x-1/2 flex-col items-center gap-3 px-4 sm:bottom-6 md:bottom-10"
+      >
+        <p className="text-center text-xs font-medium text-zinc-700 dark:text-white/80">
+          More below: work, experience, and contact.
+        </p>
+        <a
+          href="#work"
+          className="rounded-full border border-violet-500/35 bg-white/80 px-4 py-2.5 text-sm font-semibold text-violet-800 shadow-sm dark:border-violet-400/30 dark:bg-zinc-900/80 dark:text-violet-100"
+        >
+          Jump to work
+        </a>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
       style={{ opacity: op, y }}
-      className="pointer-events-auto absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-3 md:bottom-10"
+      className="pointer-events-auto absolute bottom-4 left-1/2 z-20 flex w-[min(100%,20rem)] -translate-x-1/2 flex-col items-center gap-3 px-4 sm:bottom-6 md:bottom-10"
     >
-      <span className="text-[10px] font-semibold uppercase tracking-[0.42em] text-zinc-600/90 dark:text-white/45">
-        Explore
-      </span>
-      <motion.div
-        className="relative flex h-12 w-[22px] justify-center rounded-full border border-zinc-300/60 bg-white/10 dark:border-white/15 dark:bg-white/[0.04]"
-        animate={{
-          boxShadow: [
-            "0 0 0 0 rgba(139, 92, 246, 0)",
-            "0 0 24px 2px rgba(139, 92, 246, 0.2)",
-            "0 0 0 0 rgba(139, 92, 246, 0)",
-          ],
-        }}
-        transition={{ duration: pulse, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <motion.span
-          className="absolute top-2 h-1.5 w-1.5 rounded-full bg-violet-600 dark:bg-violet-300"
-          animate={{ y: [0, 16, 0] }}
-          transition={{ duration: wheel, repeat: Infinity, ease: [0.45, 0, 0.55, 1] as const }}
-        />
-      </motion.div>
+      {touchFirst ? (
+        <>
+          <div className="flex flex-col items-center gap-1 text-center">
+            <span className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-800 dark:text-white/90 sm:text-[11px] sm:tracking-[0.18em]">
+              Scroll for more
+            </span>
+            <span className="text-[11px] font-medium leading-snug text-zinc-600 dark:text-white/70 sm:text-xs">
+              Projects, experience &amp; contact are below — or jump straight in.
+            </span>
+          </div>
+          <motion.div
+            animate={reduceMotion ? undefined : { y: [0, 6, 0] }}
+            transition={{ duration: 1.35, repeat: Infinity, ease: "easeInOut" }}
+            aria-hidden
+          >
+            <ChevronDown
+              className="h-8 w-8 text-violet-600 opacity-90 dark:text-violet-300 sm:h-7 sm:w-7"
+              strokeWidth={2.25}
+            />
+          </motion.div>
+          <a
+            href="#work"
+            className="rounded-full border border-violet-500/35 bg-white/80 px-4 py-2.5 text-sm font-semibold text-violet-800 shadow-sm transition hover:border-violet-500/55 hover:bg-white dark:border-violet-400/30 dark:bg-zinc-900/80 dark:text-violet-100 dark:hover:border-violet-400/50 dark:hover:bg-zinc-900"
+          >
+            Jump to work
+          </a>
+        </>
+      ) : (
+        <>
+          <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-700 dark:text-white/75">
+            <Mouse className="h-3.5 w-3.5 opacity-80" strokeWidth={2} aria-hidden />
+            Scroll to explore
+          </span>
+          <motion.div
+            className="relative flex h-12 w-[22px] justify-center rounded-full border border-zinc-300/60 bg-white/10 dark:border-white/15 dark:bg-white/[0.04]"
+            animate={{
+              boxShadow: [
+                "0 0 0 0 rgba(139, 92, 246, 0)",
+                "0 0 24px 2px rgba(139, 92, 246, 0.2)",
+                "0 0 0 0 rgba(139, 92, 246, 0)",
+              ],
+            }}
+            transition={{ duration: pulse, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <motion.span
+              className="absolute top-2 h-1.5 w-1.5 rounded-full bg-violet-600 dark:bg-violet-300"
+              animate={{ y: [0, 16, 0] }}
+              transition={{ duration: wheel, repeat: Infinity, ease: [0.45, 0, 0.55, 1] as const }}
+            />
+          </motion.div>
+        </>
+      )}
     </motion.div>
   );
 }
@@ -179,7 +244,7 @@ export default function Overlay({
           opacity: 0,
           y: 36,
           rotateX: -14,
-          filter: "blur(11px)",
+          filter: `blur(${ic.wordBlurHidden}px)`,
         },
         show: {
           opacity: 1,
@@ -190,7 +255,7 @@ export default function Overlay({
         },
       },
       subReveal: {
-        hidden: { opacity: 0, y: 14, filter: "blur(7px)" },
+        hidden: { opacity: 0, y: 14, filter: `blur(${ic.subBlurHidden}px)` },
         show: {
           opacity: 1,
           y: 0,
@@ -225,7 +290,7 @@ export default function Overlay({
   const blurHero = useTransform(scrollYProgress, (v) => {
     if (reduceMotion) return 0;
     const t = Math.min(1, v / sc.blurSpan);
-    return Math.pow(t, 0.88) * 11;
+    return Math.pow(t, 0.88) * sc.blurMax;
   });
   const scaleHero = useTransform(scrollYProgress, (v) => {
     if (reduceMotion) return 1;
@@ -268,7 +333,7 @@ export default function Overlay({
             <motion.span
               className="pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-to-r from-violet-600/15 via-fuchsia-500/10 to-transparent blur-2xl dark:from-violet-500/25 dark:via-fuchsia-500/15 md:-inset-10"
               animate={
-                reduceMotion
+                reduceMotion || tier === "mobile"
                   ? undefined
                   : { opacity: [0.5, 0.85, 0.5], scale: [0.98, 1.02, 0.98] }
               }
@@ -285,7 +350,7 @@ export default function Overlay({
                   <motion.span
                     key={`${word}-${i}`}
                     variants={wordReveal}
-                    className="inline-block bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 bg-clip-text text-[clamp(1.05rem,4.5vw,4.15rem)] text-transparent dark:from-white dark:via-zinc-100 dark:to-zinc-300"
+                    className="inline-block bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 bg-clip-text text-[clamp(1.05rem,4.5vw,4.15rem)] text-transparent [filter:drop-shadow(0_2px_14px_rgba(0,0,0,0.28))] max-sm:from-zinc-950 max-sm:via-zinc-900 max-sm:to-zinc-950 dark:from-white dark:via-zinc-100 dark:to-zinc-300 dark:[filter:drop-shadow(0_2px_20px_rgba(0,0,0,0.75))]"
                   >
                     {word}
                     {i === nameWords.length - 1 ? "." : ""}
@@ -294,13 +359,13 @@ export default function Overlay({
               </span>
               <motion.span
                 variants={subReveal}
-                className="mt-3 block text-[clamp(0.95rem,2.6vw,1.4rem)] font-medium leading-snug text-zinc-600 dark:mt-4 dark:text-white/88 md:mt-4"
+                className="mt-3 block text-[clamp(0.95rem,2.6vw,1.4rem)] font-medium leading-snug text-zinc-700 dark:mt-4 dark:text-white/92 max-sm:dark:text-white md:mt-4"
               >
-                <span className="bg-gradient-to-r from-violet-700 to-fuchsia-700 bg-clip-text font-display text-transparent dark:from-violet-300 dark:to-fuchsia-300">
+                <span className="bg-gradient-to-r from-violet-700 to-fuchsia-700 bg-clip-text font-display text-transparent dark:from-violet-200 dark:to-fuchsia-200 max-sm:dark:from-violet-100 max-sm:dark:to-fuchsia-100">
                   {person.role}
                 </span>
-                <span className="text-zinc-500 dark:text-white/50"> · </span>
-                <span className="text-zinc-700 dark:text-white/90">{person.tagline}.</span>
+                <span className="text-zinc-600 dark:text-white/65 max-sm:dark:text-white/80"> · </span>
+                <span className="text-zinc-800 dark:text-white max-sm:dark:text-white">{person.tagline}.</span>
               </motion.span>
             </motion.h1>
             <motion.p
@@ -311,7 +376,7 @@ export default function Overlay({
                 duration: ic.bodyDur,
                 ease: [0.22, 1, 0.36, 1] as const,
               }}
-              className="mx-auto mt-6 max-w-lg text-sm font-medium leading-relaxed text-zinc-600/95 dark:mt-8 dark:text-white/45 md:text-base"
+              className="mx-auto mt-6 max-w-lg text-sm font-medium leading-relaxed text-zinc-800 dark:mt-8 dark:text-white/78 max-sm:dark:text-white/88 md:text-base"
             >
               Full-stack · TypeScript · ML systems — I ship interfaces people feel and backends that scale.
             </motion.p>
@@ -348,7 +413,11 @@ export default function Overlay({
           </div>
         </motion.div>
 
-        {!reduceMotion ? <ScrollCue scrollYProgress={scrollYProgress} tier={tier} /> : null}
+        <ScrollCue
+          scrollYProgress={scrollYProgress}
+          tier={tier}
+          reduceMotion={reduceMotion}
+        />
       </div>
     </div>
   );

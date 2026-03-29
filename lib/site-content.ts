@@ -10,10 +10,13 @@ export const person = {
 export const links = {
   github: "https://github.com/abiodunadesesan",
   linkedin: "https://www.linkedin.com/in/abioduncaleb",
+  instagram: "https://www.instagram.com/calebsilvanus/",
   linktree: "https://linktr.ee/calebsilvanus",
   email: "mailto:abiodunadesesan@gmail.com",
-  /** WhatsApp chat — international format without + */
+  /** WhatsApp chat — wa.me uses country code + number, no + prefix */
   whatsapp: "https://wa.me/905338448449",
+  /** Shown next to WhatsApp in the footer */
+  whatsappDisplay: "+905338448449",
 } as const;
 
 /** Footer intro — paired with signature + role */

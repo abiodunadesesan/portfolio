@@ -69,7 +69,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth dark" suppressHydrationWarning>
       <body
-        className={`${syne.variable} ${dmSans.variable} ${signature.variable} font-sans antialiased`}
+        className={`${syne.variable} ${dmSans.variable} ${signature.variable} liquid-glass-body font-sans antialiased`}
       >
         <ThemeProvider>
           <PortfolioHeader />

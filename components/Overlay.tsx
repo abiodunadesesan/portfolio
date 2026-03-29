@@ -327,9 +327,9 @@ export default function Overlay({
             scale: scaleHero,
             filter: reduceMotion ? "none" : heroFilter,
           }}
-          className="relative max-w-4xl px-2 text-center [perspective:1200px]"
+          className="relative w-full max-w-[min(100%,72rem)] px-3 text-center [perspective:1200px] sm:px-4 md:px-6"
         >
-          <motion.div className="relative inline-block" style={{ rotateX: tiltInner }}>
+          <motion.div className="relative mx-auto inline-block max-w-full" style={{ rotateX: tiltInner }}>
             <span
               className={`pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-to-r from-violet-600/15 via-fuchsia-500/10 to-transparent blur-2xl dark:from-violet-500/25 dark:via-fuchsia-500/15 md:-inset-10 ${
                 reduceMotion || tier === "mobile" ? "" : "hero-title-ambient-glow"
@@ -344,12 +344,11 @@ export default function Overlay({
               variants={introContainer}
               initial={introState}
               animate={introAnimate}
-              className="relative mx-auto max-w-[min(100vw,42rem)] text-center leading-[1.06] tracking-normal"
+              className="relative mx-auto w-full max-w-[min(100vw-1.25rem,56rem)] text-center leading-[1.08] tracking-normal"
             >
               <motion.span
                 variants={nameReveal}
-                className="block bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 bg-clip-text pb-1 font-footer-signature text-[clamp(2.35rem,7.5vw,4.15rem)] font-normal not-italic text-transparent [filter:drop-shadow(0_2px_14px_rgba(0,0,0,0.22))] max-sm:from-zinc-950 max-sm:via-zinc-900 max-sm:to-zinc-950 dark:from-white dark:via-zinc-100 dark:to-zinc-200 dark:[filter:drop-shadow(0_2px_28px_rgba(255,255,255,0.12))] sm:whitespace-nowrap sm:leading-[1.05]"
-                style={{ fontFeatureSettings: '"liga" 1, "kern" 1' }}
+                className="block max-w-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 bg-clip-text pb-1 font-sans text-[clamp(1.65rem,5vw,3.35rem)] font-semibold not-italic tracking-tight text-transparent [filter:drop-shadow(0_2px_14px_rgba(0,0,0,0.22))] [overflow-wrap:anywhere] max-sm:from-zinc-950 max-sm:via-zinc-900 max-sm:to-zinc-950 dark:from-white dark:via-zinc-100 dark:to-zinc-200 dark:[filter:drop-shadow(0_2px_28px_rgba(255,255,255,0.12))] sm:text-[clamp(1.85rem,4.5vw,3.35rem)] md:text-[clamp(2rem,3.8vw,3.65rem)]"
               >
                 {person.displayName}
               </motion.span>

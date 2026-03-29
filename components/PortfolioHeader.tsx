@@ -29,7 +29,7 @@ export default function PortfolioHeader() {
       initial={reduceMotion ? false : { y: -10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] as const }}
-      className={`fixed left-0 right-0 top-0 z-[100] transition-[background-color,backdrop-filter,border-color] duration-300 ${
+      className={`fixed inset-x-0 top-0 z-[100] pt-[env(safe-area-inset-top,0px)] transition-[background-color,backdrop-filter,border-color] duration-300 ${
         scrolled
           ? "border-b border-zinc-200/80 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/72 dark:border-white/[0.07] dark:bg-[#08080a]/85 dark:supports-[backdrop-filter]:bg-[#08080a]/70"
           : "border-b border-transparent bg-gradient-to-b from-white/92 via-white/55 to-transparent dark:from-[#08080a]/95 dark:via-[#08080a]/40 dark:to-transparent"
@@ -41,7 +41,7 @@ export default function PortfolioHeader() {
           className="group min-w-0 shrink py-1"
           aria-label="Back to top"
         >
-          <p className="truncate font-display text-base font-semibold leading-tight tracking-tight text-zinc-900 transition group-hover:text-violet-700 dark:text-white dark:group-hover:text-violet-200 sm:text-lg">
+          <p className="min-w-0 max-w-[13.5rem] font-sans text-base font-semibold leading-tight tracking-tight text-zinc-900 transition [overflow-wrap:anywhere] group-hover:text-violet-700 dark:text-white dark:group-hover:text-violet-200 sm:max-w-[17rem] sm:text-lg md:max-w-[22rem] lg:max-w-none">
             {person.displayName}
           </p>
           <p className="mt-0.5 line-clamp-2 max-w-[14rem] text-[11px] font-medium uppercase leading-snug tracking-[0.18em] text-zinc-600 dark:text-white/55 sm:max-w-none sm:text-xs sm:tracking-[0.14em] md:normal-case md:tracking-tight">

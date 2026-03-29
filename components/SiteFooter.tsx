@@ -122,10 +122,14 @@ export default function SiteFooter() {
                   id="footer-heading"
                   className="font-footer-signature font-normal not-italic tracking-[0.02em] text-zinc-900 antialiased subpixel-antialiased [text-shadow:0_2px_28px_rgba(0,0,0,0.06)] dark:text-white dark:[text-shadow:0_0_52px_rgba(255,255,255,0.12)]"
                 >
-                  {/* Great Vibes: one flowing connecting script line (title case); matches reference — no rule. */}
+                  {/* Great Vibes (next/font) — calligraphic connecting script; not sans-serif. */}
                   <span
                     className="block max-w-[min(100%,36rem)] text-[clamp(2.5rem,8.5vw,4.75rem)] leading-[1.08] text-pretty sm:max-w-none sm:leading-[1.06] sm:whitespace-nowrap"
-                    style={{ fontFeatureSettings: '"liga" 1, "kern" 1' }}
+                    style={{
+                      /* Resolved on `body` — includes next/font Great Vibes (`--font-footer-signature`) */
+                      fontFamily: "var(--font-family-footer-signature)",
+                      fontFeatureSettings: '"liga" 1, "kern" 1',
+                    }}
                   >
                     {person.displayName}
                   </span>

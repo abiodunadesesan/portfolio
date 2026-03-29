@@ -197,7 +197,7 @@ export default function ScrollyCanvas() {
       className="relative h-[500vh] w-full"
       aria-label="Hero: cinematic scroll sequence. Scroll down to advance frames; text and controls sit above the canvas."
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-zinc-100 transition-colors duration-500 dark:bg-[#08080a]">
+      <div className="sticky top-0 h-screen w-full overflow-visible bg-zinc-100 transition-colors duration-500 dark:bg-[#08080a]">
         <canvas
           ref={canvasRef}
           className="absolute inset-0 z-0 h-full w-full touch-pan-y"

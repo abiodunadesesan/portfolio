@@ -77,8 +77,6 @@ type SocialIconItem = {
   href: string;
   label: string;
   Icon: typeof IconGitHub;
-  /** If set, render a wider control with icon + this text (e.g. WhatsApp number). */
-  withCaption?: string;
 };
 
 const social: readonly SocialIconItem[] = [
@@ -87,12 +85,7 @@ const social: readonly SocialIconItem[] = [
   { href: links.instagram, label: "Instagram", Icon: IconInstagram },
   { href: links.linktree, label: "Linktree", Icon: IconLinktree },
   { href: links.email, label: "Email", Icon: IconMail },
-  {
-    href: links.whatsapp,
-    label: `WhatsApp ${links.whatsappDisplay}`,
-    Icon: IconWhatsApp,
-    withCaption: links.whatsappDisplay,
-  },
+  { href: links.whatsapp, label: "WhatsApp", Icon: IconWhatsApp },
 ];
 
 export default function SiteFooter() {
@@ -158,57 +151,43 @@ export default function SiteFooter() {
               >
                 {footerBio.body}
               </motion.p>
-
-              <motion.div variants={fadeUp} className="pt-2">
-                <AnalyticsCodeBlock />
-              </motion.div>
             </motion.div>
           </div>
 
-          <motion.nav
-            aria-label="Social links"
+          <motion.div
             initial={reduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 12 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.15, ease: [0.22, 1, 0.36, 1] }}
             className="flex shrink-0 flex-col gap-6 lg:items-end lg:pt-2"
           >
-            <p className="font-display text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500 dark:text-white/40">
-              Connect
-            </p>
-            <ul className="flex flex-wrap gap-3 lg:justify-end">
-              {social.map(({ href, label, Icon, withCaption }) => (
-                <li key={label}>
-                  <motion.a
-                    href={href}
-                    target={href.startsWith("mailto:") ? undefined : "_blank"}
-                    rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                    aria-label={label}
-                    title={label}
-                    whileHover={reduceMotion ? undefined : { scale: 1.06, y: -2 }}
-                    whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-                    className={
-                      withCaption
-                        ? "flex h-12 max-w-full min-w-0 items-center gap-2.5 rounded-2xl border border-zinc-200/90 bg-white/70 px-3.5 py-2 text-zinc-700 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition-all duration-300 hover:border-violet-400/50 hover:bg-violet-500/[0.08] hover:text-violet-700 hover:shadow-[0_0_28px_-6px_rgba(139,92,246,0.35)] dark:border-white/10 dark:bg-white/[0.04] dark:text-white/85 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] dark:hover:border-violet-400/35 dark:hover:text-white dark:hover:shadow-[0_0_28px_-6px_rgba(139,92,246,0.45)] sm:px-4"
-                        : "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-zinc-200/90 bg-white/70 text-zinc-700 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition-all duration-300 hover:border-violet-400/50 hover:bg-violet-500/[0.08] hover:text-violet-700 hover:shadow-[0_0_28px_-6px_rgba(139,92,246,0.35)] dark:border-white/10 dark:bg-white/[0.04] dark:text-white/85 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] dark:hover:border-violet-400/35 dark:hover:text-white dark:hover:shadow-[0_0_28px_-6px_rgba(139,92,246,0.45)]"
-                    }
-                  >
-                    <Icon className="h-5 w-5 shrink-0" />
-                    {withCaption ? (
-                      <span className="flex min-w-0 flex-col gap-0.5 leading-tight">
-                        <span className="text-[10px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-white/45">
-                          WhatsApp
-                        </span>
-                        <span className="text-xs font-semibold tabular-nums text-zinc-900 dark:text-white">
-                          {withCaption}
-                        </span>
-                      </span>
-                    ) : null}
-                  </motion.a>
-                </li>
-              ))}
-            </ul>
-          </motion.nav>
+            <nav aria-label="Social links" className="flex flex-col gap-6 lg:items-end">
+              <p className="font-display text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500 dark:text-white/40">
+                Connect
+              </p>
+              <ul className="flex flex-wrap gap-3 lg:justify-end">
+                {social.map(({ href, label, Icon }) => (
+                  <li key={label}>
+                    <motion.a
+                      href={href}
+                      target={href.startsWith("mailto:") ? undefined : "_blank"}
+                      rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+                      aria-label={label}
+                      title={label}
+                      whileHover={reduceMotion ? undefined : { scale: 1.06, y: -2 }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-zinc-200/90 bg-white/70 text-zinc-700 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition-all duration-300 hover:border-violet-400/50 hover:bg-violet-500/[0.08] hover:text-violet-700 hover:shadow-[0_0_28px_-6px_rgba(139,92,246,0.35)] dark:border-white/10 dark:bg-white/[0.04] dark:text-white/85 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] dark:hover:border-violet-400/35 dark:hover:text-white dark:hover:shadow-[0_0_28px_-6px_rgba(139,92,246,0.45)]"
+                    >
+                      <Icon className="h-5 w-5 shrink-0" />
+                    </motion.a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <div className="w-full max-w-md lg:max-w-sm">
+              <AnalyticsCodeBlock />
+            </div>
+          </motion.div>
         </div>
 
         <motion.p

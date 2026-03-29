@@ -15,8 +15,6 @@ export const links = {
   email: "mailto:abiodunadesesan@gmail.com",
   /** WhatsApp chat — wa.me uses country code + number, no + prefix */
   whatsapp: "https://wa.me/905338448449",
-  /** Shown next to WhatsApp in the footer */
-  whatsappDisplay: "+905338448449",
 } as const;
 
 /** Footer intro — paired with signature + role */

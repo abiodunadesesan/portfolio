@@ -88,8 +88,15 @@ const social: readonly SocialIconItem[] = [
   { href: links.whatsapp, label: "WhatsApp", Icon: IconWhatsApp },
 ];
 
+function splitDisplayName(fullName: string): { line1: string; line2: string } {
+  const parts = fullName.trim().split(/\s+/).filter(Boolean);
+  if (parts.length < 2) return { line1: fullName, line2: "" };
+  return { line1: parts.slice(0, -1).join(" "), line2: parts[parts.length - 1] ?? "" };
+}
+
 export default function SiteFooter() {
   const reduceMotion = useReducedMotion();
+  const { line1, line2 } = splitDisplayName(person.displayName);
 
   return (
     <footer
@@ -120,9 +127,10 @@ export default function SiteFooter() {
               <motion.div variants={fadeUp} className="relative">
                 <p
                   id="footer-heading"
-                  className="font-footer-name text-[clamp(2.5rem,8vw,4.25rem)] font-normal leading-[1.12] tracking-normal text-zinc-900 drop-shadow-[0_2px_24px_rgba(0,0,0,0.08)] dark:text-white dark:drop-shadow-[0_2px_24px_rgba(0,0,0,0.25)]"
+                  className="font-display text-[clamp(2rem,5.5vw,3.35rem)] font-semibold leading-[0.95] tracking-[-0.02em] text-zinc-900 antialiased dark:text-white"
                 >
-                  {person.displayName}
+                  <span className="block">{line1}</span>
+                  {line2 ? <span className="block">{line2}</span> : null}
                 </p>
                 {!reduceMotion && (
                   <motion.span

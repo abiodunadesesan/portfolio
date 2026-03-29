@@ -8,16 +8,16 @@ import { footerBio, links, person } from "@/lib/site-content";
 const container = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.06 },
+    transition: { staggerChildren: 0.03, delayChildren: 0.02 },
   },
 };
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 12 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
@@ -114,13 +114,13 @@ export default function SiteFooter() {
               variants={container}
               initial={reduceMotion ? "show" : "hidden"}
               whileInView="show"
-              viewport={{ once: true, margin: "-60px" }}
+              viewport={{ once: true, margin: "-20px" }}
               className="space-y-6"
             >
               <motion.div variants={fadeUp} className="relative">
                 <p
                   id="footer-heading"
-                  className="font-signature text-[clamp(2.25rem,7vw,3.75rem)] leading-[1.05] tracking-wide text-zinc-900 drop-shadow-[0_2px_24px_rgba(0,0,0,0.08)] dark:text-white dark:drop-shadow-[0_2px_24px_rgba(0,0,0,0.25)]"
+                  className="font-footer-name text-[clamp(2.5rem,8vw,4.25rem)] font-normal leading-[1.12] tracking-normal text-zinc-900 drop-shadow-[0_2px_24px_rgba(0,0,0,0.08)] dark:text-white dark:drop-shadow-[0_2px_24px_rgba(0,0,0,0.25)]"
                 >
                   {person.displayName}
                 </p>
@@ -130,7 +130,7 @@ export default function SiteFooter() {
                     initial={{ width: 0 }}
                     whileInView={{ width: "min(12rem, 40%)" }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.6, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ delay: 0.08, duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                   />
                 )}
                 {reduceMotion && (
@@ -157,9 +157,9 @@ export default function SiteFooter() {
           <motion.div
             initial={reduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 12 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="flex shrink-0 flex-col gap-6 lg:items-end lg:pt-2"
+            viewport={{ once: true, margin: "-20px" }}
+            transition={{ duration: 0.2, delay: reduceMotion ? 0 : 0.04, ease: [0.22, 1, 0.36, 1] }}
+            className="flex min-w-0 shrink-0 flex-col gap-6 lg:items-end lg:pt-2"
           >
             <nav aria-label="Social links" className="flex flex-col gap-6 lg:items-end">
               <p className="font-display text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500 dark:text-white/40">
@@ -184,7 +184,7 @@ export default function SiteFooter() {
                 ))}
               </ul>
             </nav>
-            <div className="w-full max-w-md lg:max-w-sm">
+            <div className="w-full min-w-0 max-w-md lg:max-w-sm">
               <AnalyticsCodeBlock />
             </div>
           </motion.div>
@@ -194,7 +194,7 @@ export default function SiteFooter() {
           initial={{ opacity: reduceMotion ? 1 : 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: reduceMotion ? 0 : 0.35, duration: 0.5 }}
+          transition={{ delay: reduceMotion ? 0 : 0.08, duration: 0.22 }}
           className="mt-14 border-t border-zinc-200/80 pt-8 text-center text-xs text-zinc-500 md:text-left dark:border-white/[0.07] dark:text-white/35"
         >
           © {new Date().getFullYear()} {person.displayName}. Built with Next.js.

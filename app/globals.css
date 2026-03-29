@@ -11,6 +11,8 @@ html {
   --font-family-display: var(--font-display), var(--font-sans), ui-sans-serif,
     system-ui, sans-serif;
   --font-family-signature: var(--font-signature), cursive, serif;
+  --font-family-footer-name: var(--font-footer-name), var(--font-signature),
+    "Segoe Script", cursive, serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 }

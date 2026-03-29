@@ -8,16 +8,16 @@ import type { ExperienceItem } from "@/lib/site-content";
 const container = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
+    transition: { staggerChildren: 0.03, delayChildren: 0.02 },
   },
 };
 
 const row = {
-  hidden: { opacity: 0, x: -16 },
+  hidden: { opacity: 0, x: -10 },
   show: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
@@ -30,7 +30,7 @@ export function StaggerTimeline({ items }: { items: readonly ExperienceItem[] })
       variants={container}
       initial={reduce ? "show" : "hidden"}
       whileInView="show"
-      viewport={{ once: true, margin: "-10%", amount: 0.12 }}
+      viewport={{ once: true, margin: "-5%", amount: 0.1 }}
     >
       {items.map((item, i) => (
         <motion.li key={i} variants={row} className="relative pb-12 last:pb-0">

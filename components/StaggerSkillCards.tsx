@@ -11,16 +11,16 @@ export type SkillGroup = {
 const container = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.04 },
+    transition: { staggerChildren: 0.03, delayChildren: 0.02 },
   },
 };
 
 const card = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 12 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
@@ -33,7 +33,7 @@ export function StaggerSkillCards({ groups }: { groups: readonly SkillGroup[] })
       variants={container}
       initial={reduce ? "show" : "hidden"}
       whileInView="show"
-      viewport={{ once: true, margin: "-10%", amount: 0.15 }}
+      viewport={{ once: true, margin: "-5%", amount: 0.12 }}
     >
       {groups.map((group) => (
         <motion.div key={group.label} variants={card}>

@@ -8,16 +8,16 @@ import type { ProjectItem } from "@/lib/site-content";
 const container = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.09, delayChildren: 0.04 },
+    transition: { staggerChildren: 0.03, delayChildren: 0.02 },
   },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 22 },
+  hidden: { opacity: 0, y: 12 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
@@ -30,7 +30,7 @@ export function StaggerProjectCards({ items }: { items: readonly ProjectItem[] }
       variants={container}
       initial={reduce ? "show" : "hidden"}
       whileInView="show"
-      viewport={{ once: true, margin: "-8%", amount: 0.15 }}
+      viewport={{ once: true, margin: "-4%", amount: 0.12 }}
     >
       {items.map((p) => (
         <motion.li key={p.href} variants={item} className="h-full">

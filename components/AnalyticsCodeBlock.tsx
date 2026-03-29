@@ -87,12 +87,12 @@ export default function AnalyticsCodeBlock() {
 
   return (
     <figure
-      className="overflow-hidden rounded-2xl border border-zinc-200/90 bg-white/75 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(0,0,0,0.04)] backdrop-blur-xl transition-shadow duration-500 hover:border-violet-300/60 hover:shadow-[0_0_36px_-10px_rgba(139,92,246,0.2)] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] dark:hover:border-white/15 dark:hover:shadow-[0_0_36px_-10px_rgba(168,85,247,0.35)] md:p-6"
+      className="min-w-0 overflow-hidden rounded-2xl border border-zinc-200/90 bg-white/75 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(0,0,0,0.04)] backdrop-blur-xl transition-shadow duration-500 hover:border-violet-300/60 hover:shadow-[0_0_36px_-10px_rgba(139,92,246,0.2)] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] dark:hover:border-white/15 dark:hover:shadow-[0_0_36px_-10px_rgba(168,85,247,0.35)] sm:p-5 md:p-6"
       aria-label="Site analytics"
     >
-      <pre className="font-mono text-[13px] leading-relaxed text-zinc-800 md:text-sm dark:text-white/90">
-        <code>
-          <span className="text-zinc-500 dark:text-zinc-500">
+      <pre className="min-w-0 max-w-full whitespace-pre-wrap break-words font-mono text-[0.65rem] leading-relaxed text-zinc-800 sm:text-[11px] md:text-[12px] dark:text-white/90">
+        <code className="block min-w-0">
+          <span className="text-zinc-500 dark:text-zinc-400">
             {"// "}
             {stats.asOfLabel}
           </span>

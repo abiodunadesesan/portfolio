@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Great_Vibes, Syne } from "next/font/google";
+import { Allura, DM_Sans, Great_Vibes, Syne } from "next/font/google";
 import Script from "next/script";
 import PortfolioHeader from "@/components/PortfolioHeader";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -21,6 +21,14 @@ const signature = Great_Vibes({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-signature",
+  display: "swap",
+});
+
+/** Thin, fluid signature style for the footer display name (reference: elegant script / pen strokes). */
+const footerNameScript = Allura({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-footer-name",
   display: "swap",
 });
 
@@ -69,7 +77,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth dark" suppressHydrationWarning>
       <body
-        className={`${syne.variable} ${dmSans.variable} ${signature.variable} liquid-glass-body font-sans antialiased`}
+        className={`${syne.variable} ${dmSans.variable} ${signature.variable} ${footerNameScript.variable} liquid-glass-body font-sans antialiased`}
       >
         <ThemeProvider>
           <PortfolioHeader />

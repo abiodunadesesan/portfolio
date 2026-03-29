@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, type CSSProperties } from "react";
 import { ChevronDown, Mouse } from "lucide-react";
 import {
   motion,
@@ -141,6 +141,8 @@ function ScrollCue({
   const pulse = introCfg(tier).cuePulse;
   const wheel = introCfg(tier).cueWheel;
   const touchFirst = tier !== "desktop";
+  /** Phones: static chevron — one fewer infinite WAAPI/RAF loop. */
+  const mobileCueStatic = tier === "mobile";
 
   if (reduceMotion) {
     return (
@@ -176,16 +178,20 @@ function ScrollCue({
               Projects, experience &amp; contact are below — or jump straight in.
             </span>
           </div>
-          <motion.div
-            animate={reduceMotion ? undefined : { y: [0, 6, 0] }}
-            transition={{ duration: 1.35, repeat: Infinity, ease: "easeInOut" }}
-            aria-hidden
-          >
+          {mobileCueStatic ? (
             <ChevronDown
               className="h-8 w-8 text-violet-600 opacity-90 dark:text-violet-300 sm:h-7 sm:w-7"
               strokeWidth={2.25}
+              aria-hidden
             />
-          </motion.div>
+          ) : (
+            <div className="hero-cue-chevron-bounce" aria-hidden>
+              <ChevronDown
+                className="h-8 w-8 text-violet-600 opacity-90 dark:text-violet-300 sm:h-7 sm:w-7"
+                strokeWidth={2.25}
+              />
+            </div>
+          )}
           <a
             href="#work"
             className="rounded-full border border-violet-500/35 bg-white/80 px-4 py-2.5 text-sm font-semibold text-violet-800 shadow-sm transition hover:border-violet-500/55 hover:bg-white dark:border-violet-400/30 dark:bg-zinc-900/80 dark:text-violet-100 dark:hover:border-violet-400/50 dark:hover:bg-zinc-900"
@@ -199,23 +205,17 @@ function ScrollCue({
             <Mouse className="h-3.5 w-3.5 opacity-80" strokeWidth={2} aria-hidden />
             Scroll to explore
           </span>
-          <motion.div
-            className="relative flex h-12 w-[22px] justify-center rounded-full border border-zinc-300/60 bg-white/10 dark:border-white/15 dark:bg-white/[0.04]"
-            animate={{
-              boxShadow: [
-                "0 0 0 0 rgba(139, 92, 246, 0)",
-                "0 0 24px 2px rgba(139, 92, 246, 0.2)",
-                "0 0 0 0 rgba(139, 92, 246, 0)",
-              ],
-            }}
-            transition={{ duration: pulse, repeat: Infinity, ease: "easeInOut" }}
+          <div
+            className="hero-cue-mouse-shell relative flex h-12 w-[22px] justify-center rounded-full border border-zinc-300/60 bg-white/10 dark:border-white/15 dark:bg-white/[0.04]"
+            style={
+              {
+                "--hero-cue-pulse": `${pulse}s`,
+                "--hero-cue-wheel": `${wheel}s`,
+              } as React.CSSProperties
+            }
           >
-            <motion.span
-              className="absolute top-2 h-1.5 w-1.5 rounded-full bg-violet-600 dark:bg-violet-300"
-              animate={{ y: [0, 16, 0] }}
-              transition={{ duration: wheel, repeat: Infinity, ease: [0.45, 0, 0.55, 1] as const }}
-            />
-          </motion.div>
+            <span className="hero-cue-mouse-wheel absolute top-2 h-1.5 w-1.5 rounded-full bg-violet-600 dark:bg-violet-300" />
+          </div>
         </>
       )}
     </motion.div>
@@ -330,14 +330,15 @@ export default function Overlay({
           className="relative max-w-4xl px-2 text-center [perspective:1200px]"
         >
           <motion.div className="relative inline-block" style={{ rotateX: tiltInner }}>
-            <motion.span
-              className="pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-to-r from-violet-600/15 via-fuchsia-500/10 to-transparent blur-2xl dark:from-violet-500/25 dark:via-fuchsia-500/15 md:-inset-10"
-              animate={
+            <span
+              className={`pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-to-r from-violet-600/15 via-fuchsia-500/10 to-transparent blur-2xl dark:from-violet-500/25 dark:via-fuchsia-500/15 md:-inset-10 ${
+                reduceMotion || tier === "mobile" ? "" : "hero-title-ambient-glow"
+              }`}
+              style={
                 reduceMotion || tier === "mobile"
                   ? undefined
-                  : { opacity: [0.5, 0.85, 0.5], scale: [0.98, 1.02, 0.98] }
+                  : ({ "--hero-glow-dur": `${ic.glowDur}s` } as CSSProperties)
               }
-              transition={{ duration: ic.glowDur, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.h1
               variants={introContainer}

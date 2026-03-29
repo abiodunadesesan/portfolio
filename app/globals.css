@@ -274,6 +274,135 @@ html.dark ::selection {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
+/**
+ * Hero: compositor-friendly loops (transform / opacity only) — no JS animation tickers.
+ * Durations set inline per breakpoint where needed (`animation-duration` or `--` variables).
+ */
+@keyframes hero-ambient-drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(18px, -12px, 0);
+  }
+}
+
+@keyframes hero-ambient-drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-22px, 14px, 0);
+  }
+}
+
+@keyframes hero-ambient-breathe {
+  0%,
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+  50% {
+    transform: scale3d(1.06, 1.06, 1);
+  }
+}
+
+.hero-ambient-drift-a {
+  animation-name: hero-ambient-drift-a;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.hero-ambient-drift-b {
+  animation-name: hero-ambient-drift-b;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.hero-ambient-breathe {
+  animation-name: hero-ambient-breathe;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+@keyframes hero-title-ambient-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale3d(0.98, 0.98, 1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale3d(1.02, 1.02, 1);
+  }
+}
+
+.hero-title-ambient-glow {
+  animation: hero-title-ambient-glow var(--hero-glow-dur, 3.2s) ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes hero-cue-chevron-bounce {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 6px, 0);
+  }
+}
+
+.hero-cue-chevron-bounce {
+  animation: hero-cue-chevron-bounce 1.35s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes hero-cue-mouse-shell-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+  }
+  50% {
+    box-shadow: 0 0 24px 2px rgba(139, 92, 246, 0.2);
+  }
+}
+
+.hero-cue-mouse-shell {
+  animation: hero-cue-mouse-shell-glow var(--hero-cue-pulse, 2.05s) ease-in-out infinite;
+  will-change: box-shadow;
+}
+
+@keyframes hero-cue-mouse-wheel {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 16px, 0);
+  }
+}
+
+.hero-cue-mouse-wheel {
+  animation: hero-cue-mouse-wheel var(--hero-cue-wheel, 1.35s) cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-ambient-drift-a,
+  .hero-ambient-drift-b,
+  .hero-ambient-breathe,
+  .hero-title-ambient-glow,
+  .hero-cue-chevron-bounce,
+  .hero-cue-mouse-shell,
+  .hero-cue-mouse-wheel {
+    animation: none !important;
+  }
+}
+
 /* Scrollbars */
 @media (pointer: fine) {
   html.light * {

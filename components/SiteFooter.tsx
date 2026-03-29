@@ -88,15 +88,8 @@ const social: readonly SocialIconItem[] = [
   { href: links.whatsapp, label: "WhatsApp", Icon: IconWhatsApp },
 ];
 
-function splitDisplayName(fullName: string): { line1: string; line2: string } {
-  const parts = fullName.trim().split(/\s+/).filter(Boolean);
-  if (parts.length < 2) return { line1: fullName, line2: "" };
-  return { line1: parts.slice(0, -1).join(" "), line2: parts[parts.length - 1] ?? "" };
-}
-
 export default function SiteFooter() {
   const reduceMotion = useReducedMotion();
-  const { line1, line2 } = splitDisplayName(person.displayName);
 
   return (
     <footer
@@ -127,34 +120,32 @@ export default function SiteFooter() {
               <motion.div variants={fadeUp} className="relative">
                 <p
                   id="footer-heading"
-                  className="font-footer-signature text-[clamp(2.85rem,10vw,5rem)] font-normal leading-[1.08] tracking-normal text-zinc-900 antialiased dark:text-white"
+                  className="font-footer-signature font-normal tracking-[0.01em] text-zinc-900 antialiased dark:text-white"
                 >
-                  {/* First line only: script + thin rule underneath (reference layout). */}
-                  <span className="block w-max max-w-full">
-                    <span className="relative inline-block">
-                      <span className="block">{line1}</span>
-                      {!reduceMotion ? (
-                        <motion.span
-                          className="absolute left-0 top-full mt-1.5 block h-px w-full origin-left bg-zinc-400/60 dark:bg-white/30"
-                          initial={{ scaleX: 0 }}
-                          whileInView={{ scaleX: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.06, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                          aria-hidden
-                        />
-                      ) : (
-                        <span
-                          className="absolute left-0 top-full mt-1.5 block h-[1px] w-full bg-zinc-400/60 dark:bg-white/30"
-                          aria-hidden
-                        />
-                      )}
+                  {/* One flowing script line (Great Vibes) — title case, ornate caps; wraps on narrow screens. */}
+                  <span className="relative inline-block max-w-full">
+                    <span
+                      className="block max-w-[min(100%,34rem)] text-[clamp(2.65rem,9.5vw,4.85rem)] leading-[1.12] text-pretty sm:max-w-none sm:leading-[1.08] sm:whitespace-nowrap"
+                      style={{ fontFeatureSettings: '"liga" 1, "kern" 1' }}
+                    >
+                      {person.displayName}
                     </span>
+                    {!reduceMotion ? (
+                      <motion.span
+                        className="absolute left-0 top-full mt-2 block h-px w-full max-w-[min(100%,34rem)] origin-left bg-zinc-400/55 dark:bg-white/35"
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                        aria-hidden
+                      />
+                    ) : (
+                      <span
+                        className="absolute left-0 top-full mt-2 block h-px w-full max-w-[min(100%,34rem)] bg-zinc-400/55 dark:bg-white/35"
+                        aria-hidden
+                      />
+                    )}
                   </span>
-                  {line2 ? (
-                    <span className="mt-2 block max-w-[min(100%,22rem)] pl-[0.12em] text-[0.92em] leading-[1.05] md:mt-2.5 md:pl-[0.18em]">
-                      {line2}
-                    </span>
-                  ) : null}
                 </p>
               </motion.div>
 

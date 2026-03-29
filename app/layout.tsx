@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { DM_Sans, Great_Vibes, Syne } from "next/font/google";
 import Script from "next/script";
 import PortfolioHeader from "@/components/PortfolioHeader";
+import { MotionProvider } from "@/components/MotionProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
@@ -74,10 +75,12 @@ export default function RootLayout({
       <body
         className={`${syne.variable} ${dmSans.variable} ${footerSignature.variable} liquid-glass-body font-sans antialiased`}
       >
-        <ThemeProvider>
-          <PortfolioHeader />
-          {children}
-        </ThemeProvider>
+        <MotionProvider>
+          <ThemeProvider>
+            <PortfolioHeader />
+            {children}
+          </ThemeProvider>
+        </MotionProvider>
         <Analytics />
         <SpeedInsights />
         <Script id="noupe-ai" src={noupeScriptSrc} strategy="lazyOnload" />

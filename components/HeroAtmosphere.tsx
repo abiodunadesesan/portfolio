@@ -15,6 +15,11 @@ type Props = {
 /** Cinematic layers above the canvas: mesh lights, vignette, film grain. */
 export default function HeroAtmosphere({ scrollYProgress, reduceMotion }: Props) {
   const tier = useBreakpointTier();
+  /** Skip infinite orb drift on small screens — fewer main-thread ticks & less GPU blur work. */
+  const noAmbientDrift = reduceMotion || tier === "mobile";
+  const blurHero = tier === "mobile" ? "blur-[56px]" : tier === "tablet" ? "blur-[80px]" : "blur-[100px]";
+  const blurMid = tier === "mobile" ? "blur-[48px]" : tier === "tablet" ? "blur-[72px]" : "blur-[90px]";
+  const blurSoft = tier === "mobile" ? "blur-[44px]" : tier === "tablet" ? "blur-[64px]" : "blur-[80px]";
 
   const meshEnd = tier === "mobile" ? 0.095 : tier === "tablet" ? 0.118 : 0.14;
   const vignetteStops =
@@ -29,44 +34,40 @@ export default function HeroAtmosphere({ scrollYProgress, reduceMotion }: Props)
 
   return (
     <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden">
+      {/* Scroll-linked layer: Framer only for opacity + scale. Drift = CSS on inner (no JS ticker). */}
       <motion.div
-        className="absolute -left-1/4 top-0 h-[min(85vh,720px)] w-[min(85vh,720px)] rounded-full bg-violet-500/25 blur-[100px] dark:bg-violet-500/30"
+        className={`absolute -left-1/4 top-0 h-[min(85vh,720px)] w-[min(85vh,720px)] ${blurHero}`}
         style={{ opacity: meshOp, scale: reduceMotion ? 1 : orbScale }}
-        animate={
-          reduceMotion
-            ? undefined
-            : {
-                x: [0, 18, 0],
-                y: [0, -12, 0],
-              }
-        }
-        transition={{ duration: d1, repeat: Infinity, ease: "easeInOut" }}
-      />
+      >
+        <div
+          className={`h-full w-full rounded-full bg-violet-500/25 dark:bg-violet-500/30 ${
+            noAmbientDrift ? "" : "hero-ambient-drift-a"
+          }`}
+          style={noAmbientDrift ? undefined : { animationDuration: `${d1}s` }}
+        />
+      </motion.div>
       <motion.div
-        className="absolute -right-1/4 bottom-0 h-[min(70vh,600px)] w-[min(70vh,600px)] rounded-full bg-fuchsia-500/20 blur-[90px] dark:bg-fuchsia-500/25"
+        className={`absolute -right-1/4 bottom-0 h-[min(70vh,600px)] w-[min(70vh,600px)] ${blurMid}`}
         style={{ opacity: meshOp }}
-        animate={
-          reduceMotion
-            ? undefined
-            : {
-                x: [0, -22, 0],
-                y: [0, 14, 0],
-              }
-        }
-        transition={{ duration: d2, repeat: Infinity, ease: "easeInOut" }}
-      />
+      >
+        <div
+          className={`h-full w-full rounded-full bg-fuchsia-500/20 dark:bg-fuchsia-500/25 ${
+            noAmbientDrift ? "" : "hero-ambient-drift-b"
+          }`}
+          style={noAmbientDrift ? undefined : { animationDuration: `${d2}s` }}
+        />
+      </motion.div>
       <motion.div
-        className="absolute left-1/2 top-1/3 h-[min(50vh,480px)] w-[min(50vh,480px)] -translate-x-1/2 rounded-full bg-amber-400/10 blur-[80px] dark:bg-violet-400/15"
+        className={`absolute left-1/2 top-1/3 h-[min(50vh,480px)] w-[min(50vh,480px)] -translate-x-1/2 ${blurSoft}`}
         style={{ opacity: meshOp }}
-        animate={
-          reduceMotion
-            ? undefined
-            : {
-                scale: [1, 1.06, 1],
-              }
-        }
-        transition={{ duration: d3, repeat: Infinity, ease: "easeInOut" }}
-      />
+      >
+        <div
+          className={`h-full w-full rounded-full bg-amber-400/10 dark:bg-violet-400/15 ${
+            noAmbientDrift ? "" : "hero-ambient-breathe"
+          }`}
+          style={noAmbientDrift ? undefined : { animationDuration: `${d3}s` }}
+        />
+      </motion.div>
 
       <motion.div
         className="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_50%,transparent_35%,rgba(0,0,0,0.5)_100%)] dark:bg-[radial-gradient(ellipse_90%_70%_at_50%_50%,transparent_40%,rgba(0,0,0,0.55)_100%)]"

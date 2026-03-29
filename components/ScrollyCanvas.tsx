@@ -1,12 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useMotionValueEvent,
-} from "framer-motion";
+import { useReducedMotion, useScroll, useMotionValueEvent } from "framer-motion";
 import { drawImageCover } from "@/lib/canvas-draw";
 import {
   getFrameSrc,
@@ -47,6 +42,7 @@ type SizeState = { cssW: number; cssH: number; dpr: number };
 
 export default function ScrollyCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollProgressBarRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const sizeRef = useRef<SizeState>({ cssW: 0, cssH: 0, dpr: 1 });
@@ -172,12 +168,20 @@ export default function ScrollyCanvas() {
     };
   }, [ensureCanvasSize, renderFrame, imagesReady]);
 
-  useMotionValueEvent(scrollYProgress, "change", scheduleRender);
+  const onScrollProgressChange = useCallback(() => {
+    const el = scrollProgressBarRef.current;
+    if (el) el.style.transform = `scaleX(${scrollYProgress.get()})`;
+    scheduleRender();
+  }, [scrollYProgress, scheduleRender]);
+
+  useMotionValueEvent(scrollYProgress, "change", onScrollProgressChange);
 
   useEffect(() => {
     if (!imagesReady) return;
     scheduleRender();
-  }, [imagesReady, scheduleRender]);
+    const el = scrollProgressBarRef.current;
+    if (el) el.style.transform = `scaleX(${scrollYProgress.get()})`;
+  }, [imagesReady, scheduleRender, scrollYProgress]);
 
   return (
     <section
@@ -196,9 +200,10 @@ export default function ScrollyCanvas() {
           reduceMotion={!!reduceMotion}
         />
         <Overlay scrollYProgress={scrollYProgress} reduceMotion={!!reduceMotion} />
-        <motion.div
-          className="pointer-events-none absolute bottom-0 left-0 z-[5] h-[2px] w-full origin-left bg-gradient-to-r from-violet-600/90 via-fuchsia-600/75 to-transparent dark:from-violet-500/90 dark:via-fuchsia-500/70"
-          style={{ scaleX: scrollYProgress }}
+        <div
+          ref={scrollProgressBarRef}
+          className="pointer-events-none absolute bottom-0 left-0 z-[5] h-[2px] w-full origin-left bg-gradient-to-r from-violet-600/90 via-fuchsia-600/75 to-transparent will-change-transform dark:from-violet-500/90 dark:via-fuchsia-500/70"
+          style={{ transform: "scaleX(0)" }}
           aria-hidden
         />
       </div>

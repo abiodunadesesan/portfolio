@@ -6,6 +6,7 @@ import Script from "next/script";
 import PortfolioHeader from "@/components/PortfolioHeader";
 import { MotionProvider } from "@/components/MotionProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { getHeroPreloadFrameUrls } from "@/lib/sequence";
 import "./globals.css";
 
 const syne = Syne({
@@ -20,12 +21,13 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-/** Elegant script with flourishes — footer display name (see Google Fonts: Great Vibes). */
+/** Connecting script for hero + footer name (Great Vibes). Parisienne is a similar Google Fonts option with more bounce. */
 const footerSignature = Great_Vibes({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-footer-signature",
   display: "swap",
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
@@ -65,6 +67,8 @@ const NOUPE_EMBED_DEFAULT =
 const noupeScriptSrc =
   process.env.NEXT_PUBLIC_NOUPE_SCRIPT_URL ?? NOUPE_EMBED_DEFAULT;
 
+const heroPreloadUrls = getHeroPreloadFrameUrls();
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -72,9 +76,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth dark" suppressHydrationWarning>
+      <head>
+        {heroPreloadUrls.map((href) => (
+          <link key={href} rel="preload" href={href} as="image" fetchPriority="high" />
+        ))}
+      </head>
       <body
         className={`${syne.variable} ${dmSans.variable} ${footerSignature.variable} liquid-glass-body font-sans antialiased`}
       >
+        <a
+          href="#main-content"
+          className="absolute left-[-10000px] top-auto z-[200] h-px w-px overflow-hidden focus:left-4 focus:top-4 focus:h-auto focus:w-auto focus:overflow-visible focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-violet-500 dark:focus:bg-zinc-900 dark:focus:text-white"
+        >
+          Skip to main content
+        </a>
         <MotionProvider>
           <ThemeProvider>
             <PortfolioHeader />

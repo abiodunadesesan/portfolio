@@ -120,31 +120,14 @@ export default function SiteFooter() {
               <motion.div variants={fadeUp} className="relative">
                 <p
                   id="footer-heading"
-                  className="font-footer-signature font-normal tracking-[0.01em] text-zinc-900 antialiased dark:text-white"
+                  className="font-footer-signature font-normal not-italic tracking-[0.02em] text-zinc-900 antialiased subpixel-antialiased [text-shadow:0_2px_28px_rgba(0,0,0,0.06)] dark:text-white dark:[text-shadow:0_0_52px_rgba(255,255,255,0.12)]"
                 >
-                  {/* One flowing script line (Great Vibes) — title case, ornate caps; wraps on narrow screens. */}
-                  <span className="relative inline-block max-w-full">
-                    <span
-                      className="block max-w-[min(100%,34rem)] text-[clamp(2.65rem,9.5vw,4.85rem)] leading-[1.12] text-pretty sm:max-w-none sm:leading-[1.08] sm:whitespace-nowrap"
-                      style={{ fontFeatureSettings: '"liga" 1, "kern" 1' }}
-                    >
-                      {person.displayName}
-                    </span>
-                    {!reduceMotion ? (
-                      <motion.span
-                        className="absolute left-0 top-full mt-2 block h-px w-full max-w-[min(100%,34rem)] origin-left bg-zinc-400/55 dark:bg-white/35"
-                        initial={{ scaleX: 0 }}
-                        whileInView={{ scaleX: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                        aria-hidden
-                      />
-                    ) : (
-                      <span
-                        className="absolute left-0 top-full mt-2 block h-px w-full max-w-[min(100%,34rem)] bg-zinc-400/55 dark:bg-white/35"
-                        aria-hidden
-                      />
-                    )}
+                  {/* Great Vibes: one flowing connecting script line (title case); matches reference — no rule. */}
+                  <span
+                    className="block max-w-[min(100%,36rem)] text-[clamp(2.5rem,8.5vw,4.75rem)] leading-[1.08] text-pretty sm:max-w-none sm:leading-[1.06] sm:whitespace-nowrap"
+                    style={{ fontFeatureSettings: '"liga" 1, "kern" 1' }}
+                  >
+                    {person.displayName}
                   </span>
                 </p>
               </motion.div>

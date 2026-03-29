@@ -7,6 +7,7 @@
     "dev:webpack": "next dev",
     "dev:reset": "npm run clean && next dev --turbo",
     "build": "next build",
+    "analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .next",
@@ -23,6 +24,7 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^15.1.0",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/node": "^20",
     "@types/react": "^18",

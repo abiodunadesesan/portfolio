@@ -5,6 +5,7 @@ import { useReducedMotion, useScroll, useMotionValueEvent } from "framer-motion"
 import { drawImageCover } from "@/lib/canvas-draw";
 import {
   getFrameSrc,
+  HERO_PRELOAD_FRAME_INDICES,
   SEQUENCE_FRAME_COUNT,
   SEQUENCE_SOURCE_CROP,
 } from "@/lib/sequence";
@@ -59,9 +60,13 @@ export default function ScrollyCanvas() {
     const images: HTMLImageElement[] = [];
     let settled = 0;
 
+    const preloadSet = new Set<number>(HERO_PRELOAD_FRAME_INDICES);
     for (let i = 0; i < SEQUENCE_FRAME_COUNT; i++) {
       const img = new Image();
       img.decoding = "async";
+      if (preloadSet.has(i)) {
+        img.fetchPriority = "high";
+      }
       img.src = getFrameSrc(i);
       images.push(img);
     }
@@ -100,10 +105,13 @@ export default function ScrollyCanvas() {
     const container = canvas?.parentElement;
     if (!canvas || !container) return false;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const cssW = container.clientWidth;
     const cssH = container.clientHeight;
     if (cssW < 1 || cssH < 1) return false;
+
+    const raw = window.devicePixelRatio || 1;
+    /** Narrow screens: cap DPR to reduce canvas fill cost (still sharp on most phones). */
+    const dpr = cssW < 768 ? Math.min(raw, 1.5) : Math.min(raw, 2);
 
     const prev = sizeRef.current;
     if (prev.cssW === cssW && prev.cssH === cssH && prev.dpr === dpr) {
@@ -187,7 +195,7 @@ export default function ScrollyCanvas() {
     <section
       ref={containerRef}
       className="relative h-[500vh] w-full"
-      aria-label="Scroll-driven image sequence"
+      aria-label="Hero: cinematic scroll sequence. Scroll down to advance frames; text and controls sit above the canvas."
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-zinc-100 transition-colors duration-500 dark:bg-[#08080a]">
         <canvas

@@ -10,8 +10,9 @@ html {
   --font-family-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-family-display: var(--font-display), var(--font-sans), ui-sans-serif,
     system-ui, sans-serif;
-  --font-family-footer-signature: var(--font-footer-signature), "Brush Script MT",
-    cursive, serif;
+  /* Great Vibes (next/font) — “connecting script”; Parisienne is a similar Google Fonts alternative */
+  --font-family-footer-signature: var(--font-footer-signature), "Segoe Script",
+    "Brush Script MT", cursive, serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 }
@@ -455,4 +456,12 @@ html.dark :focus-visible {
 
 @utility text-balance {
   text-wrap: balance;
+}
+
+/** Ensures the signature stack wins over `font-sans` / `font-display` anywhere in the cascade. */
+@utility font-footer-signature {
+  font-family: var(--font-family-footer-signature);
+  font-weight: 400;
+  font-style: normal;
+  font-synthesis: none;
 }

@@ -10,7 +10,7 @@ const ScrollyCanvas = dynamic(() => import("@/components/ScrollyCanvas"), {
   loading: () => (
     <section
       className="relative h-[500vh] w-full"
-      aria-label="Loading scroll sequence"
+      aria-label="Loading hero scroll sequence"
     >
       <div className="sticky top-0 h-screen w-full bg-zinc-100 dark:bg-[#08080a]" />
     </section>

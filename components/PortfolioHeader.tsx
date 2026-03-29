@@ -37,7 +37,7 @@ export default function PortfolioHeader() {
     >
       <div className="mx-auto flex min-h-16 max-w-7xl items-center gap-3 px-4 py-2 sm:min-h-[4.25rem] sm:gap-4 sm:px-6 md:min-h-[4.5rem] md:gap-6 md:px-8">
         <a
-          href="#top"
+          href="#main-content"
           className="group min-w-0 shrink py-1"
           aria-label="Back to top"
         >

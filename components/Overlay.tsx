@@ -17,8 +17,6 @@ type OverlayProps = {
   reduceMotion: boolean;
 };
 
-const nameWords = person.displayName.split(" ");
-
 function introCfg(tier: BreakpointTier) {
   switch (tier) {
     case "mobile":
@@ -206,6 +204,8 @@ function ScrollCue({
             Scroll to explore
           </span>
           <div
+            role="img"
+            aria-label="Animated scroll hint: scroll wheel moves to show you can scroll to explore the page"
             className="hero-cue-mouse-shell relative flex h-12 w-[22px] justify-center rounded-full border border-zinc-300/60 bg-white/10 dark:border-white/15 dark:bg-white/[0.04]"
             style={
               {
@@ -214,7 +214,7 @@ function ScrollCue({
               } as React.CSSProperties
             }
           >
-            <span className="hero-cue-mouse-wheel absolute top-2 h-1.5 w-1.5 rounded-full bg-violet-600 dark:bg-violet-300" />
+            <span className="hero-cue-mouse-wheel absolute top-2 h-1.5 w-1.5 rounded-full bg-violet-600 dark:bg-violet-300" aria-hidden />
           </div>
         </>
       )}
@@ -230,7 +230,7 @@ export default function Overlay({
   const ic = introCfg(tier);
   const sc = scrollCfg(tier);
 
-  const { introContainer, wordReveal, subReveal } = useMemo(
+  const { introContainer, nameReveal, subReveal } = useMemo(
     () => ({
       introContainer: {
         hidden: { opacity: 0 },
@@ -239,12 +239,12 @@ export default function Overlay({
           transition: { staggerChildren: ic.stagger, delayChildren: ic.delayChildren },
         },
       },
-      wordReveal: {
+      nameReveal: {
         hidden: {
           opacity: 0,
-          y: 36,
-          rotateX: -14,
-          filter: `blur(${ic.wordBlurHidden}px)`,
+          y: 28,
+          rotateX: -10,
+          filter: `blur(${Math.min(ic.wordBlurHidden, 8)}px)`,
         },
         show: {
           opacity: 1,
@@ -344,20 +344,15 @@ export default function Overlay({
               variants={introContainer}
               initial={introState}
               animate={introAnimate}
-              className="relative mx-auto max-w-[100vw] text-center font-display font-semibold leading-[1.02] tracking-tight"
+              className="relative mx-auto max-w-[min(100vw,42rem)] text-center leading-[1.06] tracking-normal"
             >
-              <span className="flex flex-wrap items-baseline justify-center gap-x-3 gap-y-1 md:gap-x-4">
-                {nameWords.map((word, i) => (
-                  <motion.span
-                    key={`${word}-${i}`}
-                    variants={wordReveal}
-                    className="inline-block bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 bg-clip-text text-[clamp(1.05rem,4.5vw,4.15rem)] text-transparent [filter:drop-shadow(0_2px_14px_rgba(0,0,0,0.28))] max-sm:from-zinc-950 max-sm:via-zinc-900 max-sm:to-zinc-950 dark:from-white dark:via-zinc-100 dark:to-zinc-300 dark:[filter:drop-shadow(0_2px_20px_rgba(0,0,0,0.75))]"
-                  >
-                    {word}
-                    {i === nameWords.length - 1 ? "." : ""}
-                  </motion.span>
-                ))}
-              </span>
+              <motion.span
+                variants={nameReveal}
+                className="block bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 bg-clip-text pb-1 font-footer-signature text-[clamp(2.35rem,7.5vw,4.15rem)] font-normal not-italic text-transparent [filter:drop-shadow(0_2px_14px_rgba(0,0,0,0.22))] max-sm:from-zinc-950 max-sm:via-zinc-900 max-sm:to-zinc-950 dark:from-white dark:via-zinc-100 dark:to-zinc-200 dark:[filter:drop-shadow(0_2px_28px_rgba(255,255,255,0.12))] sm:whitespace-nowrap sm:leading-[1.05]"
+                style={{ fontFeatureSettings: '"liga" 1, "kern" 1' }}
+              >
+                {person.displayName}
+              </motion.span>
               <motion.span
                 variants={subReveal}
                 className="mt-3 block text-[clamp(0.95rem,2.6vw,1.4rem)] font-medium leading-snug text-zinc-700 dark:mt-4 dark:text-white/92 max-sm:dark:text-white md:mt-4"

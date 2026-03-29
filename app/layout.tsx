@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { DM_Sans, Mr_De_Haviland, Syne } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { DM_Sans, Great_Vibes, Syne } from "next/font/google";
 import Script from "next/script";
 import PortfolioHeader from "@/components/PortfolioHeader";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -18,8 +19,8 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-/** Flowing pen-style script for the footer name (signature aesthetic). */
-const footerSignature = Mr_De_Haviland({
+/** Elegant script with flourishes — footer display name (see Google Fonts: Great Vibes). */
+const footerSignature = Great_Vibes({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-footer-signature",
@@ -78,6 +79,7 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
         <Analytics />
+        <SpeedInsights />
         <Script id="noupe-ai" src={noupeScriptSrc} strategy="lazyOnload" />
       </body>
     </html>

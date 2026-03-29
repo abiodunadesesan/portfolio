@@ -127,32 +127,42 @@ export default function SiteFooter() {
               <motion.div variants={fadeUp} className="relative">
                 <p
                   id="footer-heading"
-                  className="font-footer-signature text-[clamp(2.75rem,9vw,4.75rem)] font-normal leading-[1.02] tracking-wide text-zinc-900 dark:text-white"
+                  className="font-footer-signature text-[clamp(2.85rem,10vw,5rem)] font-normal leading-[1.08] tracking-normal text-zinc-900 antialiased dark:text-white"
                 >
-                  <span className="block">{line1}</span>
+                  {/* First line only: script + thin rule underneath (reference layout). */}
+                  <span className="block w-max max-w-full">
+                    <span className="relative inline-block">
+                      <span className="block">{line1}</span>
+                      {!reduceMotion ? (
+                        <motion.span
+                          className="absolute left-0 top-full mt-1.5 block h-px w-full origin-left bg-zinc-400/60 dark:bg-white/30"
+                          initial={{ scaleX: 0 }}
+                          whileInView={{ scaleX: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.06, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                          aria-hidden
+                        />
+                      ) : (
+                        <span
+                          className="absolute left-0 top-full mt-1.5 block h-[1px] w-full bg-zinc-400/60 dark:bg-white/30"
+                          aria-hidden
+                        />
+                      )}
+                    </span>
+                  </span>
                   {line2 ? (
-                    <span className="block -mt-1 pl-[0.04em] md:-mt-2 md:pl-[0.08em]">{line2}</span>
+                    <span className="mt-2 block max-w-[min(100%,22rem)] pl-[0.12em] text-[0.92em] leading-[1.05] md:mt-2.5 md:pl-[0.18em]">
+                      {line2}
+                    </span>
                   ) : null}
                 </p>
-                {!reduceMotion && (
-                  <motion.span
-                    className="absolute -bottom-1 left-0 h-px w-0 bg-zinc-400/50 dark:bg-white/25"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: "min(12rem, 40%)" }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.08, duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  />
-                )}
-                {reduceMotion && (
-                  <span className="absolute -bottom-1 left-0 block h-px w-[min(12rem,40%)] bg-zinc-400/50 dark:bg-white/25" />
-                )}
               </motion.div>
 
               <motion.p
                 variants={fadeUp}
-                className="font-display text-sm font-medium uppercase tracking-[0.2em] text-zinc-600 dark:text-white/75"
+                className="font-display text-xs font-medium uppercase tracking-[0.22em] text-zinc-500 dark:text-white/55 sm:text-sm"
               >
-                {person.role} <span className="text-zinc-400 dark:text-white/40">·</span> {person.tagline}
+                {person.role} <span className="text-zinc-400/80 dark:text-white/35">·</span> {person.tagline}
               </motion.p>
 
               <motion.p

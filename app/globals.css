@@ -10,7 +10,8 @@ html {
   --font-family-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-family-display: var(--font-display), var(--font-sans), ui-sans-serif,
     system-ui, sans-serif;
-  --font-family-footer-signature: var(--font-footer-signature), cursive, serif;
+  --font-family-footer-signature: var(--font-footer-signature), "Brush Script MT",
+    cursive, serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 }

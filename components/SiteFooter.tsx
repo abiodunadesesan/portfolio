@@ -93,8 +93,11 @@ export default function SiteFooter() {
               viewport={{ once: true, margin: "-60px" }}
               className="space-y-6"
             >
-              <motion.div variants={fadeUp} id="footer-heading" className="relative">
-                <p className="font-signature text-[clamp(2.25rem,7vw,3.75rem)] leading-[1.05] tracking-wide text-zinc-900 drop-shadow-[0_2px_24px_rgba(0,0,0,0.08)] dark:text-white dark:drop-shadow-[0_2px_24px_rgba(0,0,0,0.25)]">
+              <motion.div variants={fadeUp} className="relative">
+                <p
+                  id="footer-heading"
+                  className="font-signature text-[clamp(2.25rem,7vw,3.75rem)] leading-[1.05] tracking-wide text-zinc-900 drop-shadow-[0_2px_24px_rgba(0,0,0,0.08)] dark:text-white dark:drop-shadow-[0_2px_24px_rgba(0,0,0,0.25)]"
+                >
                   {person.displayName}
                 </p>
                 {!reduceMotion && (

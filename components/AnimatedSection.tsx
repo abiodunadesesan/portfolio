@@ -25,7 +25,7 @@ export function AnimatedSection({
       transition={{
         duration: 0.65,
         delay: reduce ? 0 : delay,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1] as const,
       }}
       {...rest}
     >

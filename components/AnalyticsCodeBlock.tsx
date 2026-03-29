@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { analyticsFallback } from "@/lib/site-content";
 
+/** Dev-only: React Strict Mode remounts would double-count pageviews without this guard. */
+let analyticsPostCommitted = false;
+
 type Stats = {
   totalVisitors: number;
   totalVisits: number;
@@ -47,14 +50,17 @@ export default function AnalyticsCodeBlock() {
         }
       })();
 
-      try {
-        await fetch("/api/analytics", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ visitorId, sessionVisit }),
-        });
-      } catch {
-        /* offline — still try GET */
+      if (!analyticsPostCommitted) {
+        try {
+          const res = await fetch("/api/analytics", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ visitorId, sessionVisit }),
+          });
+          if (res.ok) analyticsPostCommitted = true;
+        } catch {
+          /* offline — still try GET */
+        }
       }
 
       try {

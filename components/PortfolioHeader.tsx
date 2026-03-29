@@ -27,7 +27,7 @@ export default function PortfolioHeader() {
     <motion.header
       initial={reduceMotion ? false : { y: -10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] as const }}
       className={`fixed left-0 right-0 top-0 z-[100] transition-[background-color,backdrop-filter,border-color] duration-300 ${
         scrolled
           ? "border-b border-zinc-200/80 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/72 dark:border-white/[0.07] dark:bg-[#08080a]/85 dark:supports-[backdrop-filter]:bg-[#08080a]/70"
@@ -65,6 +65,7 @@ export default function PortfolioHeader() {
             href={links.github}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Open GitHub profile"
             className="rounded-lg border border-zinc-200/90 bg-zinc-900/[0.03] px-2.5 py-2 text-[12px] font-medium text-zinc-800 transition hover:border-violet-500/40 hover:bg-violet-500/[0.08] hover:text-zinc-950 dark:border-white/10 dark:bg-white/[0.03] dark:text-white/85 dark:hover:border-violet-400/35 dark:hover:text-white sm:px-3"
           >
             <span className="hidden sm:inline">GitHub</span>

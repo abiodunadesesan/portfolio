@@ -12,6 +12,8 @@ export const links = {
   linkedin: "https://www.linkedin.com/in/abioduncaleb",
   linktree: "https://linktr.ee/calebsilvanus",
   email: "mailto:abiodunadesesan@gmail.com",
+  /** WhatsApp chat — international format without + */
+  whatsapp: "https://wa.me/905338448449",
 } as const;
 
 /** Footer intro — paired with signature + role */

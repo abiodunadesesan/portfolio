@@ -1,11 +1,14 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   motion,
   useMotionTemplate,
   useTransform,
   type MotionValue,
 } from "framer-motion";
+import type { BreakpointTier } from "@/hooks/useBreakpointTier";
+import { useBreakpointTier } from "@/hooks/useBreakpointTier";
 import { person } from "@/lib/site-content";
 
 type OverlayProps = {
@@ -15,43 +18,115 @@ type OverlayProps = {
 
 const nameWords = person.displayName.split(" ");
 
-const introContainer = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.038, delayChildren: 0.05 },
-  },
-};
+function introCfg(tier: BreakpointTier) {
+  switch (tier) {
+    case "mobile":
+      return {
+        stagger: 0.018,
+        delayChildren: 0.025,
+        wordDur: 0.3,
+        subDur: 0.24,
+        subDelay: 0.07,
+        bodyDelay: 0.18,
+        bodyDur: 0.28,
+        glowDur: 2.2,
+        cuePulse: 1.75,
+        cueWheel: 1.15,
+      };
+    case "tablet":
+      return {
+        stagger: 0.026,
+        delayChildren: 0.036,
+        wordDur: 0.38,
+        subDur: 0.32,
+        subDelay: 0.1,
+        bodyDelay: 0.26,
+        bodyDur: 0.32,
+        glowDur: 2.85,
+        cuePulse: 1.9,
+        cueWheel: 1.28,
+      };
+    default:
+      return {
+        stagger: 0.03,
+        delayChildren: 0.042,
+        wordDur: 0.44,
+        subDur: 0.36,
+        subDelay: 0.11,
+        bodyDelay: 0.3,
+        bodyDur: 0.34,
+        glowDur: 3.2,
+        cuePulse: 2.05,
+        cueWheel: 1.35,
+      };
+  }
+}
 
-const wordReveal = {
-  hidden: {
-    opacity: 0,
-    y: 40,
-    rotateX: -16,
-    filter: "blur(12px)",
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    rotateX: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.52, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
+function scrollCfg(tier: BreakpointTier) {
+  switch (tier) {
+    case "mobile":
+      return {
+        blurSpan: 0.052,
+        scaleSpan: 0.064,
+        yPow: 2.35,
+        midPow: 1.85,
+        endPow: 1.65,
+        ring: [0, 0.26],
+        ringOp: [0, 0.1],
+        tilt: [0, 0.055],
+        heroOp: [0, 0.028, 0.065, 0.12],
+        midOp: [0.065, 0.11, 0.16, 0.22],
+        endOp: [0.2, 0.27, 0.35, 0.45],
+        cueOp: [0, 0.028, 0.055],
+        cueY: [0, 0.055],
+      };
+    case "tablet":
+      return {
+        blurSpan: 0.068,
+        scaleSpan: 0.082,
+        yPow: 2.05,
+        midPow: 1.65,
+        endPow: 1.52,
+        ring: [0, 0.29],
+        ringOp: [0, 0.12],
+        tilt: [0, 0.065],
+        heroOp: [0, 0.032, 0.08, 0.14],
+        midOp: [0.085, 0.14, 0.2, 0.27],
+        endOp: [0.24, 0.31, 0.39, 0.49],
+        cueOp: [0, 0.032, 0.062],
+        cueY: [0, 0.062],
+      };
+    default:
+      return {
+        blurSpan: 0.082,
+        scaleSpan: 0.098,
+        yPow: 1.85,
+        midPow: 1.55,
+        endPow: 1.45,
+        ring: [0, 0.32],
+        ringOp: [0, 0.14],
+        tilt: [0, 0.075],
+        heroOp: [0, 0.038, 0.09, 0.15],
+        midOp: [0.095, 0.15, 0.21, 0.29],
+        endOp: [0.26, 0.33, 0.41, 0.51],
+        cueOp: [0, 0.038, 0.075],
+        cueY: [0, 0.075],
+      };
+  }
+}
 
-const subReveal = {
-  hidden: { opacity: 0, y: 18, filter: "blur(8px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.42, delay: 0.14, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
-
-function ScrollCue({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const op = useTransform(scrollYProgress, [0, 0.035, 0.07], [1, 1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.07], [0, 14]);
+function ScrollCue({
+  scrollYProgress,
+  tier,
+}: {
+  scrollYProgress: MotionValue<number>;
+  tier: BreakpointTier;
+}) {
+  const s = scrollCfg(tier);
+  const op = useTransform(scrollYProgress, s.cueOp, [1, 1, 0]);
+  const y = useTransform(scrollYProgress, s.cueY, [0, 14]);
+  const pulse = introCfg(tier).cuePulse;
+  const wheel = introCfg(tier).cueWheel;
 
   return (
     <motion.div
@@ -70,12 +145,12 @@ function ScrollCue({ scrollYProgress }: { scrollYProgress: MotionValue<number> }
             "0 0 0 0 rgba(139, 92, 246, 0)",
           ],
         }}
-        transition={{ duration: 2.1, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: pulse, repeat: Infinity, ease: "easeInOut" }}
       >
         <motion.span
           className="absolute top-2 h-1.5 w-1.5 rounded-full bg-violet-600 dark:bg-violet-300"
           animate={{ y: [0, 16, 0] }}
-          transition={{ duration: 1.45, repeat: Infinity, ease: [0.45, 0, 0.55, 1] }}
+          transition={{ duration: wheel, repeat: Infinity, ease: [0.45, 0, 0.55, 1] as const }}
         />
       </motion.div>
     </motion.div>
@@ -86,55 +161,87 @@ export default function Overlay({
   scrollYProgress,
   reduceMotion,
 }: OverlayProps) {
-  /** Scroll curves: most motion in the first ~12–18% of the hero track so it feels snappier. */
+  const tier = useBreakpointTier();
+  const ic = introCfg(tier);
+  const sc = scrollCfg(tier);
+
+  const { introContainer, wordReveal, subReveal } = useMemo(
+    () => ({
+      introContainer: {
+        hidden: { opacity: 0 },
+        show: {
+          opacity: 1,
+          transition: { staggerChildren: ic.stagger, delayChildren: ic.delayChildren },
+        },
+      },
+      wordReveal: {
+        hidden: {
+          opacity: 0,
+          y: 36,
+          rotateX: -14,
+          filter: "blur(11px)",
+        },
+        show: {
+          opacity: 1,
+          y: 0,
+          rotateX: 0,
+          filter: "blur(0px)",
+          transition: { duration: ic.wordDur, ease: [0.22, 1, 0.36, 1] as const },
+        },
+      },
+      subReveal: {
+        hidden: { opacity: 0, y: 14, filter: "blur(7px)" },
+        show: {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          transition: {
+            duration: ic.subDur,
+            delay: ic.subDelay,
+            ease: [0.22, 1, 0.36, 1] as const,
+          },
+        },
+      },
+    }),
+    [ic]
+  );
+
   const yHero = useTransform(scrollYProgress, (v) => {
     if (reduceMotion) return -28 * v;
-    const eased = 1 - Math.pow(1 - v, 1.85);
+    const eased = 1 - Math.pow(1 - v, sc.yPow);
     return -120 * eased;
   });
   const yMid = useTransform(scrollYProgress, (v) => {
     if (reduceMotion) return -16 * v;
-    const eased = 1 - Math.pow(1 - v, 1.55);
+    const eased = 1 - Math.pow(1 - v, sc.midPow);
     return -72 * eased;
   });
   const yEnd = useTransform(scrollYProgress, (v) => {
     if (reduceMotion) return -12 * v;
-    const eased = 1 - Math.pow(1 - v, 1.45);
+    const eased = 1 - Math.pow(1 - v, sc.endPow);
     return -52 * eased;
   });
 
   const blurHero = useTransform(scrollYProgress, (v) => {
     if (reduceMotion) return 0;
-    const t = Math.min(1, v / 0.085);
+    const t = Math.min(1, v / sc.blurSpan);
     return Math.pow(t, 0.88) * 11;
   });
   const scaleHero = useTransform(scrollYProgress, (v) => {
     if (reduceMotion) return 1;
-    const t = Math.min(1, v / 0.105);
+    const t = Math.min(1, v / sc.scaleSpan);
     return 1 - 0.07 * Math.pow(t, 0.82);
   });
   const heroFilter = useMotionTemplate`blur(${blurHero}px)`;
 
-  const ringScale = useTransform(scrollYProgress, [0, 0.32], [0.88, 1.35]);
-  const ringOpacity = useTransform(scrollYProgress, [0, 0.14], [0.55, 0]);
-  const tiltInner = useTransform(scrollYProgress, [0, 0.075], [0, 6]);
+  const ringScale = useTransform(scrollYProgress, sc.ring, [0.88, 1.35]);
+  const ringOpacity = useTransform(scrollYProgress, sc.ringOp, [0.55, 0]);
+  const tiltInner = useTransform(scrollYProgress, sc.tilt, [0, 6]);
   const lineGlow = useTransform(scrollYProgress, [0, 1], [0.4, 1]);
 
-  const opHero = useTransform(
-    scrollYProgress,
-    [0, 0.04, 0.1, 0.17],
-    [1, 1, 0.42, 0]
-  );
-  const opMid = useTransform(
-    scrollYProgress,
-    [0.1, 0.17, 0.24, 0.32],
-    [0, 1, 1, 0]
-  );
-  const opEnd = useTransform(
-    scrollYProgress,
-    [0.28, 0.36, 0.44, 0.54],
-    [0, 1, 1, 0]
-  );
+  const opHero = useTransform(scrollYProgress, sc.heroOp, [1, 1, 0.42, 0]);
+  const opMid = useTransform(scrollYProgress, sc.midOp, [0, 1, 1, 0]);
+  const opEnd = useTransform(scrollYProgress, sc.endOp, [0, 1, 1, 0]);
 
   const introState = reduceMotion ? "show" : "hidden";
   const introAnimate = "show";
@@ -165,7 +272,7 @@ export default function Overlay({
                   ? undefined
                   : { opacity: [0.5, 0.85, 0.5], scale: [0.98, 1.02, 0.98] }
               }
-              transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: ic.glowDur, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.h1
               variants={introContainer}
@@ -197,9 +304,13 @@ export default function Overlay({
               </motion.span>
             </motion.h1>
             <motion.p
-              initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: reduceMotion ? 0 : 0.38, duration: 0.4, ease: [0.22, 1, 0.36, 1] as const }}
+              transition={{
+                delay: reduceMotion ? 0 : ic.bodyDelay,
+                duration: ic.bodyDur,
+                ease: [0.22, 1, 0.36, 1] as const,
+              }}
               className="mx-auto mt-6 max-w-lg text-sm font-medium leading-relaxed text-zinc-600/95 dark:mt-8 dark:text-white/45 md:text-base"
             >
               Full-stack · TypeScript · ML systems — I ship interfaces people feel and backends that scale.
@@ -237,7 +348,7 @@ export default function Overlay({
           </div>
         </motion.div>
 
-        {!reduceMotion ? <ScrollCue scrollYProgress={scrollYProgress} /> : null}
+        {!reduceMotion ? <ScrollCue scrollYProgress={scrollYProgress} tier={tier} /> : null}
       </div>
     </div>
   );

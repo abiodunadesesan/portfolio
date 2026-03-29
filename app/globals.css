@@ -33,6 +33,9 @@ body.liquid-glass-body {
   isolation: isolate;
   color: var(--foreground);
   overflow-x: clip;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
+    inset 0 0 80px -20px rgba(139, 92, 246, 0.06);
   background-color: var(--background);
   background-image: radial-gradient(
       ellipse 130% 100% at 0% -15%,
@@ -72,6 +75,9 @@ body.liquid-glass-body {
 }
 
 html.dark body.liquid-glass-body {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 100px -24px rgba(99, 102, 241, 0.12);
   background-position:
     0% 0%,
     100% 0%,
@@ -159,6 +165,32 @@ html.dark body.liquid-glass-body::after {
 
   body.liquid-glass-body::after {
     animation: liquid-glass-sheen 10.5s ease-in-out infinite alternate;
+  }
+}
+
+/* Tablet: slightly quicker liquid drift */
+@media (prefers-reduced-motion: no-preference) and (max-width: 1023px) {
+  body.liquid-glass-body {
+    animation-duration: 20s;
+  }
+  body.liquid-glass-body::before {
+    animation-duration: 9s, 7.5s;
+  }
+  body.liquid-glass-body::after {
+    animation-duration: 8.5s;
+  }
+}
+
+/* Phone: snappiest glass motion */
+@media (prefers-reduced-motion: no-preference) and (max-width: 639px) {
+  body.liquid-glass-body {
+    animation-duration: 16s;
+  }
+  body.liquid-glass-body::before {
+    animation-duration: 7.5s, 6.5s;
+  }
+  body.liquid-glass-body::after {
+    animation-duration: 7s;
   }
 }
 

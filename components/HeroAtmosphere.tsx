@@ -5,6 +5,7 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
+import { useBreakpointTier } from "@/hooks/useBreakpointTier";
 
 type Props = {
   scrollYProgress: MotionValue<number>;
@@ -13,8 +14,17 @@ type Props = {
 
 /** Cinematic layers above the canvas: mesh lights, vignette, film grain. */
 export default function HeroAtmosphere({ scrollYProgress, reduceMotion }: Props) {
-  const vignetteOp = useTransform(scrollYProgress, [0, 0.22, 0.5], [0.55, 0.76, 0.9]);
-  const meshOp = useTransform(scrollYProgress, [0, 0.14], [1, 0.32]);
+  const tier = useBreakpointTier();
+
+  const meshEnd = tier === "mobile" ? 0.095 : tier === "tablet" ? 0.118 : 0.14;
+  const vignetteStops =
+    tier === "mobile" ? [0, 0.14, 0.36] : tier === "tablet" ? [0, 0.18, 0.42] : [0, 0.22, 0.5];
+  const d1 = tier === "mobile" ? 7.5 : tier === "tablet" ? 9 : 11;
+  const d2 = tier === "mobile" ? 9 : tier === "tablet" ? 11 : 13;
+  const d3 = tier === "mobile" ? 6.5 : tier === "tablet" ? 8 : 9;
+
+  const vignetteOp = useTransform(scrollYProgress, vignetteStops, [0.55, 0.76, 0.9]);
+  const meshOp = useTransform(scrollYProgress, [0, meshEnd], [1, 0.32]);
   const orbScale = useTransform(scrollYProgress, (v) => 1 + 0.08 * (1 - Math.pow(1 - v, 1.4)));
 
   return (
@@ -30,7 +40,7 @@ export default function HeroAtmosphere({ scrollYProgress, reduceMotion }: Props)
                 y: [0, -12, 0],
               }
         }
-        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: d1, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute -right-1/4 bottom-0 h-[min(70vh,600px)] w-[min(70vh,600px)] rounded-full bg-fuchsia-500/20 blur-[90px] dark:bg-fuchsia-500/25"
@@ -43,7 +53,7 @@ export default function HeroAtmosphere({ scrollYProgress, reduceMotion }: Props)
                 y: [0, 14, 0],
               }
         }
-        transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: d2, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute left-1/2 top-1/3 h-[min(50vh,480px)] w-[min(50vh,480px)] -translate-x-1/2 rounded-full bg-amber-400/10 blur-[80px] dark:bg-violet-400/15"
@@ -55,7 +65,7 @@ export default function HeroAtmosphere({ scrollYProgress, reduceMotion }: Props)
                 scale: [1, 1.06, 1],
               }
         }
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: d3, repeat: Infinity, ease: "easeInOut" }}
       />
 
       <motion.div

@@ -41,14 +41,14 @@ export type ProjectItem = {
 export const projects: ProjectItem[] = [
   {
     title: "Paris American International University",
-    tag: "Client Work · WordPress · Elementor",
+    tag: "Professional Client Work · WordPress · Elementor",
     blurb:
       "Developed a modern, visually engaging web presence for the Paris American International University. Built using WordPress and Elementor to ensure a highly responsive, optimized, and easily manageable platform for the institution.",
     href: "https://parisamerican.org",
   },
   {
     title: "Study in North Cyprus",
-    tag: "Client Work · WordPress · Elementor",
+    tag: "Professional Client Work · WordPress · Elementor",
     blurb:
       "Educational consultancy platform crafted to guide international students. Custom-built with WordPress and Elementor for a seamless, conversion-focused user experience with modern aesthetics.",
     href: "https://studyinnc.com",
@@ -90,9 +90,9 @@ export const projects: ProjectItem[] = [
   },
   {
     title: "Contact Management",
-    tag: "JavaScript",
+    tag: "Professional Project · JavaScript",
     blurb:
-      "Contact management app — CRUD, organization, and practical UI for managing people and records.",
+      "Contact management system developed at a professional architecture level — featuring CRUD operations, record organization, and practical, production-ready UI.",
     href: "https://github.com/abiodunadesesan/contact-management",
   },
 ];

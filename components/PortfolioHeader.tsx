@@ -27,7 +27,7 @@ export default function PortfolioHeader() {
       initial={reduceMotion ? false : { y: -10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] as const }}
-      className="nav-water-glass fixed inset-x-0 top-0 z-[999] transition-colors duration-300"
+      className="nav-water-glass sticky top-0 w-full z-[999] transition-colors duration-300"
     >
       {/* Modern Scroll Progress Bar */}
       <div className="absolute bottom-0 left-0 z-[100] h-[4px] w-full bg-zinc-200/50 dark:bg-zinc-800/50">

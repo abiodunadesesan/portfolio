@@ -14,31 +14,22 @@ const NAV = [
 ] as const;
 
 export default function PortfolioHeader() {
-  const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
   return (
     <motion.header
-      initial={{ opacity: 0, top: "-10px" }}
-      animate={{ opacity: 1, top: "-10px" }}
+      initial={{ opacity: 0, top: "-10.5px" }}
+      animate={{ opacity: 1, top: "-10.5px" }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       className="nav-water-glass fixed inset-x-0 z-[9999] m-0 border-none pt-[10px] transform-gpu"
       style={{ 
-        top: "-10px",
+        top: "-10.5px",
         marginTop: "env(safe-area-inset-top, 0px)"
       }}
     >
-
-
-
-
-
       <div className="flex h-[4.5rem] w-full items-center px-4 sm:px-6 md:h-[5.25rem] md:px-12">
+
+
+
+
 
         {/* Left: Branding */}
         <div className="flex flex-1 items-center justify-start min-w-0">
@@ -88,15 +79,8 @@ export default function PortfolioHeader() {
           </a>
         </div>
       </div>
-
-
-
-      {/* Liquid Water Progress Line */}
-      <motion.div
-        className="absolute bottom-0 left-0 h-[2px] bg-white/40 shadow-[0_0_12px_rgba(255,255,255,0.3)] origin-left z-10"
-        style={{ scaleX, width: "100%" }}
-      />
     </motion.header>
+
   );
 }
 

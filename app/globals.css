@@ -8,10 +8,10 @@ html {
 
 /* overflow-x: clip prevents horizontal overflow without creating a scroll container,
    so position:sticky still works in Safari and mobile browsers. */
-/* Force the Root to be identical to the dark theme backdrop to kill any phantom gaps */
+/* Force the Root to Pure Black to erase any phantom browser gaps */
 html.dark, 
 html.dark body {
-  background-color: #08080a !important;
+  background-color: #000000 !important;
 }
 
 html,
@@ -21,6 +21,7 @@ body {
   width: 100%;
   overflow-x: clip;
 }
+
 
 
 
@@ -81,6 +82,8 @@ html.dark body.liquid-glass-body {
 }
 
 
+
+
 body.liquid-glass-body::before {
   content: "";
   position: fixed;
@@ -96,7 +99,7 @@ body.liquid-glass-body::before {
 body.liquid-glass-body::after {
   content: "";
   position: fixed;
-  inset: 0;
+  inset: -2.5px;
   z-index: 0;
   pointer-events: none;
   transform-origin: 45% 25%;
@@ -159,7 +162,7 @@ html.dark body.liquid-glass-body::after {
     animation-duration: 7.5s, 6.5s;
   }
   body.liquid-glass-body::after {
-    animation-duration: 7s;
+    animation-duration: 4s;
   }
 }
 
@@ -199,6 +202,7 @@ html.dark body.liquid-glass-body::after {
   }
 }
 
+
 @keyframes liquid-glass-sheen {
   0% {
     transform: translate3d(0, 0, 0) scale(1);
@@ -209,6 +213,7 @@ html.dark body.liquid-glass-body::after {
     opacity: 0.9;
   }
 }
+
 
 body.liquid-glass-body > * {
   position: relative;
@@ -508,61 +513,51 @@ html:not(.dark) .glass-card {
    SCROLL-REVEAL ENHANCEMENT (complements AnimatedSection)
    Sections receive a subtle upward slide + fade orchestrated
    by Framer Motion — the CSS below adds an initial opacity:0
-   so there's no FOUC before JS hydrates.
-   ============================================================ */
+   so there's no FOUC before JS     ============================================================ */
+
 .nav-water-glass {
-  /* Ultra-Clear Liquid Water (Zero Overcast) */
-  background: transparent !important;
-  backdrop-filter: blur(20px) saturate(190%) contrast(102%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(190%) contrast(102%) !important;
+  /* Hyper-Glass: The balanced high-end look */
+  background: rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(40px) saturate(210%) brightness(104%) contrast(100%);
+  -webkit-backdrop-filter: blur(40px) saturate(210%) brightness(104%) contrast(100%);
   
-  /* Lock to top edge with precision */
-  top: -2.5px !important;
+  /* Absolute-Zero Bezel Handshake (Gap-Free) */
+  top: -10.5px !important;
   left: 0 !important;
 
-  /* Subtle Surface Tension (Invisible but there) */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+  /* The Obsidian Bridge (Infinite Black Seal) */
+  background: linear-gradient(to bottom, #000 0%, #000 11px, rgba(255, 255, 255, 0.05) 20%, transparent 100%) !important;
+
+  /* Specular Edges (The subtle glint) */
+  border-bottom: none !important;
   box-shadow: 
-    0 4px 30px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.25),
-    inset 0 0 40px rgba(255, 255, 255, 0.01) !important;
+    0 12px 40px rgba(0, 0, 0, 0.12),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4); /* Soft top shimmer only */
 }
 
-html.dark .nav-water-glass {
-  /* Maintain the same zero-tint quality in Dark Theme */
-  background: transparent !important;
-  backdrop-filter: blur(20px) saturate(190%) contrast(102%) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-
-
-
-
-
-/* Pro Designer Liquid Shimmer (Horizontal streak) */
-.nav-water-glass::after {
+/* Background Barrier (Obsidian Seal) */
+.nav-water-glass::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.15) 50%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: liquid-shimmer 18s linear infinite;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 14px;
+  background: #000;
+  z-index: -1;
   pointer-events: none;
-  opacity: 0.6;
 }
 
-
-
-
+/* Still Water: No movement lines */
+.nav-water-glass::after {
+  display: none !important;
+}
 
 .section-reveal-pending {
   opacity: 0;
   transform: translateY(24px);
   transition: none;
 }
+
+
+

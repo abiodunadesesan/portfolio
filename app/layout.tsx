@@ -111,6 +111,9 @@ export default function RootLayout({
           <div className="absolute inset-0 bg-black/5 dark:bg-black/40" />
         </div>
 
+
+
+
         <a
           href="#main-content"
           className="sr-only absolute pointer-events-none opacity-0"

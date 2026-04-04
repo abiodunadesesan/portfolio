@@ -15,12 +15,6 @@ const NAV = [
 
 export default function PortfolioHeader() {
   const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
 
   return (
     <motion.header
@@ -29,13 +23,6 @@ export default function PortfolioHeader() {
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] as const }}
       className="nav-water-glass sticky top-0 w-full z-[999] transition-colors duration-300"
     >
-      {/* Modern Scroll Progress Bar */}
-      <div className="absolute bottom-0 left-0 z-[100] h-[4px] w-full bg-zinc-200/50 dark:bg-zinc-800/50">
-        <motion.div
-          className="h-full w-full origin-left bg-gradient-to-r from-violet-500 via-fuchsia-500 to-violet-500 shadow-[0_0_12px_rgba(139,92,246,0.8)]"
-          style={{ scaleX }}
-        />
-      </div>
       <div
         style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
         className="mx-auto flex min-h-[3.75rem] max-w-7xl items-center gap-3 px-4 sm:min-h-16 sm:gap-4 sm:px-6 md:min-h-[4.25rem] md:gap-6 md:px-8">

@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { DM_Sans, Great_Vibes, Syne } from "next/font/google";
 import Script from "next/script";
 import PortfolioHeader from "@/components/PortfolioHeader";
+import VerticalScrollIndicator from "@/components/VerticalScrollIndicator";
 import { CustomCursor } from "@/components/CustomCursor";
 import { MotionProvider } from "@/components/MotionProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -109,6 +110,7 @@ export default function RootLayout({
             {children}
           </MotionProvider>
         </ThemeProvider>
+        <VerticalScrollIndicator />
         <Analytics />
         <SpeedInsights />
         <Script id="noupe-ai" src={noupeScriptSrc} strategy="lazyOnload" />

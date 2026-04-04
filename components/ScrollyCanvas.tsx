@@ -44,7 +44,6 @@ type SizeState = { cssW: number; cssH: number; dpr: number };
 export default function ScrollyCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
-  const scrollProgressBarRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const sizeRef = useRef<SizeState>({ cssW: 0, cssH: 0, dpr: 1 });
@@ -189,20 +188,12 @@ export default function ScrollyCanvas() {
     };
   }, [ensureCanvasSize, renderFrame]);
 
-  const onScrollProgressChange = useCallback(() => {
-    const el = scrollProgressBarRef.current;
-    if (el) el.style.transform = `scaleX(${smoothProgress.get()})`;
-    scheduleRender();
-  }, [smoothProgress, scheduleRender]);
-
-  useMotionValueEvent(smoothProgress, "change", onScrollProgressChange);
+  useMotionValueEvent(smoothProgress, "change", scheduleRender);
 
   useEffect(() => {
     if (!imagesReady) return;
     scheduleRender();
-    const el = scrollProgressBarRef.current;
-    if (el) el.style.transform = `scaleX(${smoothProgress.get()})`;
-  }, [imagesReady, scheduleRender, smoothProgress]);
+  }, [imagesReady, scheduleRender]);
 
   useEffect(() => {
     if (!firstFrameReady) return;
@@ -211,6 +202,7 @@ export default function ScrollyCanvas() {
 
   return (
     <section
+      id="hero"
       ref={containerRef}
       className="relative w-full h-[180vh]"
       aria-label="Hero: cinematic scroll sequence. Scroll down to advance frames; text and controls sit above the canvas."
@@ -229,12 +221,6 @@ export default function ScrollyCanvas() {
           reduceMotion={!!reduceMotion}
         />
         <Overlay scrollYProgress={smoothProgress} reduceMotion={!!reduceMotion} />
-        <div
-          ref={scrollProgressBarRef}
-          className="pointer-events-none absolute bottom-0 left-0 z-[5] h-[2px] w-full origin-left bg-gradient-to-r from-violet-600/90 via-fuchsia-600/75 to-transparent will-change-transform dark:from-violet-500/90 dark:via-fuchsia-500/70"
-          style={{ transform: "scaleX(0)" }}
-          aria-hidden
-        />
       </div>
     </section>
   );

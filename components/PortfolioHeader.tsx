@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FolderGit2 } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import ThemeToggle from "@/components/ThemeToggle";
 import { links, person } from "@/lib/site-content";
 
@@ -14,30 +14,28 @@ const NAV = [
 ] as const;
 
 export default function PortfolioHeader() {
-  const [scrolled, setScrolled] = useState(false);
   const reduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    const onScroll = () => {
-      // Keep navbar transparent until the user scrolls past the 300vh hero section
-      setScrolled(window.scrollY > window.innerHeight * 2.5);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   return (
     <motion.header
       initial={reduceMotion ? false : { y: -10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] as const }}
-      className={`fixed inset-x-0 top-0 z-[100] transition-[background-color,backdrop-filter,border-color] duration-300 ${
-        scrolled
-          ? "border-b border-zinc-200/80 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/72 dark:border-white/[0.07] dark:bg-[#08080a]/85 dark:supports-[backdrop-filter]:bg-[#08080a]/70"
-          : "border-b border-transparent bg-transparent"
-      }`}
+      className="nav-water-glass fixed inset-x-0 top-0 z-[999] transition-colors duration-300"
     >
+      {/* Modern Scroll Progress Bar */}
+      <div className="absolute bottom-0 left-0 z-[100] h-[4px] w-full bg-zinc-200/50 dark:bg-zinc-800/50">
+        <motion.div
+          className="h-full w-full origin-left bg-gradient-to-r from-violet-500 via-fuchsia-500 to-violet-500 shadow-[0_0_12px_rgba(139,92,246,0.8)]"
+          style={{ scaleX }}
+        />
+      </div>
       <div
         style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
         className="mx-auto flex min-h-[3.75rem] max-w-7xl items-center gap-3 px-4 sm:min-h-16 sm:gap-4 sm:px-6 md:min-h-[4.25rem] md:gap-6 md:px-8">

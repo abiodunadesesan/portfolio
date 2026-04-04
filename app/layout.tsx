@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { DM_Sans, Great_Vibes, Syne } from "next/font/google";
 import Script from "next/script";
 import PortfolioHeader from "@/components/PortfolioHeader";
+import { CustomCursor } from "@/components/CustomCursor";
 import { MotionProvider } from "@/components/MotionProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { getHeroPreloadFrameUrls } from "@/lib/sequence";
@@ -96,12 +97,13 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <MotionProvider>
-          <ThemeProvider>
-            <PortfolioHeader />
+        <CustomCursor />
+        <ThemeProvider>
+          <PortfolioHeader />
+          <MotionProvider>
             {children}
-          </ThemeProvider>
-        </MotionProvider>
+          </MotionProvider>
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
         <Script id="noupe-ai" src={noupeScriptSrc} strategy="lazyOnload" />

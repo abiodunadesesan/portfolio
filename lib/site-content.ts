@@ -40,6 +40,20 @@ export type ProjectItem = {
 /** Pinned / highlighted repos — aligned with GitHub showcase */
 export const projects: ProjectItem[] = [
   {
+    title: "Paris American International University",
+    tag: "Client Work · WordPress · Elementor",
+    blurb:
+      "Developed a modern, visually engaging web presence for the Paris American International University. Built using WordPress and Elementor to ensure a highly responsive, optimized, and easily manageable platform for the institution.",
+    href: "https://parisamerican.org",
+  },
+  {
+    title: "Study in North Cyprus",
+    tag: "Client Work · WordPress · Elementor",
+    blurb:
+      "Educational consultancy platform crafted to guide international students. Custom-built with WordPress and Elementor for a seamless, conversion-focused user experience with modern aesthetics.",
+    href: "https://studyinnc.com",
+  },
+  {
     title: "PEFT / LoRA — Sentiment Analysis",
     tag: "Python · Jupyter · Hugging Face",
     blurb:
@@ -122,7 +136,15 @@ export const skillGroups: { label: string; items: string[] }[] = [
   },
   {
     label: "Web & UI",
-    items: ["React", "Next.js", "Tailwind CSS", "HTML5 Canvas", "Framer Motion"],
+    items: [
+      "React",
+      "Next.js",
+      "Tailwind CSS",
+      "HTML5 Canvas",
+      "Framer Motion",
+      "WordPress",
+      "Elementor"
+    ],
   },
   {
     label: "ML & data",

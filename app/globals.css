@@ -545,20 +545,24 @@ html:not(.dark) .hero-light-bg {
    LIQUID GLASS CARD UTILITY
    ============================================================ */
 .glass-card {
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 4px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
 }
 html:not(.dark) .glass-card {
-  background: rgba(255, 255, 255, 0.52);
-  border-color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.07),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    0 8px 32px rgba(0, 0, 0, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.15);
 }
 
 /* ============================================================
@@ -567,6 +571,24 @@ html:not(.dark) .glass-card {
    by Framer Motion — the CSS below adds an initial opacity:0
    so there's no FOUC before JS hydrates.
    ============================================================ */
+.nav-water-glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 4px 24px rgba(0, 0, 0, 0.06),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.1);
+}
+
+html.dark .nav-water-glass {
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 4px 32px rgba(0, 0, 0, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+}
+
 .section-reveal-pending {
   opacity: 0;
   transform: translateY(24px);

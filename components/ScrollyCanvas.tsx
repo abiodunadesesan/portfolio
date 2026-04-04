@@ -59,8 +59,8 @@ export default function ScrollyCanvas() {
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 180,
-    damping: 28,
+    stiffness: 280,
+    damping: 24,
     restDelta: 0.001
   });
 
@@ -212,7 +212,7 @@ export default function ScrollyCanvas() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[300vh]"
+      className="relative w-full h-[180vh]"
       aria-label="Hero: cinematic scroll sequence. Scroll down to advance frames; text and controls sit above the canvas."
     >
       <div

@@ -26,7 +26,8 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       layout
       whileHover={reduceMotion ? undefined : { scale: 1.04 }}
       whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-      className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-zinc-200/90 bg-gradient-to-br from-white to-zinc-100 text-violet-700 shadow-sm transition-colors dark:border-white/12 dark:from-zinc-900/90 dark:to-zinc-950 dark:text-violet-200 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ${className}`}
+      className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-zinc-200/90 bg-zinc-900/[0.02] text-violet-700 transition-colors dark:border-white/10 dark:bg-white/[0.04] dark:text-violet-200 ${className}`}
+
       aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
       title={isDark ? "Light mode" : "Dark mode"}
     >

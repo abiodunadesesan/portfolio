@@ -72,7 +72,8 @@ export default function PortfolioHeader() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Open GitHub profile"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-zinc-200/90 bg-zinc-900/[0.03] px-3 py-2 text-sm font-semibold text-zinc-800 transition hover:border-violet-500/40 hover:bg-violet-500/[0.08] hover:text-zinc-950 dark:border-white/10 dark:bg-white/[0.03] dark:text-white/90 dark:hover:border-violet-400/35 dark:hover:text-white sm:px-4"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-zinc-900/[0.05] bg-zinc-900/[0.02] px-3 py-2 text-sm font-semibold text-zinc-800 transition hover:border-violet-500/40 hover:bg-violet-500/[0.08] hover:text-zinc-950 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/90 dark:hover:border-violet-400/35 dark:hover:text-white sm:px-4"
+
           >
             <FolderGit2 className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden />
             <span className="hidden sm:inline">GitHub</span>

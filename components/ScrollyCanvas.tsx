@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useReducedMotion, useScroll, useMotionValueEvent } from "framer-motion";
+import { useReducedMotion, useScroll, useMotionValueEvent, useSpring } from "framer-motion";
 import { drawImageCover } from "@/lib/canvas-draw";
 import {
   getFrameSrc,
@@ -19,10 +19,10 @@ function drawPlaceholder(
   h: number
 ): void {
   const g = ctx.createLinearGradient(0, 0, w, h);
-  g.addColorStop(0, "#070709");
-  g.addColorStop(0.35, "#0e0c12");
-  g.addColorStop(0.7, "#12101a");
-  g.addColorStop(1, "#181528");
+  g.addColorStop(0, "#121212");
+  g.addColorStop(0.35, "#121212");
+  g.addColorStop(0.7, "#121212");
+  g.addColorStop(1, "#121212");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, w, h);
   const vignette = ctx.createRadialGradient(
@@ -43,17 +43,25 @@ type SizeState = { cssW: number; cssH: number; dpr: number };
 
 export default function ScrollyCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const scrollProgressBarRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const sizeRef = useRef<SizeState>({ cssW: 0, cssH: 0, dpr: 1 });
   const rafRef = useRef<number | null>(null);
   const [imagesReady, setImagesReady] = useState(false);
+  const [firstFrameReady, setFirstFrameReady] = useState(false);
   const reduceMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"],
+    offset: ["start start", "end start"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 180,
+    damping: 28,
+    restDelta: 0.001
   });
 
   useEffect(() => {
@@ -76,8 +84,11 @@ export default function ScrollyCanvas() {
       settled++;
       if (settled >= SEQUENCE_FRAME_COUNT) setImagesReady(true);
     };
-    images.forEach((img) => {
-      img.onload = mark;
+    images.forEach((img, idx) => {
+      img.onload = () => {
+        mark();
+        if (idx === 0) setFirstFrameReady(true);
+      };
       img.onerror = mark;
     });
 
@@ -102,12 +113,15 @@ export default function ScrollyCanvas() {
   /** Resize backing store only when CSS size or DPR changes — not on every scroll tick. */
   const ensureCanvasSize = useCallback((): boolean => {
     const canvas = canvasRef.current;
-    const container = canvas?.parentElement;
-    if (!canvas || !container) return false;
+    const host = stickyRef.current;
+    if (!canvas || !host) return false;
 
-    const cssW = container.clientWidth;
-    const cssH = container.clientHeight;
-    if (cssW < 1 || cssH < 1) return false;
+    const rect = host.getBoundingClientRect();
+    let cssW = Math.round(rect.width);
+    let cssH = Math.round(rect.height);
+    // Mobile sticky/vh can report 0 briefly; never allow a blank canvas.
+    if (cssW < 1) cssW = Math.max(1, Math.round(window.innerWidth));
+    if (cssH < 1) cssH = Math.max(1, Math.round(window.innerHeight));
 
     const raw = window.devicePixelRatio || 1;
     /** Narrow screens: cap DPR to reduce canvas fill cost (still sharp on most phones). */
@@ -139,13 +153,13 @@ export default function ScrollyCanvas() {
 
     const { cssW, cssH } = sizeRef.current;
 
-    let progress = scrollYProgress.get();
+    let progress = smoothProgress.get();
     if (reduceMotion) progress = 0.35;
 
     const max = SEQUENCE_FRAME_COUNT - 1;
     const idx = Math.min(max, Math.max(0, Math.round(progress * max)));
     paintFrame(ctx, idx, cssW, cssH);
-  }, [ensureCanvasSize, paintFrame, scrollYProgress, reduceMotion]);
+  }, [ensureCanvasSize, paintFrame, smoothProgress, reduceMotion]);
 
   const scheduleRender = useCallback(() => {
     if (rafRef.current != null) return;
@@ -156,15 +170,14 @@ export default function ScrollyCanvas() {
   }, [renderFrame]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const container = canvas?.parentElement;
-    if (!canvas || !container) return;
+    const host = stickyRef.current;
+    if (!host) return;
 
     const ro = new ResizeObserver(() => {
       ensureCanvasSize();
       renderFrame();
     });
-    ro.observe(container);
+    ro.observe(host);
     ensureCanvasSize();
     renderFrame();
     return () => {
@@ -174,40 +187,48 @@ export default function ScrollyCanvas() {
         rafRef.current = null;
       }
     };
-  }, [ensureCanvasSize, renderFrame, imagesReady]);
+  }, [ensureCanvasSize, renderFrame]);
 
   const onScrollProgressChange = useCallback(() => {
     const el = scrollProgressBarRef.current;
-    if (el) el.style.transform = `scaleX(${scrollYProgress.get()})`;
+    if (el) el.style.transform = `scaleX(${smoothProgress.get()})`;
     scheduleRender();
-  }, [scrollYProgress, scheduleRender]);
+  }, [smoothProgress, scheduleRender]);
 
-  useMotionValueEvent(scrollYProgress, "change", onScrollProgressChange);
+  useMotionValueEvent(smoothProgress, "change", onScrollProgressChange);
 
   useEffect(() => {
     if (!imagesReady) return;
     scheduleRender();
     const el = scrollProgressBarRef.current;
-    if (el) el.style.transform = `scaleX(${scrollYProgress.get()})`;
-  }, [imagesReady, scheduleRender, scrollYProgress]);
+    if (el) el.style.transform = `scaleX(${smoothProgress.get()})`;
+  }, [imagesReady, scheduleRender, smoothProgress]);
+
+  useEffect(() => {
+    if (!firstFrameReady) return;
+    scheduleRender();
+  }, [firstFrameReady, scheduleRender]);
 
   return (
     <section
       ref={containerRef}
-      className="relative h-[500vh] w-full"
+      className="relative w-full h-[300vh]"
       aria-label="Hero: cinematic scroll sequence. Scroll down to advance frames; text and controls sit above the canvas."
     >
-      <div className="sticky top-0 h-screen w-full overflow-visible bg-zinc-100 transition-colors duration-500 dark:bg-[#08080a]">
+      <div
+        ref={stickyRef}
+        className="sticky top-0 h-screen w-full overflow-visible bg-zinc-100 transition-colors duration-500 dark:bg-[#121212]"
+      >
         <canvas
           ref={canvasRef}
           className="absolute inset-0 z-0 h-full w-full touch-pan-y"
           aria-hidden
         />
         <HeroAtmosphere
-          scrollYProgress={scrollYProgress}
+          scrollYProgress={smoothProgress}
           reduceMotion={!!reduceMotion}
         />
-        <Overlay scrollYProgress={scrollYProgress} reduceMotion={!!reduceMotion} />
+        <Overlay scrollYProgress={smoothProgress} reduceMotion={!!reduceMotion} />
         <div
           ref={scrollProgressBarRef}
           className="pointer-events-none absolute bottom-0 left-0 z-[5] h-[2px] w-full origin-left bg-gradient-to-r from-violet-600/90 via-fuchsia-600/75 to-transparent will-change-transform dark:from-violet-500/90 dark:via-fuchsia-500/70"

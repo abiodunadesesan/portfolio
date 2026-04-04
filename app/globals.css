@@ -6,11 +6,14 @@ html {
   scroll-padding-top: 5.5rem;
 }
 
-/* Flush layout to the viewport; avoids stray UA margins showing as a strip above the nav */
+/* overflow-x: clip prevents horizontal overflow without creating a scroll container,
+   so position:sticky still works in Safari and mobile browsers. */
 html,
 body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  overflow-x: clip;
 }
 
 @theme {
@@ -38,7 +41,7 @@ body {
 }
 
 html.dark {
-  --background: #08080a;
+  --background: #121212;
   --foreground: #f4f4f5;
   --liquid-mesh-a: rgba(139, 92, 246, 0.2);
   --liquid-mesh-b: rgba(56, 189, 248, 0.11);
@@ -476,4 +479,96 @@ html.dark :focus-visible {
   font-weight: 400;
   font-style: normal;
   font-synthesis: none;
+}
+
+/* ============================================================
+   INFINITE SKILLS MARQUEE
+   ============================================================ */
+@keyframes skills-scroll-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes skills-scroll-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.skills-marquee {
+  display: flex;
+  gap: 0.625rem;
+  white-space: nowrap;
+  width: max-content;
+  animation: skills-scroll-left 22s linear infinite;
+  will-change: transform;
+  padding-bottom: 0.375rem;
+}
+.skills-marquee-r {
+  display: flex;
+  gap: 0.625rem;
+  white-space: nowrap;
+  width: max-content;
+  animation: skills-scroll-right 28s linear infinite;
+  will-change: transform;
+  padding-bottom: 0.375rem;
+}
+.skills-marquee:hover,
+.skills-marquee-r:hover {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skills-marquee,
+  .skills-marquee-r {
+    animation: none !important;
+    flex-wrap: wrap;
+    width: auto;
+  }
+}
+
+
+/* ============================================================
+   HERO TEXT — frosted glass pill (light mode only)
+   ============================================================ */
+html:not(.dark) .hero-light-bg {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px) saturate(175%);
+  -webkit-backdrop-filter: blur(10px) saturate(175%);
+  border-radius: 2rem;
+  padding: 1.5rem 2.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.15);
+}
+
+/* ============================================================
+   LIQUID GLASS CARD UTILITY
+   ============================================================ */
+.glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+html:not(.dark) .glass-card {
+  background: rgba(255, 255, 255, 0.52);
+  border-color: rgba(255, 255, 255, 0.75);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+/* ============================================================
+   SCROLL-REVEAL ENHANCEMENT (complements AnimatedSection)
+   Sections receive a subtle upward slide + fade orchestrated
+   by Framer Motion — the CSS below adds an initial opacity:0
+   so there's no FOUC before JS hydrates.
+   ============================================================ */
+.section-reveal-pending {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: none;
 }

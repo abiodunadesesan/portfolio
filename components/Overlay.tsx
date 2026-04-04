@@ -80,11 +80,12 @@ function scrollCfg(tier: BreakpointTier) {
         ring: [0, 0.26],
         ringOp: [0, 0.1],
         tilt: [0, 0.055],
-        heroOp: [0, 0.028, 0.065, 0.12],
-        midOp: [0.065, 0.11, 0.16, 0.22],
-        endOp: [0.2, 0.27, 0.35, 0.45],
-        cueOp: [0, 0.028, 0.055],
-        cueY: [0, 0.055],
+        /* Hero fades, mid appears & stays visible longer, end appears & stays visible longer */
+        heroOp: [0, 0.04, 0.12, 0.2],
+        midOp:  [0.08, 0.15, 0.38, 0.5],
+        endOp:  [0.3, 0.4, 0.62, 0.75],
+        cueOp: [0, 0.04, 0.09],
+        cueY: [0, 0.09],
         blurMax: 6,
       };
     case "tablet":
@@ -97,11 +98,11 @@ function scrollCfg(tier: BreakpointTier) {
         ring: [0, 0.29],
         ringOp: [0, 0.12],
         tilt: [0, 0.065],
-        heroOp: [0, 0.032, 0.08, 0.14],
-        midOp: [0.085, 0.14, 0.2, 0.27],
-        endOp: [0.24, 0.31, 0.39, 0.49],
-        cueOp: [0, 0.032, 0.062],
-        cueY: [0, 0.062],
+        heroOp: [0, 0.045, 0.13, 0.21],
+        midOp:  [0.09, 0.16, 0.39, 0.52],
+        endOp:  [0.31, 0.42, 0.64, 0.77],
+        cueOp: [0, 0.045, 0.10],
+        cueY: [0, 0.10],
         blurMax: 9,
       };
     default:
@@ -114,11 +115,11 @@ function scrollCfg(tier: BreakpointTier) {
         ring: [0, 0.32],
         ringOp: [0, 0.14],
         tilt: [0, 0.075],
-        heroOp: [0, 0.038, 0.09, 0.15],
-        midOp: [0.095, 0.15, 0.21, 0.29],
-        endOp: [0.26, 0.33, 0.41, 0.51],
-        cueOp: [0, 0.038, 0.075],
-        cueY: [0, 0.075],
+        heroOp: [0, 0.05, 0.14, 0.22],
+        midOp:  [0.1, 0.18, 0.4, 0.54],
+        endOp:  [0.33, 0.44, 0.67, 0.8],
+        cueOp: [0, 0.05, 0.12],
+        cueY: [0, 0.12],
         blurMax: 11,
       };
   }
@@ -316,7 +317,7 @@ export default function Overlay({
       <div className="relative flex min-h-screen flex-1 items-center justify-center px-6 md:px-12">
         <motion.div
           aria-hidden
-          className="absolute left-1/2 top-1/2 h-[min(100vw,560px)] w-[min(100vw,560px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-violet-500/10 dark:border-violet-400/15"
+          className="absolute left-1/2 top-1/2 h-[min(100%,560px)] w-[min(100%,560px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-violet-500/10 dark:border-violet-400/15"
           style={{ scale: ringScale, opacity: ringOpacity }}
         />
 
@@ -329,7 +330,7 @@ export default function Overlay({
           }}
           className="relative w-full max-w-[min(100%,72rem)] px-3 text-center [perspective:1200px] sm:px-4 md:px-6"
         >
-          <motion.div className="relative mx-auto inline-block max-w-full" style={{ rotateX: tiltInner }}>
+          <motion.div className="relative mx-auto inline-block max-w-full hero-light-bg" style={{ rotateX: tiltInner }}>
             <span
               className={`pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-to-r from-violet-600/15 via-fuchsia-500/10 to-transparent blur-2xl dark:from-violet-500/25 dark:via-fuchsia-500/15 md:-inset-10 ${
                 reduceMotion || tier === "mobile" ? "" : "hero-title-ambient-glow"
@@ -344,37 +345,23 @@ export default function Overlay({
               variants={introContainer}
               initial={introState}
               animate={introAnimate}
-              className="relative mx-auto w-full max-w-[min(100vw-1.25rem,56rem)] text-center leading-[1.08] tracking-normal"
+              className="relative mx-auto w-full max-w-[min(calc(100%_-_1.25rem),80rem)] text-center leading-[1.08] tracking-normal"
             >
               <motion.span
                 variants={nameReveal}
-                className="block max-w-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 bg-clip-text pb-1 font-sans text-[clamp(1.65rem,5vw,3.35rem)] font-semibold not-italic tracking-tight text-transparent [filter:drop-shadow(0_2px_14px_rgba(0,0,0,0.22))] [overflow-wrap:anywhere] max-sm:from-zinc-950 max-sm:via-zinc-900 max-sm:to-zinc-950 dark:from-white dark:via-zinc-100 dark:to-zinc-200 dark:[filter:drop-shadow(0_2px_28px_rgba(255,255,255,0.12))] sm:text-[clamp(1.85rem,4.5vw,3.35rem)] md:text-[clamp(2rem,3.8vw,3.65rem)]"
+                className="block w-full max-w-full whitespace-nowrap bg-gradient-to-br from-white via-zinc-100 to-zinc-200 bg-clip-text px-4 pb-2 font-sans text-[clamp(1.2rem,4vw,3.2rem)] font-bold tracking-tight text-transparent [filter:drop-shadow(0_2px_28px_rgba(255,255,255,0.12))]"
               >
                 {person.displayName}
               </motion.span>
               <motion.span
                 variants={subReveal}
-                className="mt-3 block text-[clamp(0.95rem,2.6vw,1.4rem)] font-medium leading-snug text-zinc-700 dark:mt-4 dark:text-white/92 max-sm:dark:text-white md:mt-4"
+                className="mt-3 block w-full whitespace-nowrap px-4 pb-2 text-[clamp(0.55rem,1.3vw,1.1rem)] font-medium leading-snug text-white/92 max-sm:text-white md:mt-3"
               >
-                <span className="bg-gradient-to-r from-violet-700 to-fuchsia-700 bg-clip-text font-display text-transparent dark:from-violet-200 dark:to-fuchsia-200 max-sm:dark:from-violet-100 max-sm:dark:to-fuchsia-100">
-                  {person.role}
+                <span className="bg-gradient-to-r from-violet-200 via-fuchsia-200 to-violet-200 bg-clip-text pr-2 font-display text-transparent max-sm:from-violet-100 max-sm:to-fuchsia-100">
+                  Software Engineer&nbsp;|&nbsp;Machine Learning&nbsp;|&nbsp;Artificial Intelligence
                 </span>
-                <span className="text-zinc-600 dark:text-white/65 max-sm:dark:text-white/80"> · </span>
-                <span className="text-zinc-800 dark:text-white max-sm:dark:text-white">{person.tagline}.</span>
               </motion.span>
             </motion.h1>
-            <motion.p
-              initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: reduceMotion ? 0 : ic.bodyDelay,
-                duration: ic.bodyDur,
-                ease: [0.22, 1, 0.36, 1] as const,
-              }}
-              className="mx-auto mt-6 max-w-lg text-sm font-medium leading-relaxed text-zinc-800 dark:mt-8 dark:text-white/78 max-sm:dark:text-white/88 md:text-base"
-            >
-              Full-stack · TypeScript · ML systems — I ship interfaces people feel and backends that scale.
-            </motion.p>
           </motion.div>
         </motion.div>
 
@@ -384,11 +371,11 @@ export default function Overlay({
         >
           <div className="relative">
             <motion.span
-              className="mb-4 block h-px w-12 bg-gradient-to-r from-violet-600 to-transparent dark:from-violet-400"
+              className="mb-4 block h-px w-12 bg-gradient-to-r from-violet-400 to-transparent"
               style={{ opacity: lineGlow }}
             />
-            <p className="font-display text-2xl font-medium leading-[1.15] tracking-tight text-zinc-900 dark:text-white/95 md:text-4xl lg:text-[2.75rem]">
-              I build full-stack apps, dashboards, and ML-backed products.
+            <p className="font-display text-2xl font-medium leading-[1.15] tracking-tight text-white/95 md:text-4xl lg:text-[2.75rem]">
+              I build digital experiences.
             </p>
           </div>
         </motion.div>
@@ -399,11 +386,11 @@ export default function Overlay({
         >
           <div className="relative">
             <motion.span
-              className="mb-4 ml-auto block h-px w-12 bg-gradient-to-l from-fuchsia-600 to-transparent dark:from-fuchsia-400"
+              className="mb-4 ml-auto block h-px w-12 bg-gradient-to-l from-fuchsia-400 to-transparent"
               style={{ opacity: lineGlow }}
             />
-            <p className="font-display text-2xl font-medium leading-[1.15] tracking-tight text-zinc-900 dark:text-white/95 md:text-4xl lg:text-[2.75rem]">
-              Bridging interface craft, systems thinking, and research-grade ML.
+            <p className="font-display text-2xl font-medium leading-[1.15] tracking-tight text-white/95 md:text-4xl lg:text-[2.75rem]">
+              Bridging design and engineering.
             </p>
           </div>
         </motion.div>

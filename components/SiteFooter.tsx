@@ -124,7 +124,7 @@ export default function SiteFooter() {
                 >
                   {/* Great Vibes (next/font) — calligraphic connecting script; not sans-serif. */}
                   <span
-                    className="block max-w-[min(100%,36rem)] text-[clamp(2.5rem,8.5vw,4.75rem)] leading-[1.08] text-pretty sm:max-w-none sm:leading-[1.06] sm:whitespace-nowrap"
+                    className="block max-w-[min(100%,36rem)] text-[clamp(2rem,6.2vw,3.6rem)] leading-[1.08] text-pretty sm:max-w-none sm:leading-[1.06] sm:whitespace-nowrap"
                     style={{
                       /* Resolved on `body` — includes next/font Great Vibes (`--font-footer-signature`) */
                       fontFamily: "var(--font-family-footer-signature)",
@@ -149,6 +149,16 @@ export default function SiteFooter() {
               >
                 {footerBio.body}
               </motion.p>
+              
+              <motion.div variants={fadeUp} className="pt-4">
+                <a
+                  href="/cv.pdf"
+                  download
+                  className="inline-flex h-12 flex-none items-center justify-center rounded-full bg-violet-600 px-7 font-sans text-sm font-semibold text-white transition-all hover:bg-violet-500 hover:shadow-[0_0_24px_-4px_rgba(139,92,246,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 dark:bg-violet-500 dark:hover:bg-violet-400"
+                >
+                  Download my CV
+                </a>
+              </motion.div>
             </motion.div>
           </div>
 

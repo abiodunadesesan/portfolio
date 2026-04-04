@@ -19,15 +19,15 @@ export const links = {
 
 /** Footer intro — paired with signature + role */
 export const footerBio = {
-  body: "Thanks for stopping by! I'm Abiodun Caleb Adesesan, a Software Engineer focused on AI/ML and full-stack development. Explore my work — and stay connected as we build the future together.",
+  body: "Thanks for stopping by! I'm Abiodun Caleb Adesesan, a Software Engineer focused on AI/ML and full-stack development. Let's work together — view my CV and reach out to build the future together.",
 } as const;
 
 /** Client-side placeholder before `/api/analytics` responds; API returns live label + counts. */
 export const analyticsFallback = {
-  asOfLabel: "Developer Analytics",
-  totalVisitors: 0,
-  totalVisits: 0,
-  pageViews: 0,
+  asOfLabel: "Developer Analytics (from 4 April 2026)",
+  totalVisitors: 1,
+  totalVisits: 1,
+  pageViews: 1,
 } as const;
 
 export type ProjectItem = {

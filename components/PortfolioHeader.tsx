@@ -18,7 +18,10 @@ export default function PortfolioHeader() {
   const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      // Keep navbar transparent until the user scrolls past the 300vh hero section
+      setScrolled(window.scrollY > window.innerHeight * 2.5);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -29,13 +32,15 @@ export default function PortfolioHeader() {
       initial={reduceMotion ? false : { y: -10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] as const }}
-      className={`fixed inset-x-0 top-0 z-[100] pt-[env(safe-area-inset-top,0px)] transition-[background-color,backdrop-filter,border-color] duration-300 ${
+      className={`fixed inset-x-0 top-0 z-[100] transition-[background-color,backdrop-filter,border-color] duration-300 ${
         scrolled
           ? "border-b border-zinc-200/80 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/72 dark:border-white/[0.07] dark:bg-[#08080a]/85 dark:supports-[backdrop-filter]:bg-[#08080a]/70"
-          : "border-b border-transparent bg-gradient-to-b from-white/92 via-white/55 to-transparent dark:from-[#08080a]/95 dark:via-[#08080a]/40 dark:to-transparent"
+          : "border-b border-transparent bg-transparent"
       }`}
     >
-      <div className="mx-auto flex min-h-16 max-w-7xl items-center gap-3 px-4 py-2 sm:min-h-[4.25rem] sm:gap-4 sm:px-6 md:min-h-[4.5rem] md:gap-6 md:px-8">
+      <div
+        style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
+        className="mx-auto flex min-h-[3.75rem] max-w-7xl items-center gap-3 px-4 sm:min-h-16 sm:gap-4 sm:px-6 md:min-h-[4.25rem] md:gap-6 md:px-8">
         <a
           href="#main-content"
           className="group min-w-0 shrink py-1"

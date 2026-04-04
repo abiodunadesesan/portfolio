@@ -92,7 +92,7 @@ export default function RootLayout({
       >
         <a
           href="#main-content"
-          className="absolute left-[-10000px] top-auto z-[200] h-px w-px overflow-hidden focus:left-4 focus:top-4 focus:h-auto focus:w-auto focus:overflow-visible focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-violet-500 dark:focus:bg-zinc-900 dark:focus:text-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-24 focus:z-[200] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-violet-500 dark:focus:bg-zinc-900 dark:focus:text-white"
         >
           Skip to main content
         </a>

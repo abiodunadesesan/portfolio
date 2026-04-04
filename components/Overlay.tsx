@@ -349,19 +349,20 @@ export default function Overlay({
             >
               <motion.span
                 variants={nameReveal}
-                className="block w-full max-w-full bg-gradient-to-br from-white via-zinc-100 to-zinc-200 bg-clip-text px-4 pb-2 font-sans text-[clamp(1.75rem,8vw,3.25rem)] font-bold tracking-tight text-transparent text-balance [filter:drop-shadow(0_2px_28px_rgba(255,255,255,0.12))]"
+                className="block w-full max-w-full whitespace-nowrap bg-gradient-to-br from-white via-zinc-100 to-zinc-200 bg-clip-text px-4 pb-2 font-sans text-[clamp(1.2rem,8.3vw,3.25rem)] font-bold tracking-tighter text-transparent [filter:drop-shadow(0_2px_28px_rgba(255,255,255,0.12))]"
               >
                 {person.displayName}
               </motion.span>
 
               <motion.span
                 variants={subReveal}
-                className="mt-3 block w-full px-4 pb-2 text-[clamp(0.75rem,2.5vw,1.1rem)] font-medium leading-snug text-white/92 text-balance max-sm:text-white md:mt-4"
+                className="mt-3 block w-full whitespace-nowrap px-4 pb-2 text-[clamp(0.45rem,2.4vw,1.1rem)] font-medium leading-snug text-white/92 max-sm:text-white md:mt-4"
               >
                 <span className="bg-gradient-to-r from-violet-200 via-fuchsia-200 to-violet-200 bg-clip-text pr-2 font-display text-transparent max-sm:from-violet-100 max-sm:to-fuchsia-100">
                   Software Engineer &nbsp;|&nbsp; Machine Learning &nbsp;|&nbsp; Artificial Intelligence
                 </span>
               </motion.span>
+
 
             </motion.h1>
           </motion.div>

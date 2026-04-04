@@ -22,15 +22,29 @@ const SECTIONS = [
 export default function VerticalScrollIndicator() {
   const { scrollYProgress } = useScroll();
   const [activeSection, setActiveSection] = useState("hero");
+  const [isVisible, setIsVisible] = useState(false);
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 200, // Faster tracking
+    damping: 35,
     restDelta: 0.001,
   });
 
-  // Scale the mercury capsule's position across the full track
+  // Track the capsule's position (top: 0% to top: calc(100% - 32px))
   const capsuleY = useTransform(smoothProgress, [0, 1], ["0%", "calc(100% - 32px)"]);
+
+  // Auto-hide logic: show on scroll, hide after 2 seconds of inactivity
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    const handleScroll = () => {
+      setIsVisible(true);
+      clearTimeout(timeout);
+      timeout = setTimeout(() => setIsVisible(false), 2000);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const scrollToId = useCallback((id: string) => {
     const element = document.getElementById(id);
@@ -58,16 +72,19 @@ export default function VerticalScrollIndicator() {
   });
 
   return (
-    <div
+    <motion.div
       style={{
         position: "fixed",
-        right: "32px",
+        right: "16px",
         top: "50%",
         transform: "translateY(-50%)",
         zIndex: 99999,
         display: "flex",
         flexDirection: "column",
-        alignItems: "center"
+        alignItems: "center",
+        opacity: isVisible ? 1 : 0,
+        transition: "opacity 0.4s ease",
+        pointerEvents: isVisible ? "auto" : "none"
       }}
       className="hidden gap-8 lg:flex"
       aria-hidden="true"
@@ -75,15 +92,7 @@ export default function VerticalScrollIndicator() {
       {/* The Track & Beads */}
       <div className="relative flex h-[320px] w-[2px] flex-col items-center justify-between py-2">
         {/* Glass Track */}
-        <div className="absolute inset-0 rounded-full bg-zinc-200/40 backdrop-blur-md dark:bg-white/10" />
-
-        {/* Mercury Capsule (The Tracker) */}
-        <motion.div
-          style={{ top: capsuleY }}
-          className="absolute left-1/2 z-20 h-8 w-4 -translate-x-1/2 rounded-full bg-gradient-to-b from-violet-400 via-fuchsia-500 to-violet-600 shadow-[0_0_20px_rgba(168,85,247,0.7)]"
-        >
-          <div className="h-full w-full animate-pulse rounded-full bg-white/20 blur-[1px]" />
-        </motion.div>
+        <div className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-md dark:bg-white/5 border border-white/10" />
 
         {/* Section Beads */}
         {SECTIONS.map((section) => (
@@ -97,13 +106,13 @@ export default function VerticalScrollIndicator() {
             <div 
               className={`h-1.5 w-1.5 rounded-full transition-all duration-500 ${
                 activeSection === section.id 
-                ? "bg-white scale-125 shadow-[0_0_8px_rgba(255,255,255,0.8)]" 
-                : "bg-zinc-400/60 dark:bg-white/20 group-hover:bg-white/60"
+                ? "bg-white scale-125 shadow-[0_0_8px_rgba(255,255,255,0.6)]" 
+                : "bg-white/10 group-hover:bg-white/40"
               }`} 
             />
             
             {/* Label Tooltip */}
-            <span className="absolute right-8 origin-right scale-0 text-[10px] font-bold uppercase tracking-widest text-zinc-500 transition-all duration-300 group-hover:scale-100 dark:text-white/40">
+            <span className="absolute right-8 origin-right scale-0 text-[10px] font-bold uppercase tracking-widest text-white/40 transition-all duration-300 group-hover:scale-100">
               {section.label}
             </span>
           </button>
@@ -115,18 +124,19 @@ export default function VerticalScrollIndicator() {
         whileHover={{ scale: 1.1, y: -2 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => scrollToId("hero")}
-        className="group relative flex h-10 w-10 items-center justify-center rounded-2xl border border-zinc-200/50 bg-white/80 text-zinc-500 shadow-lg backdrop-blur-xl transition-all duration-500 hover:border-violet-500/50 hover:text-violet-600 dark:border-white/10 dark:bg-white/5 dark:text-white/40 dark:hover:border-violet-400/30 dark:hover:text-violet-300"
+        className="group relative flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white/30 shadow-lg backdrop-blur-xl transition-all duration-500 hover:border-white/30 hover:text-white/80"
       >
         {/* Glow Ring */}
-        <div className="absolute inset-0 scale-75 rounded-2xl bg-violet-500/0 blur-xl transition-all duration-500 group-hover:scale-110 group-hover:bg-violet-500/20" />
+        <div className="absolute inset-0 scale-75 rounded-2xl bg-white/0 blur-xl transition-all duration-500 group-hover:scale-110 group-hover:bg-white/5" />
         
         <ChevronUp className="relative h-5 w-5" />
         
         {/* "Zenith" Label */}
-        <span className="absolute -top-6 text-[8px] font-black uppercase tracking-[0.2em] opacity-0 transition-opacity duration-300 group-hover:opacity-60">
+        <span className="absolute -top-6 text-[8px] font-black uppercase tracking-[0.2em] opacity-0 transition-opacity duration-300 group-hover:opacity-30">
           Zenith
         </span>
       </motion.button>
-    </div>
+    </motion.div>
   );
 }
+

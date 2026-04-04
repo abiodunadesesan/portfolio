@@ -15,62 +15,88 @@ const NAV = [
 
 export default function PortfolioHeader() {
   const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   return (
     <motion.header
-      initial={reduceMotion ? false : { y: -10, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] as const }}
-      className="nav-water-glass sticky top-0 w-full z-[999] transition-colors duration-300"
+      initial={{ opacity: 0, top: "-10px" }}
+      animate={{ opacity: 1, top: "-10px" }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="nav-water-glass fixed inset-x-0 z-[9999] m-0 border-none pt-[10px] transform-gpu"
+      style={{ 
+        top: "-10px",
+        marginTop: "env(safe-area-inset-top, 0px)"
+      }}
     >
-      <div
-        style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
-        className="mx-auto flex min-h-[3.75rem] max-w-7xl items-center gap-3 px-4 sm:min-h-16 sm:gap-4 sm:px-6 md:min-h-[4.25rem] md:gap-6 md:px-8">
-        <a
-          href="#main-content"
-          className="group min-w-0 shrink py-1"
-          aria-label="Back to top"
-        >
-          <p className="min-w-0 max-w-[13.5rem] font-sans text-base font-semibold leading-tight tracking-tight text-zinc-900 transition [overflow-wrap:anywhere] group-hover:text-violet-700 dark:text-white dark:group-hover:text-violet-200 sm:max-w-[17rem] sm:text-lg md:max-w-[22rem] lg:max-w-none">
-            {person.displayName}
-          </p>
-          <p className="mt-0.5 line-clamp-2 max-w-[14rem] text-[11px] font-medium uppercase leading-snug tracking-[0.18em] text-zinc-600 dark:text-white/55 sm:max-w-none sm:text-xs sm:tracking-[0.14em] md:normal-case md:tracking-tight">
-            <span className="md:hidden">{person.role}</span>
-            <span className="hidden md:inline">
-              {person.role} · {person.tagline}
-            </span>
-          </p>
-        </a>
 
+
+
+
+
+      <div className="flex h-[4.5rem] w-full items-center px-4 sm:px-6 md:h-[5.25rem] md:px-12">
+
+        {/* Left: Branding */}
+        <div className="flex flex-1 items-center justify-start min-w-0">
+          <a
+            href="#main-content"
+            className="group min-w-0 shrink-0 py-1"
+            aria-label="Back to top"
+          >
+            <p className="min-w-0 font-sans text-base font-semibold leading-tight tracking-tight text-zinc-900 transition [overflow-wrap:anywhere] group-hover:text-violet-700 dark:text-white dark:group-hover:text-violet-200 sm:text-lg md:tracking-tight">
+              {person.displayName}
+            </p>
+            <p className="mt-0.5 line-clamp-1 text-[10px] font-medium uppercase tracking-[0.12em] text-zinc-600 dark:text-white/55 sm:text-xs md:normal-case md:tracking-tight">
+              <span className="hidden sm:inline">{person.role} · {person.tagline}</span>
+              <span className="sm:hidden">{person.role}</span>
+            </p>
+          </a>
+        </div>
+
+        {/* Center: Navigation */}
         <nav
-          className="flex min-w-0 flex-1 justify-end gap-1 overflow-x-auto py-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:justify-center sm:gap-1.5 md:gap-2 [&::-webkit-scrollbar]:hidden"
+          className="hidden lg:flex flex-[2] items-center justify-center gap-1.5"
           aria-label="Primary"
         >
           {NAV.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-600 transition hover:bg-zinc-900/[0.06] hover:text-zinc-900 dark:text-white/55 dark:hover:bg-white/[0.06] dark:hover:text-white sm:min-h-12 sm:px-3.5 sm:text-[13px] sm:tracking-normal md:min-h-11 md:px-4 md:text-sm md:font-medium md:normal-case md:tracking-tight"
+              className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium tracking-tight text-zinc-600 transition hover:bg-zinc-900/[0.04] hover:text-zinc-900 dark:text-white/55 dark:hover:bg-white/[0.05] dark:hover:text-white"
             >
               {item.label}
             </a>
           ))}
         </nav>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
+        {/* Right: Actions */}
+        <div className="flex flex-1 items-center justify-end gap-2 sm:gap-3">
           <ThemeToggle />
           <a
             href={links.github}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Open GitHub profile"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-xl border border-zinc-200/90 bg-zinc-900/[0.03] px-3 py-2 text-sm font-semibold text-zinc-800 transition hover:border-violet-500/40 hover:bg-violet-500/[0.08] hover:text-zinc-950 dark:border-white/10 dark:bg-white/[0.03] dark:text-white/90 dark:hover:border-violet-400/35 dark:hover:text-white sm:min-h-12 sm:px-4"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-zinc-200/90 bg-zinc-900/[0.03] px-3 py-2 text-sm font-semibold text-zinc-800 transition hover:border-violet-500/40 hover:bg-violet-500/[0.08] hover:text-zinc-950 dark:border-white/10 dark:bg-white/[0.03] dark:text-white/90 dark:hover:border-violet-400/35 dark:hover:text-white sm:px-4"
           >
-            <FolderGit2 className="h-5 w-5 shrink-0 opacity-90" strokeWidth={2} aria-hidden />
+            <FolderGit2 className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden />
             <span className="hidden sm:inline">GitHub</span>
           </a>
         </div>
       </div>
+
+
+
+      {/* Liquid Water Progress Line */}
+      <motion.div
+        className="absolute bottom-0 left-0 h-[2px] bg-white/40 shadow-[0_0_12px_rgba(255,255,255,0.3)] origin-left z-10"
+        style={{ scaleX, width: "100%" }}
+      />
     </motion.header>
   );
 }
+

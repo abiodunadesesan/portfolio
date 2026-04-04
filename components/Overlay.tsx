@@ -349,7 +349,7 @@ export default function Overlay({
             >
               <motion.span
                 variants={nameReveal}
-                className="block w-full max-w-full whitespace-nowrap bg-gradient-to-br from-white via-zinc-100 to-zinc-200 bg-clip-text px-4 pb-2 font-sans text-[clamp(1.2rem,4vw,3.2rem)] font-bold tracking-tight text-transparent [filter:drop-shadow(0_2px_28px_rgba(255,255,255,0.12))]"
+                className="block w-full max-w-full whitespace-nowrap bg-gradient-to-br from-white via-zinc-100 to-zinc-200 bg-clip-text px-4 pb-2 font-sans text-[clamp(2.2rem,6vw,3.2rem)] font-bold tracking-tight text-transparent [filter:drop-shadow(0_2px_28px_rgba(255,255,255,0.12))]"
               >
                 {person.displayName}
               </motion.span>

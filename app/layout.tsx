@@ -97,12 +97,27 @@ export default function RootLayout({
       <body
         className={`${syne.variable} ${dmSans.variable} ${footerSignature.variable} liquid-glass-body font-sans antialiased`}
       >
+        <div 
+          className="pointer-events-none fixed inset-0 -z-10 bg-[#f5f4f1] transition-colors duration-700 dark:bg-[#0a0a0c]" 
+          aria-hidden="true"
+        >
+          {/* Liquid Mesh Layer - GPU Accelerated */}
+          <div className="absolute inset-0 opacity-[0.45] dark:opacity-[0.18]">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_130%_100%_at_0%_-15%,rgba(139,92,246,0.3),transparent_58%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_90%_at_100%_-5%,rgba(56,189,248,0.25),transparent_52%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_115%,rgba(236,72,153,0.22),transparent_55%)]" />
+          </div>
+          {/* Subtle Dim overlay for premium feel */}
+          <div className="absolute inset-0 bg-black/5 dark:bg-black/40" />
+        </div>
+
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-24 focus:z-[200] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-violet-500 dark:focus:bg-zinc-900 dark:focus:text-white"
+          className="sr-only absolute pointer-events-none opacity-0"
         >
           Skip to main content
         </a>
+
         <CustomCursor />
         <ThemeProvider>
           <PortfolioHeader />

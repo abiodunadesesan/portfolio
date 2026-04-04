@@ -32,7 +32,7 @@ export function getFrameSrc(frameIndex: number): string {
 }
 
 /** First frames to preload (layout `<link rel="preload">` + high `fetchPriority` in loader). */
-export const HERO_PRELOAD_FRAME_INDICES = [0, 1, 2, 3, 4, 5, 10, 15, 20, 25, 30] as const;
+export const HERO_PRELOAD_FRAME_INDICES = [0, 1, 5, 10, 20] as const;
 
 export function getHeroPreloadFrameUrls(): string[] {
   return HERO_PRELOAD_FRAME_INDICES.map((i) => getFrameSrc(i));

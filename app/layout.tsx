@@ -59,6 +59,11 @@ export const metadata: Metadata = {
       "Full-stack engineering, applied ML, and systems design — projects, experience, and stack.",
     type: "website",
   },
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
   twitter: {
     card: "summary_large_image",
     title: "Abiodun Caleb Adesesan — Software Engineer · AI/ML",

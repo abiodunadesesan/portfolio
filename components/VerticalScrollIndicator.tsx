@@ -75,7 +75,11 @@ export default function VerticalScrollIndicator() {
     <motion.div
       style={{
         position: "fixed",
-        right: "16px",
+        right: "12px",
+
+
+
+
         top: "50%",
         transform: "translateY(-50%)",
         zIndex: 99999,

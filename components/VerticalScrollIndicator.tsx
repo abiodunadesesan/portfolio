@@ -1,16 +1,20 @@
 "use client";
 
-import { motion, useScroll, useSpring, useTransform, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { useEffect, useState, useCallback } from "react";
 import { ChevronUp } from "lucide-react";
 
 const SECTIONS = [
   { id: "hero", label: "Zenith" },
   { id: "about", label: "About" },
-  { id: "work", label: "Projects" },
-  { id: "experience", label: "Logic" },
-  { id: "skills", label: "Stack" },
-  { id: "contact", label: "Contact" },
+  { id: "work", label: "Work" },
+  { id: "services", label: "Services" },
+  { id: "process", label: "Process" },
+  { id: "recent", label: "Recent" },
+  { id: "why", label: "Why" },
+  { id: "faq", label: "FAQ" },
+  { id: "lets-connect", label: "Connect" },
+  { id: "contact-form", label: "Contact" },
 ];
 
 /**
@@ -23,15 +27,6 @@ export default function VerticalScrollIndicator() {
   const { scrollYProgress } = useScroll();
   const [activeSection, setActiveSection] = useState("hero");
   const [isVisible, setIsVisible] = useState(false);
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 200, // Faster tracking
-    damping: 35,
-    restDelta: 0.001,
-  });
-
-  // Track the capsule's position (top: 0% to top: calc(100% - 32px))
-  const capsuleY = useTransform(smoothProgress, [0, 1], ["0%", "calc(100% - 32px)"]);
 
   // Auto-hide logic: show on scroll, hide after 2 seconds of inactivity
   useEffect(() => {
@@ -82,7 +77,7 @@ export default function VerticalScrollIndicator() {
 
         top: "50%",
         transform: "translateY(-50%)",
-        zIndex: 99999,
+        zIndex: 9000,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

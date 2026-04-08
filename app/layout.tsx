@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { DM_Sans, Great_Vibes, Syne } from "next/font/google";
+import { DM_Sans, Great_Vibes, Instrument_Serif, Syne } from "next/font/google";
 import Script from "next/script";
 import PortfolioHeader from "@/components/PortfolioHeader";
 import VerticalScrollIndicator from "@/components/VerticalScrollIndicator";
@@ -28,6 +28,14 @@ const footerSignature = Great_Vibes({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-footer-signature",
+  display: "swap",
+  adjustFontFallback: true,
+});
+
+const navSerif = Instrument_Serif({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-nav-serif",
   display: "swap",
   adjustFontFallback: true,
 });
@@ -95,20 +103,19 @@ export default function RootLayout({
         ))}
       </head>
       <body
-        className={`${syne.variable} ${dmSans.variable} ${footerSignature.variable} liquid-glass-body font-sans antialiased`}
+        className={`${syne.variable} ${dmSans.variable} ${footerSignature.variable} ${navSerif.variable} liquid-glass-body font-sans antialiased`}
       >
-        <div 
-          className="pointer-events-none fixed inset-0 -z-10 bg-[#f5f4f1] transition-colors duration-700 dark:bg-[#0a0a0c]" 
+        <div
+          className="pointer-events-none fixed inset-0 -z-10 bg-[#f5f4f1] transition-colors duration-700 dark:bg-[#050505]"
           aria-hidden="true"
         >
-          {/* Liquid Mesh Layer - GPU Accelerated */}
-          <div className="absolute inset-0 opacity-[0.45] dark:opacity-[0.18]">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_130%_100%_at_0%_-15%,rgba(139,92,246,0.3),transparent_58%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_90%_at_100%_-5%,rgba(56,189,248,0.25),transparent_52%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_115%,rgba(236,72,153,0.22),transparent_55%)]" />
+          {/* Liquid mesh — lighter in dark mode for a sharper, editorial backdrop */}
+          <div className="absolute inset-0 opacity-[0.38] dark:opacity-[0.07]">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_130%_100%_at_0%_-15%,rgba(139,92,246,0.22),transparent_58%)] dark:bg-[radial-gradient(ellipse_130%_100%_at_0%_-15%,rgba(139,92,246,0.09),transparent_62%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_90%_at_100%_-5%,rgba(56,189,248,0.18),transparent_52%)] dark:bg-[radial-gradient(ellipse_100%_90%_at_100%_-5%,rgba(56,189,248,0.06),transparent_55%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_115%,rgba(236,72,153,0.14),transparent_55%)] dark:bg-[radial-gradient(ellipse_80%_70%_at_50%_115%,rgba(236,72,153,0.05),transparent_58%)]" />
           </div>
-          {/* Subtle Dim overlay for premium feel */}
-          <div className="absolute inset-0 bg-black/5 dark:bg-black/40" />
+          <div className="absolute inset-0 bg-black/[0.03] dark:bg-black/[0.62]" />
         </div>
 
 
@@ -123,10 +130,11 @@ export default function RootLayout({
 
         <CustomCursor />
         <ThemeProvider>
-          <PortfolioHeader />
-          <MotionProvider>
-            {children}
-          </MotionProvider>
+          {/* Isolate stacking so the sticky nav paints above the hero canvas; hero stays full-bleed under the pill. */}
+          <div className="relative isolate min-h-0">
+            <PortfolioHeader />
+            <MotionProvider>{children}</MotionProvider>
+          </div>
         </ThemeProvider>
         <VerticalScrollIndicator />
         <Analytics />

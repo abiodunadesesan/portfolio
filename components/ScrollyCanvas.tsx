@@ -204,12 +204,12 @@ export default function ScrollyCanvas() {
     <section
       id="hero"
       ref={containerRef}
-      className="relative w-full h-[180vh]"
+      className="relative z-0 w-full h-[180vh]"
       aria-label="Hero: cinematic scroll sequence. Scroll down to advance frames; text and controls sit above the canvas."
     >
       <div
         ref={stickyRef}
-        className="sticky top-0 h-screen w-full overflow-visible bg-zinc-100 transition-colors duration-500 dark:bg-[#121212]"
+        className="sticky top-0 z-0 h-[100dvh] min-h-[100svh] w-full overflow-visible bg-zinc-100 transition-colors duration-500 dark:bg-[#121212]"
       >
         <canvas
           ref={canvasRef}

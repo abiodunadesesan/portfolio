@@ -10,7 +10,7 @@ export default function PageTransition({ children }: { children: ReactNode }) {
     <motion.main
       id="main-content"
       tabIndex={-1}
-      className="min-h-screen bg-transparent text-[var(--foreground)] transition-colors duration-500"
+      className="relative z-0 min-h-screen bg-transparent text-[var(--foreground)] transition-colors duration-500"
       initial={reduce ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}

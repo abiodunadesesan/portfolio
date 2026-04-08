@@ -3,7 +3,15 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 html {
-  scroll-padding-top: 5.5rem;
+  scroll-padding-top: 6rem;
+}
+
+/* Custom cursor (see CustomCursor.tsx) — fine pointers only, class toggled client-side */
+@media (pointer: fine) {
+  html.custom-cursor-active,
+  html.custom-cursor-active * {
+    cursor: none !important;
+  }
 }
 
 /* overflow-x: clip prevents horizontal overflow without creating a scroll container,
@@ -50,14 +58,14 @@ body {
 }
 
 html.dark {
-  --background: #08080a;
+  --background: #050507;
   --foreground: #f4f4f5;
-  --liquid-mesh-a: rgba(139, 92, 246, 0.15);
-  --liquid-mesh-b: rgba(56, 189, 248, 0.08);
-  --liquid-mesh-c: rgba(236, 72, 153, 0.07);
-  --liquid-mesh-d: rgba(167, 139, 250, 0.05);
-  --liquid-sheen: rgba(255, 255, 255, 0.04);
-  --liquid-noise-opacity: 0.04;
+  --liquid-mesh-a: rgba(139, 92, 246, 0.07);
+  --liquid-mesh-b: rgba(56, 189, 248, 0.05);
+  --liquid-mesh-c: rgba(236, 72, 153, 0.04);
+  --liquid-mesh-d: rgba(167, 139, 250, 0.03);
+  --liquid-sheen: rgba(255, 255, 255, 0.03);
+  --liquid-noise-opacity: 0.032;
 }
 
 /**
@@ -77,8 +85,7 @@ body.liquid-glass-body {
 }
 
 html.dark body.liquid-glass-body {
-  box-shadow:
-    inset 0 0 100px -24px rgba(99, 102, 241, 0.12);
+  box-shadow: inset 0 0 120px -28px rgba(99, 102, 241, 0.06);
 }
 
 

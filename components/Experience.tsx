@@ -11,16 +11,15 @@ export default function Experience() {
       aria-labelledby="experience-heading"
     >
       <div className="mx-auto max-w-6xl">
-        <NanoChip>Experience & timeline</NanoChip>
+        <NanoChip>Experience</NanoChip>
         <h2
           id="experience-heading"
           className="font-display mt-4 text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl dark:text-white"
         >
-          How I work
+          Experience & achievements
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-600 md:text-base dark:text-white/55">
-          Snapshot aligned with your public work and direction — tighten dates
-          and employer names from your CV (
+          A quick timeline of what I’ve been building. Full details live on{" "}
           <a
             href={links.linkedin}
             className="text-violet-700 underline underline-offset-2 hover:text-zinc-900 dark:text-violet-300/90 dark:hover:text-white"
@@ -29,7 +28,7 @@ export default function Experience() {
           >
             LinkedIn
           </a>
-          ) anytime.
+          .
         </p>
 
         <StaggerTimeline items={experience} />

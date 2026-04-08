@@ -1,7 +1,9 @@
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { StaggerProjectCards } from "@/components/StaggerProjectCards";
+import { GlassCard } from "@/components/ui/GlassCard";
 import { NanoChip } from "@/components/ui/NanoChip";
-import { links, projects } from "@/lib/site-content";
+import { caseStudies, links, projects } from "@/lib/site-content";
+import { ArrowUpRight } from "lucide-react";
 
 export default function Projects() {
   return (
@@ -13,16 +15,15 @@ export default function Projects() {
       <div className="mx-auto max-w-6xl">
         <div className="mb-14 flex flex-col gap-4 md:mb-20 md:flex-row md:items-end md:justify-between">
           <div>
-            <NanoChip>GitHub · Case studies</NanoChip>
+            <NanoChip>Selected work</NanoChip>
             <h2
               id="projects-heading"
               className="font-display mt-4 text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl dark:text-white"
             >
-              Selected projects
+              Case studies (high-signal)
             </h2>
             <p className="mt-3 max-w-lg text-sm leading-relaxed text-zinc-600 md:text-base dark:text-white/55">
-              Public repos spanning TypeScript, JavaScript, PHP, and applied ML —
-              dashboards, commerce, microservices, and NLP research.
+              A few projects shown the way recruiters and clients read them: problem → approach → outcomes.
             </p>
             <a
               href={links.github}
@@ -35,7 +36,103 @@ export default function Projects() {
           </div>
         </div>
 
-        <StaggerProjectCards items={projects} />
+        <div className="grid gap-6 lg:gap-8">
+          {caseStudies.map((c) => (
+            <GlassCard key={c.href} className="group" data-cursor="view-project">
+              <details className="group/details">
+                <summary className="cursor-pointer list-none select-none">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-6">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
+                        {c.category} · {c.year}
+                      </p>
+                      <h3 className="font-display mt-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">
+                        {c.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-white/55">
+                        {c.problem}
+                      </p>
+                    </div>
+                    <a
+                      href={c.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 inline-flex w-fit items-center gap-2 rounded-full border border-zinc-200/80 bg-white/70 px-4 py-2 text-sm font-semibold text-zinc-900 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition hover:border-violet-300/60 hover:bg-violet-50/60 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:border-violet-400/25 dark:hover:bg-violet-500/[0.08] md:mt-0"
+                    >
+                      Open
+                      <ArrowUpRight className="h-4 w-4 opacity-70" aria-hidden />
+                    </a>
+                  </div>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {c.tech.slice(0, 6).map((t) => (
+                      <span
+                        key={t}
+                        className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/75"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                    <span className="inline-flex items-center rounded-full border border-violet-200/70 bg-violet-50/60 px-3 py-1 text-xs font-medium text-violet-700 dark:border-violet-400/15 dark:bg-violet-500/[0.07] dark:text-violet-200/80">
+                      Click for details
+                    </span>
+                  </div>
+                </summary>
+
+                <div className="mt-6 grid gap-6 md:grid-cols-3">
+                  <div className="md:col-span-1">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
+                      Approach
+                    </p>
+                    <ul className="mt-3 space-y-2 text-sm text-zinc-700 dark:text-white/75">
+                      {c.approach.map((a) => (
+                        <li key={a} className="flex items-start gap-2">
+                          <span className="mt-2 h-1.5 w-1.5 rounded-full bg-violet-500/70 dark:bg-violet-300/70" aria-hidden />
+                          <span>{a}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="md:col-span-1">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
+                      Challenges
+                    </p>
+                    <ul className="mt-3 space-y-2 text-sm text-zinc-700 dark:text-white/75">
+                      {c.challenges.map((a) => (
+                        <li key={a} className="flex items-start gap-2">
+                          <span className="mt-2 h-1.5 w-1.5 rounded-full bg-zinc-400/70 dark:bg-white/30" aria-hidden />
+                          <span>{a}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="md:col-span-1">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
+                      Outcomes
+                    </p>
+                    <ul className="mt-3 space-y-2 text-sm text-zinc-700 dark:text-white/75">
+                      {c.outcomes.map((a) => (
+                        <li key={a} className="flex items-start gap-2">
+                          <span className="mt-2 h-1.5 w-1.5 rounded-full bg-emerald-500/70 dark:bg-emerald-300/70" aria-hidden />
+                          <span>{a}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </details>
+            </GlassCard>
+          ))}
+        </div>
+
+        <div className="mt-14">
+          <div className="mb-6">
+            <NanoChip>More projects</NanoChip>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-600 dark:text-white/55">
+              Additional repos and builds. I keep this list curated—quality over quantity.
+            </p>
+          </div>
+          <StaggerProjectCards items={projects} />
+        </div>
       </div>
     </AnimatedSection>
   );

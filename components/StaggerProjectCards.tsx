@@ -38,6 +38,7 @@ export function StaggerProjectCards({ items }: { items: readonly ProjectItem[] }
             href={p.href}
             target="_blank"
             rel="noopener noreferrer"
+            data-cursor="view-project"
             className="block h-full outline-none ring-violet-500/40 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#08080c]"
           >
             <GlassCard className="group h-full cursor-pointer">

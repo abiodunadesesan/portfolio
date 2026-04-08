@@ -11,7 +11,7 @@ export default function Skills() {
       aria-labelledby="skills-heading"
     >
       <div className="mx-auto max-w-6xl">
-        <NanoChip>Skills & tools</NanoChip>
+        <NanoChip>Skills</NanoChip>
         <h2
           id="skills-heading"
           className="font-display mt-4 text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl dark:text-white"
@@ -19,8 +19,7 @@ export default function Skills() {
           Stack & craft
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-600 md:text-base dark:text-white/55">
-          Grounded in your GitHub footprint and this portfolio&apos;s stack —
-          extend with certifications and tools from{" "}
+          Grouped by what I use to ship: languages, web/UI, ML/data, and engineering practices. More history on{" "}
           <a
             href={links.linkedin}
             target="_blank"

@@ -2,6 +2,7 @@ import { AnimatedSection } from "@/components/AnimatedSection";
 import { StaggerProjectCards } from "@/components/StaggerProjectCards";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NanoChip } from "@/components/ui/NanoChip";
+import { getProjectPreviewImageUrl } from "@/lib/preview";
 import { caseStudies, links, projects } from "@/lib/site-content";
 import { ArrowUpRight } from "lucide-react";
 
@@ -9,7 +10,7 @@ export default function Projects() {
   return (
     <AnimatedSection
       id="work"
-      className="relative z-20 scroll-mt-24 border-t border-zinc-200/60 bg-gradient-to-b from-zinc-50 via-neutral-50 to-stone-100/90 px-6 pt-14 pb-24 dark:border-white/10 dark:from-[#060608] dark:via-[#08080c] dark:to-[#0a0a10] md:scroll-mt-28 md:px-12 md:pt-20 md:pb-32"
+      className="binary-matrix relative z-20 scroll-mt-24 border-t border-zinc-200/60 bg-gradient-to-b from-zinc-50 via-neutral-50 to-stone-100/90 px-6 pt-14 pb-24 dark:border-white/10 dark:from-[#060608] dark:via-[#08080c] dark:to-[#0a0a10] md:scroll-mt-28 md:px-12 md:pt-20 md:pb-32"
       aria-labelledby="projects-heading"
     >
       <div className="mx-auto max-w-6xl">
@@ -42,7 +43,7 @@ export default function Projects() {
               <details className="group/details">
                 <summary className="cursor-pointer list-none select-none">
                   <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-6">
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
                         {c.category} · {c.year}
                       </p>
@@ -52,6 +53,25 @@ export default function Projects() {
                       <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-white/55">
                         {c.problem}
                       </p>
+                    </div>
+                    <div className="hidden shrink-0 md:block md:w-[15.5rem]">
+                      {(() => {
+                        const preview = c.previewImage ?? getProjectPreviewImageUrl(c.href);
+                        return preview ? (
+                          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-zinc-200/70 bg-gradient-to-br from-violet-500/15 via-fuchsia-500/10 to-transparent shadow-sm shadow-zinc-900/5 dark:border-white/10">
+                            <img
+                              src={preview}
+                              alt={`${c.title} preview`}
+                              loading="lazy"
+                              className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
+                            />
+                            <div
+                              aria-hidden
+                              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent dark:from-black/55"
+                            />
+                          </div>
+                        ) : null;
+                      })()}
                     </div>
                     <a
                       href={c.href}

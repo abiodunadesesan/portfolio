@@ -9,7 +9,7 @@ export default function TestimonialsSection() {
   return (
     <AnimatedSection
       id="testimonials"
-      className="relative z-20 scroll-mt-24 border-t border-zinc-200/60 bg-gradient-to-b from-stone-50 to-zinc-100/90 px-6 py-24 dark:border-white/10 dark:from-[#0a0a10] dark:to-[#060608] md:scroll-mt-28 md:px-12 md:py-28"
+      className="binary-matrix relative z-20 scroll-mt-24 border-t border-zinc-200/60 bg-gradient-to-b from-stone-50 to-zinc-100/90 px-6 py-24 dark:border-white/10 dark:from-[#0a0a10] dark:to-[#060608] md:scroll-mt-28 md:px-12 md:py-28"
       aria-labelledby="testimonials-heading"
     >
       <div className="mx-auto max-w-6xl">

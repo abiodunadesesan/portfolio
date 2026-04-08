@@ -19,6 +19,7 @@ import {
   recommendationsCredentialsSection,
   referencesAvailability,
 } from "@/lib/site-content";
+import { getProjectPreviewImageUrl } from "@/lib/preview";
 import { ArrowUpRight, Calendar, GraduationCap, Quote } from "lucide-react";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -249,6 +250,27 @@ export default function AboutPageLayout() {
               {caseStudies.slice(0, 4).map((c) => (
                 <Link key={c.href} href="/projects" className="group block" data-cursor="view-project">
                   <GlassCard spotlight className="h-full transition group-hover:border-violet-300/50">
+                    <div className="relative mb-5 aspect-[16/10] w-full overflow-hidden rounded-2xl border border-zinc-200/70 bg-gradient-to-br from-violet-500/15 via-fuchsia-500/10 to-transparent dark:border-white/10">
+                      {(() => {
+                        const preview = c.previewImage ?? getProjectPreviewImageUrl(c.href);
+                        return preview ? (
+                          <>
+                            <img
+                              src={preview}
+                              alt={`${c.title} preview`}
+                              loading="lazy"
+                              className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
+                            />
+                            <div
+                              aria-hidden
+                              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent dark:from-black/55"
+                            />
+                          </>
+                        ) : (
+                          <div className="h-full w-full bg-[radial-gradient(ellipse_80%_70%_at_30%_20%,rgba(255,255,255,0.35),transparent_55%)] opacity-35 dark:opacity-15" />
+                        );
+                      })()}
+                    </div>
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-white/45">
                       {c.category} · {c.year}
                     </p>

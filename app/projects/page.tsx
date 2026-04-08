@@ -2,6 +2,7 @@ import Link from "next/link";
 import { NanoChip } from "@/components/ui/NanoChip";
 import { GlassCard } from "@/components/ui/GlassCard";
 import SiteFooter from "@/components/SiteFooter";
+import { getProjectPreviewImageUrl } from "@/lib/preview";
 import { caseStudies, links, projects, person } from "@/lib/site-content";
 import { ArrowUpRight, Calendar } from "lucide-react";
 
@@ -148,6 +149,27 @@ export default function ProjectsPage() {
               className="block outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#08080c]"
             >
               <GlassCard spotlight className="group h-full cursor-pointer">
+                <div className="relative mb-5 aspect-[16/10] w-full overflow-hidden rounded-2xl border border-zinc-200/70 bg-gradient-to-br from-violet-500/15 via-fuchsia-500/10 to-transparent dark:border-white/10">
+                  {(() => {
+                    const preview = p.previewImage ?? getProjectPreviewImageUrl(p.href);
+                    return preview ? (
+                      <>
+                        <img
+                          src={preview}
+                          alt={`${p.title} preview`}
+                          loading="lazy"
+                          className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
+                        />
+                        <div
+                          aria-hidden
+                          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent dark:from-black/55"
+                        />
+                      </>
+                    ) : (
+                      <div className="h-full w-full bg-[radial-gradient(ellipse_80%_70%_at_30%_20%,rgba(255,255,255,0.35),transparent_55%)] opacity-35 dark:opacity-15" />
+                    );
+                  })()}
+                </div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
                   {p.tag}
                 </p>

@@ -39,6 +39,8 @@ export type ProjectItem = {
   tag: string;
   blurb: string;
   href: string;
+  /** Optional local preview image (served from /public). */
+  previewImage?: string;
 };
 
 export type CaseStudy = {
@@ -46,6 +48,8 @@ export type CaseStudy = {
   year: string;
   category: string;
   href: string;
+  /** Optional local preview image (served from /public). */
+  previewImage?: string;
   problem: string;
   approach: string[];
   challenges: string[];
@@ -61,6 +65,7 @@ export const projects: ProjectItem[] = [
     blurb:
       "Developed a modern, visually engaging web presence for the Paris American International University. Built using WordPress and Elementor to ensure a highly responsive, optimized, and easily manageable platform for the institution.",
     href: "https://parisamerican.org",
+    previewImage: "/previews/parisamerican.png",
   },
   {
     title: "Study in North Cyprus",
@@ -68,6 +73,7 @@ export const projects: ProjectItem[] = [
     blurb:
       "Educational consultancy platform crafted to guide international students. Custom-built with WordPress and Elementor for a seamless, conversion-focused user experience with modern aesthetics.",
     href: "https://studyinnc.com",
+    previewImage: "/previews/studyinnc.png",
   },
   {
     title: "PEFT / LoRA — Sentiment Analysis",
@@ -82,6 +88,7 @@ export const projects: ProjectItem[] = [
     blurb:
       "Modern TypeScript codebase for a bakery / food commerce experience — structure and UI craft tuned for real-world use.",
     href: "https://github.com/abiodunadesesan/gourmetbakes-more",
+    previewImage: "/previews/gourmetbakes.png",
   },
   {
     title: "FinLogger Dashboard",
@@ -120,6 +127,7 @@ export const caseStudies: CaseStudy[] = [
     year: "2026",
     category: "Web Design & Build",
     href: "https://parisamerican.org",
+    previewImage: "/previews/parisamerican.png",
     problem:
       "A university site needed a modern, mobile-first presence with clear program discovery and a maintainable admin workflow.",
     approach: [
@@ -142,6 +150,7 @@ export const caseStudies: CaseStudy[] = [
     year: "2026",
     category: "Conversion-focused Website",
     href: "https://studyinnc.com",
+    previewImage: "/previews/studyinnc.png",
     problem:
       "An education consultancy needed a site that builds trust quickly and guides visitors to inquiry actions.",
     approach: [
@@ -170,19 +179,21 @@ export const caseStudies: CaseStudy[] = [
     tech: ["Python", "Hugging Face Transformers", "PEFT/LoRA", "Jupyter"],
   },
   {
-    title: "FinLogger Dashboard",
-    year: "2024",
-    category: "Frontend Dashboard UI",
-    href: "https://github.com/abiodunadesesan/finlogger-dashboard",
+    title: "Gourmet Bakes",
+    year: "2025",
+    category: "Product / Commerce UI",
+    href: "https://github.com/abiodunadesesan/gourmetbakes-more",
+    previewImage: "/previews/gourmetbakes.png",
     problem:
-      "A simple, data-forward finance UI to log entries and visualize trends in a clean dashboard layout.",
+      "Create a clean, appetizing commerce experience with strong hierarchy, mobile-first layout, and conversion-friendly CTAs.",
     approach: [
-      "Designed a dashboard layout optimized for scanning key numbers.",
-      "Implemented interactive UI states for filters and summaries.",
+      "Designed a homepage layout optimized for scanning categories and key actions.",
+      "Built reusable UI sections and components for rapid iteration.",
+      "Focused on contrast, spacing, and responsive typography for readability.",
     ],
-    challenges: ["Avoiding clutter while keeping useful detail accessible."],
-    outcomes: ["A practical pattern library for future dashboard builds."],
-    tech: ["JavaScript", "UI patterns", "Data visualization basics"],
+    challenges: ["Balancing visual richness with speed and layout stability."],
+    outcomes: ["A modern UI foundation suitable for a real productized food/commerce build."],
+    tech: ["TypeScript", "React UI patterns", "Responsive design"],
   },
 ];
 
@@ -410,6 +421,7 @@ export const recentHighlights = caseStudies.slice(0, 4).map((c) => ({
   year: c.year,
   category: c.category,
   href: c.href,
+  previewImage: c.previewImage,
 }));
 
 /** About page — Tricia-style hero copy (adapt to your story anytime). */

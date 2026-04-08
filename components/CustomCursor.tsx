@@ -9,6 +9,14 @@ import {
 
 type CursorMode = "default" | "interactive" | "project";
 
+function getEventTargetElement(e: Event): Element | null {
+  const t = e.target;
+  if (t instanceof Element) return t;
+  const anyE = e as unknown as { composedPath?: () => unknown[] };
+  const path0 = anyE.composedPath?.()?.[0];
+  return path0 instanceof Element ? path0 : null;
+}
+
 function getCursorMode(target: EventTarget | null): CursorMode {
   if (!target || !(target instanceof Element)) return "default";
   if (target.closest("#hero") || target.closest("footer")) return "default";
@@ -44,8 +52,11 @@ export function CustomCursor() {
 
   useEffect(() => {
     if (!mounted) return;
-    const hasFinePointer = window.matchMedia("(any-pointer: fine)").matches;
-    if (!hasFinePointer) return;
+    // Safari / hybrid devices can misreport pointer capabilities.
+    // Only skip on truly touch-only environments (no fine pointer detected at all).
+    const anyFine = window.matchMedia("(any-pointer: fine)").matches;
+    const anyCoarse = window.matchMedia("(any-pointer: coarse)").matches;
+    if (anyCoarse && !anyFine) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const lerpRing = reduce ? 0.45 : 0.12;
@@ -54,10 +65,24 @@ export function CustomCursor() {
     setActive(true);
     document.documentElement.classList.add("custom-cursor-active");
 
-    const onMove = (e: MouseEvent) => {
+    // Initialize position so the cursor is visible immediately on load.
+    const initialX = Math.round(window.innerWidth / 2);
+    const initialY = Math.round(window.innerHeight / 2);
+    mouse.current = { x: initialX, y: initialY };
+    ring.current = { x: initialX, y: initialY };
+    pill.current = { x: initialX, y: initialY };
+    if (ringRef.current) {
+      ringRef.current.style.transform = `translate3d(${initialX}px, ${initialY}px, 0) translate(-50%, -50%) scale(1)`;
+    }
+    if (dotRef.current) {
+      dotRef.current.style.transform = `translate3d(${initialX}px, ${initialY}px, 0) translate(-50%, -50%) scale(1)`;
+    }
+    setVisible(true);
+
+    const onMove = (e: PointerEvent | MouseEvent) => {
       document.documentElement.classList.add("custom-cursor-ready");
       mouse.current = { x: e.clientX, y: e.clientY };
-      const next = getCursorMode(e.target);
+      const next = getCursorMode(getEventTargetElement(e));
       const prev = modeRef.current;
       if (next !== prev) {
         if (next === "project") {
@@ -80,10 +105,15 @@ export function CustomCursor() {
       modeRef.current = "default";
       setMode("default");
     };
-    const onEnter = () => setVisible(true);
+    const onEnter = () => {
+      document.documentElement.classList.add("custom-cursor-ready");
+      setVisible(true);
+    };
 
     const moveOpts = { passive: true } as const;
+    const onMouseMove = (e: MouseEvent) => onMove(e);
     window.addEventListener("pointermove", onMove, moveOpts);
+    window.addEventListener("mousemove", onMouseMove, moveOpts);
     window.addEventListener("mouseleave", onLeave);
     window.addEventListener("mouseenter", onEnter);
 
@@ -110,6 +140,7 @@ export function CustomCursor() {
     return () => {
       document.documentElement.classList.remove("custom-cursor-active", "custom-cursor-ready");
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseleave", onLeave);
       window.removeEventListener("mouseenter", onEnter);
       cancelAnimationFrame(rafId);

@@ -18,13 +18,13 @@ export default function About() {
           id="about-heading"
           className="font-display mt-4 text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl dark:text-white"
         >
-          Who I am (in 10 seconds)
+          Who I am
         </h2>
 
         <div className="mt-8 space-y-4 text-base leading-relaxed text-zinc-700 md:text-lg dark:text-white/80">
           <p>
-            I am {person.displayName} — you can call me Caleb. I&apos;m a full‑stack engineer with an AI/ML focus. I help teams ship
-            clean, fast web products and practical ML prototypes—from UI to APIs to deployment.
+            I am {person.displayName}. I&apos;m a full‑stack engineer with an AI/ML focus. I help teams ship clean, fast web products and
+            practical ML prototypes—from UI to APIs to deployment.
           </p>
           <p className="text-sm md:text-base text-zinc-600 dark:text-white/60">
             Strengths: crisp UI hierarchy, performance-aware implementation, and communication that keeps projects moving.

@@ -11,7 +11,7 @@ export default function LetsConnectSection() {
   return (
     <AnimatedSection
       id="lets-connect"
-      className="relative z-20 scroll-mt-24 bg-[#0a0a0a] px-6 pb-8 pt-20 md:scroll-mt-28 md:px-12 md:pb-12 md:pt-28"
+      className="binary-matrix relative z-20 scroll-mt-24 bg-[#0a0a0a] px-6 pb-8 pt-20 md:scroll-mt-28 md:px-12 md:pb-12 md:pt-28"
       aria-labelledby="lets-connect-heading"
     >
       <div className="mx-auto max-w-6xl">

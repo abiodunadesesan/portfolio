@@ -9,7 +9,7 @@ export default function ProcessSection() {
   return (
     <AnimatedSection
       id="process"
-      className="relative z-20 scroll-mt-24 border-t border-zinc-200/60 bg-white px-6 py-24 dark:border-white/10 dark:bg-[#0a0a10] md:scroll-mt-28 md:px-12 md:py-28"
+      className="binary-matrix relative z-20 scroll-mt-24 border-t border-zinc-200/60 bg-white px-6 py-24 dark:border-white/10 dark:bg-[#0a0a10] md:scroll-mt-28 md:px-12 md:py-28"
       aria-labelledby="process-heading"
     >
       <div className="mx-auto max-w-6xl">

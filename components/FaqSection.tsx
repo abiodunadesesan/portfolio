@@ -14,7 +14,7 @@ export default function FaqSection() {
   return (
     <AnimatedSection
       id="faq"
-      className="relative z-20 scroll-mt-24 border-t border-white/5 bg-[#0a0a0a] px-6 py-24 md:scroll-mt-28 md:px-12 md:py-28"
+      className="binary-matrix relative z-20 scroll-mt-24 border-t border-white/5 bg-[#0a0a0a] px-6 py-24 md:scroll-mt-28 md:px-12 md:py-28"
       aria-labelledby="faq-heading"
     >
       <div className="mx-auto max-w-6xl">

@@ -4,10 +4,15 @@ import { AnimatedSection } from "@/components/AnimatedSection";
 import { NanoChip } from "@/components/ui/NanoChip";
 import { SpotlightSurface } from "@/components/ui/SpotlightSurface";
 import { VerbCrossFade } from "@/components/VerbCrossFade";
-import { connectOffers, connectVerbs, links } from "@/lib/site-content";
+import { connectOffers, connectVerbs, links, projects } from "@/lib/site-content";
+import { getProjectPreviewImageUrl } from "@/lib/preview";
 import { Calendar, FolderGit2 } from "lucide-react";
 
 export default function LetsConnectSection() {
+  const featured =
+    projects.find((p) => typeof p.previewImage === "string" && p.previewImage.length > 0) ?? projects[0];
+  const featuredPreview = featured?.previewImage ?? (featured?.href ? getProjectPreviewImageUrl(featured.href) : null);
+
   return (
     <AnimatedSection
       id="lets-connect"
@@ -79,17 +84,37 @@ export default function LetsConnectSection() {
                       "radial-gradient(ellipse 80% 60% at 30% 20%, rgba(139,92,246,0.35), transparent 50%), radial-gradient(ellipse 70% 50% at 80% 80%, rgba(236,72,153,0.15), transparent 45%)",
                   }}
                 />
-                <div className="relative flex h-full flex-col items-center justify-center p-8 text-center">
-                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
-                    Preview
-                  </p>
-                  <p className="font-display mt-3 text-2xl font-semibold text-white md:text-3xl">
-                    Black collection
-                  </p>
-                  <p className="mt-2 text-sm text-zinc-400">
-                    Replace with your project screenshot.
-                  </p>
-                </div>
+                {featuredPreview ? (
+                  <>
+                    <img
+                      src={featuredPreview}
+                      alt={`${featured?.title ?? "Project"} preview`}
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover opacity-90"
+                    />
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-transparent"
+                    />
+                    <div className="relative flex h-full flex-col justify-end p-8">
+                      <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-400">
+                        Featured preview
+                      </p>
+                      <p className="font-display mt-2 text-2xl font-semibold text-white md:text-3xl">
+                        {featured?.title ?? "Project"}
+                      </p>
+                      <p className="mt-2 text-sm text-zinc-300">
+                        A quick visual reference for what you’ll get—polish, hierarchy, and conversion-ready UI.
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="relative flex h-full flex-col items-center justify-center p-8 text-center">
+                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">Preview</p>
+                    <p className="font-display mt-3 text-2xl font-semibold text-white md:text-3xl">Project preview</p>
+                    <p className="mt-2 text-sm text-zinc-400">Preview unavailable.</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -27,9 +27,18 @@ export default function VerticalScrollIndicator() {
   const { scrollYProgress } = useScroll();
   const [activeSection, setActiveSection] = useState("hero");
   const [isVisible, setIsVisible] = useState(false);
+  const [enabled, setEnabled] = useState(false);
+
+  // Desktop-only: show on devices with a fine pointer (mouse/trackpad).
+  useEffect(() => {
+    const anyFine = window.matchMedia("(any-pointer: fine)").matches;
+    const anyCoarse = window.matchMedia("(any-pointer: coarse)").matches;
+    setEnabled(anyFine || !anyCoarse);
+  }, []);
 
   // Auto-hide logic: show on scroll, hide after 2 seconds of inactivity
   useEffect(() => {
+    if (!enabled) return;
     let timeout: NodeJS.Timeout;
     const handleScroll = () => {
       setIsVisible(true);
@@ -39,7 +48,7 @@ export default function VerticalScrollIndicator() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [enabled]);
 
   const scrollToId = useCallback((id: string) => {
     const element = document.getElementById(id);
@@ -59,12 +68,15 @@ export default function VerticalScrollIndicator() {
 
   // Update active section based on scroll position
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (!enabled) return;
     const sectionIndex = Math.min(
       Math.floor(latest * SECTIONS.length),
       SECTIONS.length - 1
     );
     setActiveSection(SECTIONS[sectionIndex].id);
   });
+
+  if (!enabled) return null;
 
   return (
     <motion.div

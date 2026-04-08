@@ -6,6 +6,16 @@ html {
   scroll-padding-top: 6rem;
 }
 
+/* Typography tuning (Vecteezy / tech-sci-fi feel) */
+.font-display {
+  letter-spacing: -0.03em;
+}
+@media (min-width: 768px) {
+  .font-display {
+    letter-spacing: -0.035em;
+  }
+}
+
 /* Sci‑fi binary layer (subtle watermark) */
 .binary-matrix {
   position: relative;
@@ -20,11 +30,23 @@ html {
   letter-spacing: 0.38em;
   font-size: 10px;
   line-height: 1.35;
-  opacity: 0.06;
+  color: rgba(212, 212, 216, 0.78); /* silver (zinc-300-ish) */
+  opacity: 0.18;
+  text-shadow:
+    0 0 14px rgba(212, 212, 216, 0.22),
+    0 0 36px rgba(255, 255, 255, 0.08);
   white-space: pre-wrap;
   overflow: hidden;
-  mask-image: radial-gradient(ellipse 65% 55% at 50% 20%, black, transparent 70%);
-  -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 20%, black, transparent 70%);
+  mask-image: radial-gradient(ellipse 90% 75% at 50% 18%, black, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 75% at 50% 18%, black, transparent 72%);
+}
+
+.dark .binary-matrix::before {
+  color: rgba(228, 228, 231, 0.9); /* brighter silver in dark mode */
+  opacity: 0.22;
+  text-shadow:
+    0 0 18px rgba(228, 228, 231, 0.26),
+    0 0 52px rgba(255, 255, 255, 0.12);
 }
 
 /* Custom cursor — hide system cursor only once we have a position (custom-cursor-ready). */

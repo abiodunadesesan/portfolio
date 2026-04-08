@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CURSOR_VIEW_PROJECT, DATA_CURSOR } from "@/lib/cursor";
+import { CURSOR_INTERACTIVE, CURSOR_VIEW_PROJECT, DATA_CURSOR } from "@/lib/cursor";
 
 type CursorMode = "default" | "interactive" | "project";
 
@@ -13,18 +13,16 @@ function getTargetElement(e: Event): Element | null {
   return path0 instanceof Element ? path0 : null;
 }
 
-function isTouchOnly() {
-  const canHover = window.matchMedia("(hover: hover)").matches;
-  const anyFine = window.matchMedia("(any-pointer: fine)").matches;
-  const likelyTouch =
-    (typeof navigator !== "undefined" && navigator.maxTouchPoints > 0) || "ontouchstart" in window;
-  return likelyTouch && !canHover && !anyFine;
+/** Match globals.css — only enable where we also hide the system cursor. */
+function shouldUseCustomCursor() {
+  return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 }
 
 function getMode(el: Element | null): CursorMode {
   if (!el) return "default";
   if (el.closest("#hero") || el.closest("footer")) return "default";
   if (el.closest(`[${DATA_CURSOR}="${CURSOR_VIEW_PROJECT}"]`)) return "project";
+  if (el.closest(`[${DATA_CURSOR}="${CURSOR_INTERACTIVE}"]`)) return "interactive";
   const interactive = el.closest(
     "a[href], button:not([disabled]), [role='button']:not([disabled]), input[type='submit'], input[type='button'], summary, label[for]",
   );
@@ -52,7 +50,6 @@ export function CustomCursor() {
   const [mounted, setMounted] = useState(false);
   const [active, setActive] = useState(false);
   const [mode, setMode] = useState<CursorMode>("default");
-  const [pressed, setPressed] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -60,7 +57,7 @@ export function CustomCursor() {
 
   useEffect(() => {
     if (!mounted) return;
-    if (isTouchOnly()) return;
+    if (!shouldUseCustomCursor()) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const lerpGlow = reduce ? 0.55 : 0.14;
@@ -69,10 +66,32 @@ export function CustomCursor() {
     setActive(true);
     document.documentElement.classList.add("custom-cursor-on");
 
-    // Only hide the system cursor once we have a real pointer position.
     const markReady = () => document.documentElement.classList.add("custom-cursor-ready");
-    // Desktop UX: hide arrow immediately; dot/glow render even before first move.
-    markReady();
+
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    mouse.current = { x: cx, y: cy };
+    glow.current = { x: cx, y: cy };
+    pill.current = { x: cx, y: cy };
+
+    const applyInstantPositions = () => {
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%) scale(1)`;
+      }
+      if (glowRef.current) {
+        glowRef.current.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%) scale(1)`;
+      }
+      if (pillRef.current) {
+        const ox = 18;
+        const oy = 16;
+        pillRef.current.style.transform = `translate3d(${cx + ox}px, ${cy + oy}px, 0) translate(-50%, -50%) scale(0.95)`;
+      }
+    };
+    applyInstantPositions();
+    requestAnimationFrame(() => {
+      applyInstantPositions();
+      markReady();
+    });
 
     const onMove = (e: PointerEvent | MouseEvent) => {
       markReady();
@@ -118,11 +137,9 @@ export function CustomCursor() {
 
     const onDown = () => {
       pressedRef.current = true;
-      setPressed(true);
     };
     const onUp = () => {
       pressedRef.current = false;
-      setPressed(false);
     };
 
     const opts = { passive: true } as const;
@@ -184,18 +201,18 @@ export function CustomCursor() {
       className="pointer-events-none fixed inset-0 z-[100000] overflow-hidden"
       aria-hidden
     >
-      {/* soft glow follower */}
+      {/* soft glow follower — tinted so it reads on light + dark backgrounds */}
       <div
         ref={glowRef}
-        className="absolute left-0 top-0 h-12 w-12 rounded-full bg-white/10 blur-[10px] will-change-transform transition-opacity duration-150"
+        className="absolute left-0 top-0 h-14 w-14 rounded-full bg-violet-500/22 blur-[12px] will-change-transform transition-opacity duration-150 dark:bg-white/12 dark:blur-[10px]"
       />
 
-      {/* bright dot */}
+      {/* dot: light ring for contrast on pale bg, glow on dark */}
       <div
         ref={dotRef}
-        className={`absolute left-0 top-0 h-2 w-2 rounded-full bg-white shadow-[0_0_18px_6px_rgba(255,255,255,0.35)] will-change-transform transition-opacity duration-150 ${
+        className={`absolute left-0 top-0 h-2 w-2 rounded-full border border-zinc-900/35 bg-white shadow-[0_0_0_1px_rgba(255,255,255,0.95),0_0_14px_rgba(99,102,241,0.35)] will-change-transform transition-[opacity,transform] duration-150 dark:border-white/45 dark:shadow-[0_0_0_1px_rgba(0,0,0,0.4),0_0_18px_6px_rgba(255,255,255,0.35)] ${
           project ? "opacity-0" : "opacity-100"
-        } ${pressed ? "shadow-[0_0_18px_6px_rgba(255,255,255,0.25)]" : ""}`}
+        }`}
       />
 
       <div

@@ -6,10 +6,10 @@ html {
   scroll-padding-top: 6rem;
 }
 
-/* Custom cursor: desktop only (hover-capable, fine pointer). */
+/* Custom cursor: desktop only. Hide system pointer only once the custom layer is ready (see CustomCursor). */
 @media (hover: hover) and (pointer: fine) {
-  html.custom-cursor-on,
-  html.custom-cursor-on * {
+  html.custom-cursor-on.custom-cursor-ready,
+  html.custom-cursor-on.custom-cursor-ready * {
     cursor: none !important;
   }
 }

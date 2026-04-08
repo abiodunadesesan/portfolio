@@ -37,20 +37,12 @@ export async function POST(req: Request) {
       auth: { persistSession: false, autoRefreshToken: false },
     });
 
-    const ua = req.headers.get("user-agent") ?? null;
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
-    const origin = req.headers.get("origin") ?? null;
-    const referer = req.headers.get("referer") ?? null;
-
-    // Store message (create table `contact_messages` in Supabase).
+    // Store message (expects table `contact_messages` with at least: name, email, message).
+    // Keep the insert minimal to match the user's current table schema.
     const { error: insertError } = await supabase.from("contact_messages").insert({
       name: name || null,
       email: email || null,
       message,
-      user_agent: ua,
-      ip,
-      origin,
-      referer,
     });
 
     if (insertError) {
@@ -84,9 +76,6 @@ export async function POST(req: Request) {
       "—",
       `Name: ${name || "-"}`,
       `Email: ${email || "-"}`,
-      `IP: ${ip || "-"}`,
-      `Origin: ${origin || "-"}`,
-      `Referer: ${referer || "-"}`,
     ].join("\n");
 
     const from = process.env.RESEND_FROM ?? "onboarding@resend.dev";

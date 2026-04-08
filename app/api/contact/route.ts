@@ -65,7 +65,7 @@ export async function POST(req: Request) {
     }
 
     const resend = new Resend(resendKey);
-    const toEmail = links.email.replace("mailto:", "");
+    const toEmail = (process.env.CONTACT_TO_EMAIL?.trim() || links.email.replace("mailto:", "")).trim();
     const subject = `New message via ${person.navWordmark} site${name ? ` — ${name}` : ""}`;
 
     const text = [
@@ -78,12 +78,7 @@ export async function POST(req: Request) {
       `Email: ${email || "-"}`,
     ].join("\n");
 
-    const fromCandidate = process.env.RESEND_FROM?.trim();
-    // Resend requires a verified sender/domain. A raw personal mailbox (e.g. gmail.com) often fails.
-    const from =
-      fromCandidate && !/@gmail\.com\s*$/i.test(fromCandidate)
-        ? fromCandidate
-        : `Caleb <onboarding@resend.dev>`;
+    const from = (process.env.RESEND_FROM?.trim() || "Caleb <onboarding@resend.dev>").trim();
 
     const { error: mailError } = await resend.emails.send({
       from,

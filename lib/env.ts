@@ -3,6 +3,6 @@ export function requireEnv(name: string) {
   if (!v) {
     throw new Error(`Missing environment variable: ${name}`);
   }
-  return v;
+  return v.trim();
 }
 

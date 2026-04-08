@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createClient } from "@supabase/supabase-js";
+import type { PostgrestError } from "@supabase/supabase-js";
 import { requireEnv } from "@/lib/env";
 import { links, person } from "@/lib/site-content";
 
@@ -53,8 +54,20 @@ export async function POST(req: Request) {
     });
 
     if (insertError) {
+      const pg = insertError as PostgrestError;
+      const details =
+        process.env.NODE_ENV !== "production"
+          ? { supabase: { message: pg.message, code: pg.code } }
+          : undefined;
       return NextResponse.json(
-        { ok: false, error: "Failed to save message. Please try again." },
+        {
+          ok: false,
+          error:
+            pg.message?.includes('relation "contact_messages" does not exist')
+              ? "Contact form database table is missing. Create `contact_messages` in Supabase."
+              : "Failed to save message. Please try again.",
+          details,
+        },
         { status: 500 },
       );
     }

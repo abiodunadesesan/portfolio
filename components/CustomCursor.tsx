@@ -149,12 +149,13 @@ export function CustomCursor() {
       if (showPill) {
         pill.current.x += (mouse.current.x - pill.current.x) * lerpPill;
         pill.current.y += (mouse.current.y - pill.current.y) * lerpPill;
-        if (pillRef.current) {
-          // Offset so it feels like a CTA beside the cursor (not centered on it).
-          const ox = 18;
-          const oy = 16;
-          pillRef.current.style.transform = `translate3d(${pill.current.x + ox}px, ${pill.current.y + oy}px, 0) translate(-50%, -50%) scale(${pressedRef.current ? 0.98 : 1})`;
-        }
+      }
+      if (pillRef.current) {
+        // Offset so it feels like a CTA beside the cursor (not centered on it).
+        const ox = 18;
+        const oy = 16;
+        const scale = showPill ? (pressedRef.current ? 0.98 : 1) : 0.95;
+        pillRef.current.style.transform = `translate3d(${pill.current.x + ox}px, ${pill.current.y + oy}px, 0) translate(-50%, -50%) scale(${scale})`;
       }
 
       rafId = requestAnimationFrame(tick);

@@ -63,7 +63,6 @@ export default function ScrollyCanvas() {
   });
 
   useEffect(() => {
-    const preloadSet = new Set<number>(HERO_PRELOAD_FRAME_INDICES);
     imagesRef.current = Array.from({ length: SEQUENCE_FRAME_COUNT }, () => null);
 
     // Load only the critical frames up-front. Everything else loads on-demand while scrolling.

@@ -5,6 +5,7 @@ import { Great_Vibes, Instrument_Serif, Manrope, Orbitron, Space_Grotesk } from 
 import Script from "next/script";
 import PortfolioHeader from "@/components/PortfolioHeader";
 import VerticalScrollIndicator from "@/components/VerticalScrollIndicator";
+import { CustomCursor } from "@/components/CustomCursor";
 import { MotionProvider } from "@/components/MotionProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { getHeroPreloadFrameUrls } from "@/lib/sequence";
@@ -135,6 +136,7 @@ export default function RootLayout({
           Skip to main content
         </a>
 
+        <CustomCursor />
         <ThemeProvider>
           {/* Isolate stacking so the sticky nav paints above the hero canvas; hero stays full-bleed under the pill. */}
           <div className="relative isolate min-h-0">

@@ -76,45 +76,46 @@ export default function LetsConnectSection() {
             </div>
 
             <div className="relative flex min-h-[280px] items-center justify-center md:min-h-[360px]">
-              <div className="relative aspect-[4/3] w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-zinc-800 via-zinc-900 to-black shadow-2xl">
-                <div
-                  className="absolute inset-0 opacity-40"
-                  style={{
-                    backgroundImage:
-                      "radial-gradient(ellipse 80% 60% at 30% 20%, rgba(139,92,246,0.35), transparent 50%), radial-gradient(ellipse 70% 50% at 80% 80%, rgba(236,72,153,0.15), transparent 45%)",
-                  }}
-                />
-                {featuredPreview ? (
-                  <>
-                    <img
-                      src={featuredPreview}
-                      alt={`${featured?.title ?? "Project"} preview`}
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover opacity-90"
-                    />
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-transparent"
-                    />
-                    <div className="relative flex h-full flex-col justify-end p-8">
-                      <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-400">
-                        Featured preview
-                      </p>
-                      <p className="font-display mt-2 text-2xl font-semibold text-white md:text-3xl">
-                        {featured?.title ?? "Project"}
-                      </p>
-                      <p className="mt-2 text-sm text-zinc-300">
-                        A quick visual reference for what you’ll get—polish, hierarchy, and conversion-ready UI.
-                      </p>
+              <div className="w-full max-w-lg">
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-zinc-800 via-zinc-900 to-black shadow-2xl">
+                  <div
+                    className="absolute inset-0 opacity-40"
+                    style={{
+                      backgroundImage:
+                        "radial-gradient(ellipse 80% 60% at 30% 20%, rgba(139,92,246,0.35), transparent 50%), radial-gradient(ellipse 70% 50% at 80% 80%, rgba(236,72,153,0.15), transparent 45%)",
+                    }}
+                  />
+                  {featuredPreview ? (
+                    <>
+                      <img
+                        src={featuredPreview}
+                        alt={`${featured?.title ?? "Project"} preview`}
+                        loading="lazy"
+                        className="absolute inset-0 h-full w-full object-cover opacity-95"
+                      />
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"
+                      />
+                    </>
+                  ) : (
+                    <div className="relative flex h-full flex-col items-center justify-center p-8 text-center">
+                      <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">Preview</p>
+                      <p className="font-display mt-3 text-2xl font-semibold text-white md:text-3xl">Project preview</p>
+                      <p className="mt-2 text-sm text-zinc-400">Preview unavailable.</p>
                     </div>
-                  </>
-                ) : (
-                  <div className="relative flex h-full flex-col items-center justify-center p-8 text-center">
-                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">Preview</p>
-                    <p className="font-display mt-3 text-2xl font-semibold text-white md:text-3xl">Project preview</p>
-                    <p className="mt-2 text-sm text-zinc-400">Preview unavailable.</p>
-                  </div>
-                )}
+                  )}
+                </div>
+
+                {/* Caption outside the image (cleaner) */}
+                <div className="mt-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
+                    Featured preview
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+                    A quick visual reference for what you’ll get—polish, hierarchy, and conversion-ready UI.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

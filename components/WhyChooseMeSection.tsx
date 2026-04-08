@@ -7,8 +7,8 @@ import { NanoChip } from "@/components/ui/NanoChip";
 import { reasons } from "@/lib/site-content";
 
 /**
- * Two-column grid of reason cards with scroll reveal (aligned with buildwithtricia.com/about —
- * not a tall sticky stack, which read as “cards on top of each other”).
+ * Scroll-stacked, alternating alignment: cards overlap slightly, then settle left/right as you scroll.
+ * (Desktop: left/right timeline feel. Mobile: single column.)
  */
 export default function WhyChooseMeSection() {
   const reduce = useReducedMotion();
@@ -39,33 +39,59 @@ export default function WhyChooseMeSection() {
           </p>
         </motion.div>
 
-        <div className="grid gap-5 sm:grid-cols-2 sm:gap-6">
-          {reasons.map((r, i) => (
-            <motion.div
-              key={r.title}
-              initial={reduce ? false : { opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-6%", amount: 0.15 }}
-              transition={{
-                duration: 0.45,
-                delay: reduce ? 0 : i * 0.05,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              <GlassCard
-                spotlight
-                className="h-full border-zinc-200/90 p-6 shadow-[0_20px_70px_-24px_rgba(0,0,0,0.4)] md:p-8 dark:border-white/[0.12] dark:bg-[#0d0d12]/[0.92] dark:shadow-[0_28px_90px_-28px_rgba(0,0,0,0.65)]"
-              >
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.4em] text-zinc-400 dark:text-white/35">
-                  {String(i + 1).padStart(2, "0")}
-                </p>
-                <p className="font-display mt-3 text-lg font-semibold tracking-tight text-zinc-900 md:text-xl dark:text-white">
-                  {r.title}
-                </p>
-                <p className="mt-3 text-sm leading-relaxed text-zinc-600 md:text-base dark:text-white/58">{r.body}</p>
-              </GlassCard>
-            </motion.div>
-          ))}
+        <div className="relative">
+          {/* center rail (desktop) */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/10 to-transparent lg:block"
+          />
+
+          <div className="space-y-[-18px] lg:space-y-[-28px]">
+            {reasons.map((r, i) => {
+              const left = i % 2 === 0;
+              const fromX = left ? 90 : -90; // start “closer to center”
+              const toX = 0; // settle at side alignment
+              return (
+                <div key={r.title} className="relative">
+                  {/* bead (desktop) */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute left-1/2 top-8 hidden h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-white/35 shadow-[0_0_18px_rgba(255,255,255,0.18)] lg:block"
+                  />
+
+                  <div className={`flex ${left ? "justify-start" : "justify-end"}`}>
+                    <motion.div
+                      className="w-full lg:w-[calc(50%-1.25rem)]"
+                      initial={reduce ? false : { opacity: 0, y: 24, x: fromX, scale: 0.985 }}
+                      whileInView={{ opacity: 1, y: 0, x: toX, scale: 1 }}
+                      viewport={{ once: true, margin: "-10%", amount: 0.28 }}
+                      transition={{
+                        duration: 0.6,
+                        delay: reduce ? 0 : i * 0.05,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      style={{ zIndex: reasons.length - i }}
+                    >
+                      <GlassCard
+                        spotlight
+                        className="h-full border-zinc-200/90 p-6 shadow-[0_26px_90px_-34px_rgba(0,0,0,0.55)] md:p-8 dark:border-white/[0.12] dark:bg-[#0d0d12]/[0.92] dark:shadow-[0_34px_110px_-40px_rgba(0,0,0,0.8)]"
+                      >
+                        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.4em] text-zinc-400 dark:text-white/35">
+                          {String(i + 1).padStart(2, "0")}
+                        </p>
+                        <p className="font-display mt-3 text-lg font-semibold tracking-tight text-zinc-900 md:text-xl dark:text-white">
+                          {r.title}
+                        </p>
+                        <p className="mt-3 text-sm leading-relaxed text-zinc-600 md:text-base dark:text-white/58">
+                          {r.body}
+                        </p>
+                      </GlassCard>
+                    </motion.div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

@@ -6,14 +6,6 @@ html {
   scroll-padding-top: 6rem;
 }
 
-/* Custom cursor: desktop only. Hide system pointer only once the custom layer is ready (see CustomCursor). */
-@media (hover: hover) and (pointer: fine) {
-  html.custom-cursor-on.custom-cursor-ready,
-  html.custom-cursor-on.custom-cursor-ready * {
-    cursor: none !important;
-  }
-}
-
 /* Typography tuning (Vecteezy / tech-sci-fi feel) */
 .font-display {
   letter-spacing: -0.03em;
@@ -272,7 +264,12 @@ html.dark body.liquid-glass-body::after {
 }
 
 
-body.liquid-glass-body > * {
+/*
+ * Stack page chrome above body::before/::after (z-index 0).
+ * IMPORTANT: Do not target fixed layers (cursor portal, full-bleed backdrop) — a bare `> *`
+ * overrides Tailwind `.fixed` (higher specificity) and breaks viewport-fixed positioning.
+ */
+body.liquid-glass-body > *:not([data-liquid-backdrop]):not([data-cursor-root]) {
   position: relative;
   z-index: 1;
 }

@@ -57,7 +57,7 @@ export default function QuickActions() {
               href={links.bookCall}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex min-h-12 items-center justify-between gap-3 rounded-2xl border border-zinc-200/80 bg-white/70 px-5 py-4 text-sm font-semibold text-zinc-900 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition hover:border-zinc-300 hover:bg-white dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:border-white/20"
+              className="group inline-flex min-h-12 items-center justify-between gap-3 rounded-2xl border border-zinc-200/80 bg-white/70 px-5 py-4 text-sm font-semibold text-zinc-900 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition hover:border-violet-200/70 hover:bg-violet-50/45 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:border-violet-400/30 dark:hover:bg-violet-500/[0.1]"
             >
               <span className="inline-flex items-center gap-2">
                 <Calendar className="h-4 w-4 opacity-80" aria-hidden />
@@ -70,7 +70,7 @@ export default function QuickActions() {
               href={links.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex min-h-12 items-center justify-between gap-3 rounded-2xl border border-zinc-200/80 bg-white/70 px-5 py-4 text-sm font-semibold text-zinc-900 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition hover:border-zinc-300 hover:bg-white dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:border-white/20"
+              className="group inline-flex min-h-12 items-center justify-between gap-3 rounded-2xl border border-zinc-200/80 bg-white/70 px-5 py-4 text-sm font-semibold text-zinc-900 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition hover:border-violet-200/70 hover:bg-violet-50/45 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:border-violet-400/30 dark:hover:bg-violet-500/[0.1]"
             >
               <span className="inline-flex items-center gap-2">
                 <FolderGit2 className="h-4 w-4 opacity-80" aria-hidden />

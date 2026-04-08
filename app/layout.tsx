@@ -114,6 +114,7 @@ export default function RootLayout({
         className={`${display.variable} ${manrope.variable} ${tech.variable} ${footerSignature.variable} ${navSerif.variable} liquid-glass-body font-sans antialiased`}
       >
         <div
+          data-liquid-backdrop
           className="pointer-events-none fixed inset-0 -z-10 bg-[#f5f4f1] transition-colors duration-700 dark:bg-[#050505]"
           aria-hidden="true"
         >

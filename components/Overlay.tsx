@@ -194,7 +194,7 @@ function ScrollCue({
           )}
           <a
             href="#work"
-            className="rounded-full border border-violet-500/35 bg-white/80 px-4 py-2.5 text-sm font-semibold text-violet-800 shadow-sm transition hover:border-violet-500/55 hover:bg-white dark:border-violet-400/30 dark:bg-zinc-900/80 dark:text-violet-100 dark:hover:border-violet-400/50 dark:hover:bg-zinc-900"
+            className="rounded-full border border-violet-500/35 bg-white/80 px-4 py-2.5 text-sm font-semibold text-violet-800 shadow-sm transition hover:border-violet-500/55 hover:bg-violet-50/90 dark:border-violet-400/30 dark:bg-zinc-900/80 dark:text-violet-100 dark:hover:border-violet-400/50 dark:hover:bg-zinc-900"
           >
             Jump to work
           </a>

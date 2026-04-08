@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { CURSOR_INTERACTIVE, CURSOR_VIEW_PROJECT, DATA_CURSOR } from "@/lib/cursor";
 
 type CursorMode = "default" | "interactive" | "project";
@@ -13,9 +14,14 @@ function getTargetElement(e: Event): Element | null {
   return path0 instanceof Element ? path0 : null;
 }
 
-/** Match globals.css — only enable where we also hide the system cursor. */
+/** True when a fine pointer is available (mouse / trackpad). Excludes typical phones. */
 function shouldUseCustomCursor() {
-  return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (typeof window === "undefined") return false;
+  const fine = window.matchMedia("(pointer: fine)").matches;
+  const anyFine = window.matchMedia("(any-pointer: fine)").matches;
+  const coarseOnly =
+    window.matchMedia("(pointer: coarse)").matches && !anyFine && !fine;
+  return !coarseOnly && (fine || anyFine);
 }
 
 function getMode(el: Element | null): CursorMode {
@@ -30,109 +36,72 @@ function getMode(el: Element | null): CursorMode {
 }
 
 /**
- * Premium portfolio cursor (desktop only)
- * - Default: small bright dot + soft glow follower (lag)
- * - Interactive: slight magnetic pull + subtle scale
- * - Project hover: floating “View project” pill that follows the cursor
+ * Native arrow + sharp white follower dot that lerps behind the pointer.
+ * Interactive targets: subtle violet accent (no big white “bloom”).
  */
-export function CustomCursor() {
-  const dotRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
+function CustomCursorLayer() {
+  const followerRef = useRef<HTMLDivElement>(null);
   const pillRef = useRef<HTMLDivElement>(null);
 
   const mouse = useRef({ x: 0, y: 0 });
-  const glow = useRef({ x: 0, y: 0 });
+  const follower = useRef({ x: 0, y: 0 });
   const pill = useRef({ x: 0, y: 0 });
   const modeRef = useRef<CursorMode>("default");
   const pressedRef = useRef(false);
-  const magneticRectRef = useRef<DOMRect | null>(null);
-
-  const [mounted, setMounted] = useState(false);
-  const [active, setActive] = useState(false);
   const [mode, setMode] = useState<CursorMode>("default");
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    if (!shouldUseCustomCursor()) return;
-
+  useLayoutEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const lerpGlow = reduce ? 0.55 : 0.14;
-    const lerpPill = reduce ? 0.6 : 0.18;
-
-    setActive(true);
-    document.documentElement.classList.add("custom-cursor-on");
-
-    const markReady = () => document.documentElement.classList.add("custom-cursor-ready");
+    /** Higher = snappier; still visibly lags behind the arrow. */
+    const lerpFollower = reduce ? 0.5 : 0.42;
+    const lerpPill = reduce ? 0.65 : 0.22;
 
     const cx = window.innerWidth / 2;
     const cy = window.innerHeight / 2;
     mouse.current = { x: cx, y: cy };
-    glow.current = { x: cx, y: cy };
+    follower.current = { x: cx, y: cy };
     pill.current = { x: cx, y: cy };
 
-    const applyInstantPositions = () => {
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%) scale(1)`;
+    const applyFollower = () => {
+      const el = followerRef.current;
+      if (!el) return;
+      const showPill = modeRef.current === "project";
+      if (showPill) {
+        el.style.opacity = "0";
+        return;
       }
-      if (glowRef.current) {
-        glowRef.current.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%) scale(1)`;
-      }
-      if (pillRef.current) {
-        const ox = 18;
-        const oy = 16;
-        pillRef.current.style.transform = `translate3d(${cx + ox}px, ${cy + oy}px, 0) translate(-50%, -50%) scale(0.95)`;
-      }
+      el.style.opacity = "1";
+      const interactive = modeRef.current === "interactive";
+      const scale = pressedRef.current ? 0.88 : interactive ? 1.05 : 1;
+      el.style.transform = `translate3d(${follower.current.x}px, ${follower.current.y}px, 0) translate(-50%, -50%) scale(${scale})`;
     };
-    applyInstantPositions();
-    requestAnimationFrame(() => {
-      applyInstantPositions();
-      markReady();
-    });
+
+    const applyPill = () => {
+      if (!pillRef.current) return;
+      const ox = 18;
+      const oy = 16;
+      const showPill = modeRef.current === "project";
+      const scale = showPill ? (pressedRef.current ? 0.98 : 1) : 0.95;
+      pillRef.current.style.transform = `translate3d(${pill.current.x + ox}px, ${pill.current.y + oy}px, 0) translate(-50%, -50%) scale(${scale})`;
+    };
+
+    const sync = () => {
+      applyFollower();
+      applyPill();
+    };
+    sync();
+    requestAnimationFrame(sync);
 
     const onMove = (e: PointerEvent | MouseEvent) => {
-      markReady();
-
       const el = getTargetElement(e);
       const next = getMode(el);
       const prev = modeRef.current;
       if (next !== prev) {
         setMode(next);
         if (next === "project") pill.current = { x: e.clientX, y: e.clientY };
-        if (prev === "project") glow.current = { x: e.clientX, y: e.clientY };
       }
       modeRef.current = next;
-
-      // Magnetic feel over interactive elements (very subtle).
-      let tx = e.clientX;
-      let ty = e.clientY;
-      if (next === "interactive" && el) {
-        const host = el.closest(
-          "a[href], button:not([disabled]), [role='button']:not([disabled]), input[type='submit'], input[type='button'], summary, label[for]",
-        );
-        if (host) {
-          const r = host.getBoundingClientRect();
-          magneticRectRef.current = r;
-          const cx = r.left + r.width / 2;
-          const cy = r.top + r.height / 2;
-          const strength = pressedRef.current ? 0.09 : 0.14;
-          tx = e.clientX + (cx - e.clientX) * strength;
-          ty = e.clientY + (cy - e.clientY) * strength;
-        }
-      } else {
-        magneticRectRef.current = null;
-      }
-
-      mouse.current = { x: tx, y: ty };
-
-      // Dot leads (minimal lag) with click scale.
-      const dotScale = pressedRef.current ? 0.82 : next === "interactive" ? 1.08 : 1;
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${tx}px, ${ty}px, 0) translate(-50%, -50%) scale(${dotScale})`;
-      }
+      mouse.current = { x: e.clientX, y: e.clientY };
     };
 
     const onDown = () => {
@@ -142,76 +111,57 @@ export function CustomCursor() {
       pressedRef.current = false;
     };
 
-    const opts = { passive: true } as const;
+    const opts = { passive: true, capture: true } as const;
+    const doc = document;
     const onMouseMove = (e: MouseEvent) => onMove(e);
-    window.addEventListener("pointermove", onMove, opts);
-    window.addEventListener("mousemove", onMouseMove, opts);
-    window.addEventListener("pointerdown", onDown, opts);
-    window.addEventListener("pointerup", onUp, opts);
+    doc.addEventListener("pointermove", onMove, opts);
+    doc.addEventListener("mousemove", onMouseMove, opts);
+    doc.addEventListener("pointerdown", onDown, opts);
+    doc.addEventListener("pointerup", onUp, opts);
     window.addEventListener("blur", onUp);
 
     let rafId = 0;
     const tick = () => {
-      // Glow follower
-      glow.current.x += (mouse.current.x - glow.current.x) * lerpGlow;
-      glow.current.y += (mouse.current.y - glow.current.y) * lerpGlow;
+      follower.current.x += (mouse.current.x - follower.current.x) * lerpFollower;
+      follower.current.y += (mouse.current.y - follower.current.y) * lerpFollower;
 
-      const showPill = modeRef.current === "project";
-      if (glowRef.current) {
-        const glowScale = pressedRef.current ? 0.92 : modeRef.current === "interactive" ? 1.12 : 1;
-        glowRef.current.style.transform = `translate3d(${glow.current.x}px, ${glow.current.y}px, 0) translate(-50%, -50%) scale(${glowScale})`;
-        glowRef.current.style.opacity = showPill ? "0" : "1";
-      }
-
-      if (showPill) {
+      if (modeRef.current === "project") {
         pill.current.x += (mouse.current.x - pill.current.x) * lerpPill;
         pill.current.y += (mouse.current.y - pill.current.y) * lerpPill;
       }
-      if (pillRef.current) {
-        // Offset so it feels like a CTA beside the cursor (not centered on it).
-        const ox = 18;
-        const oy = 16;
-        const scale = showPill ? (pressedRef.current ? 0.98 : 1) : 0.95;
-        pillRef.current.style.transform = `translate3d(${pill.current.x + ox}px, ${pill.current.y + oy}px, 0) translate(-50%, -50%) scale(${scale})`;
-      }
 
+      applyFollower();
+      applyPill();
       rafId = requestAnimationFrame(tick);
     };
     rafId = requestAnimationFrame(tick);
 
     return () => {
-      document.documentElement.classList.remove("custom-cursor-on", "custom-cursor-ready");
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("pointerdown", onDown);
-      window.removeEventListener("pointerup", onUp);
+      doc.removeEventListener("pointermove", onMove, opts);
+      doc.removeEventListener("mousemove", onMouseMove, opts);
+      doc.removeEventListener("pointerdown", onDown, opts);
+      doc.removeEventListener("pointerup", onUp, opts);
       window.removeEventListener("blur", onUp);
       cancelAnimationFrame(rafId);
     };
-  }, [mounted]);
-
-  if (!mounted || !active) {
-    return null;
-  }
+  }, []);
 
   const project = mode === "project";
+  const interactive = mode === "interactive";
 
-  return (
+  const layer = (
     <div
-      className="pointer-events-none fixed inset-0 z-[100000] overflow-hidden"
+      data-cursor-root
+      className="pointer-events-none fixed inset-0 overflow-hidden"
+      style={{ zIndex: 2147483647 }}
       aria-hidden
     >
-      {/* soft glow follower — tinted so it reads on light + dark backgrounds */}
       <div
-        ref={glowRef}
-        className="absolute left-0 top-0 h-14 w-14 rounded-full bg-violet-500/22 blur-[12px] will-change-transform transition-opacity duration-150 dark:bg-white/12 dark:blur-[10px]"
-      />
-
-      {/* dot: light ring for contrast on pale bg, glow on dark */}
-      <div
-        ref={dotRef}
-        className={`absolute left-0 top-0 h-2 w-2 rounded-full border border-zinc-900/35 bg-white shadow-[0_0_0_1px_rgba(255,255,255,0.95),0_0_14px_rgba(99,102,241,0.35)] will-change-transform transition-[opacity,transform] duration-150 dark:border-white/45 dark:shadow-[0_0_0_1px_rgba(0,0,0,0.4),0_0_18px_6px_rgba(255,255,255,0.35)] ${
-          project ? "opacity-0" : "opacity-100"
+        ref={followerRef}
+        className={`absolute left-0 top-0 h-2.5 w-2.5 rounded-full will-change-transform ${
+          interactive && !project
+            ? "border border-violet-400/45 bg-white shadow-[0_0_12px_rgba(139,92,246,0.42)] ring-2 ring-violet-400/35 dark:border-violet-300/40 dark:bg-zinc-100 dark:shadow-[0_0_14px_rgba(167,139,250,0.32)] dark:ring-violet-400/25"
+            : "border border-zinc-900/25 bg-white shadow-[0_0_0_1px_rgba(255,255,255,0.9),0_1px_6px_rgba(0,0,0,0.22)] dark:border-white/35 dark:bg-zinc-50 dark:shadow-[0_0_0_1px_rgba(0,0,0,0.35),0_0_10px_rgba(255,255,255,0.22)]"
         }`}
       />
 
@@ -227,4 +177,40 @@ export function CustomCursor() {
       </div>
     </div>
   );
+
+  if (typeof document === "undefined") return null;
+  return createPortal(layer, document.body);
+}
+
+/**
+ * Desktop: native cursor + lagging sharp dot; project cards show the pill.
+ */
+export function CustomCursor() {
+  const [mounted, setMounted] = useState(false);
+  const [useCursor, setUseCursor] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const ok = shouldUseCustomCursor();
+    setUseCursor(ok);
+    const mqFine = window.matchMedia("(any-pointer: fine)");
+    const mqPointer = window.matchMedia("(pointer: fine)");
+    const sync = () => setUseCursor(shouldUseCustomCursor());
+    mqFine.addEventListener("change", sync);
+    mqPointer.addEventListener("change", sync);
+    return () => {
+      mqFine.removeEventListener("change", sync);
+      mqPointer.removeEventListener("change", sync);
+    };
+  }, [mounted]);
+
+  if (!mounted || !useCursor) {
+    return null;
+  }
+
+  return <CustomCursorLayer />;
 }

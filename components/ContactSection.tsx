@@ -61,7 +61,7 @@ export default function ContactSection() {
               href={links.bookCall}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-zinc-200/80 bg-white/70 px-5 py-2.5 text-sm font-semibold text-zinc-900 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition hover:border-zinc-300 hover:bg-white dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:border-white/20"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-zinc-200/80 bg-white/70 px-5 py-2.5 text-sm font-semibold text-zinc-900 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition hover:border-violet-200/70 hover:bg-violet-50/45 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:border-violet-400/30 dark:hover:bg-violet-500/[0.1]"
             >
               <Calendar className="h-4 w-4 opacity-80" aria-hidden />
               Book a call
@@ -179,7 +179,7 @@ export default function ContactSection() {
                       // ignore
                     }
                   }}
-                  className="inline-flex h-12 items-center justify-center rounded-full border border-zinc-200/80 bg-white/70 px-6 text-sm font-semibold text-zinc-900 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition hover:border-zinc-300 hover:bg-white dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:border-white/20"
+                  className="inline-flex h-12 items-center justify-center rounded-full border border-zinc-200/80 bg-white/70 px-6 text-sm font-semibold text-zinc-900 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition hover:border-violet-200/70 hover:bg-violet-50/45 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:border-violet-400/30 dark:hover:bg-violet-500/[0.1]"
                 >
                   {didCopy ? "Copied" : "Copy message"}
                 </button>

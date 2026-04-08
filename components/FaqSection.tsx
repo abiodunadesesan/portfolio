@@ -74,7 +74,7 @@ export default function FaqSection() {
               </a>
               <a
                 href="#contact-form"
-                className="inline-flex min-h-11 items-center justify-center rounded-full bg-zinc-100 px-6 text-sm font-semibold text-zinc-900 transition hover:bg-white"
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-transparent bg-zinc-100 px-6 text-sm font-semibold text-zinc-900 transition hover:border-violet-200/60 hover:bg-violet-50/55 hover:text-violet-950"
               >
                 Contact now
               </a>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { NanoChip } from "@/components/ui/NanoChip";
+import { SpotlightSurface } from "@/components/ui/SpotlightSurface";
 import { faqs, links, testimonials } from "@/lib/site-content";
 import { Calendar, Mail, Plus, X } from "lucide-react";
 
@@ -32,7 +33,10 @@ export default function FaqSection() {
               Get quick answers to your most pressing questions.
             </p>
 
-            <div className="mt-8 rounded-2xl border border-white/10 bg-zinc-900/50 p-6 backdrop-blur-sm">
+            <SpotlightSurface
+              variant="dark"
+              className="mt-8 rounded-2xl border border-white/10 bg-zinc-900/50 p-6 backdrop-blur-sm"
+            >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                 <div
                   className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500/30 to-fuchsia-500/20 text-lg font-semibold text-white"
@@ -59,7 +63,7 @@ export default function FaqSection() {
                   </p>
                 </div>
               </div>
-            </div>
+            </SpotlightSurface>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <a
@@ -98,8 +102,9 @@ export default function FaqSection() {
             {faqs.map((f, i) => {
               const isOpen = openIndex === i;
               return (
-                <div
+                <SpotlightSurface
                   key={f.q}
+                  variant="dark"
                   className={`overflow-hidden rounded-2xl border transition-colors ${
                     isOpen
                       ? "border-white/20 bg-zinc-900/70"
@@ -127,7 +132,7 @@ export default function FaqSection() {
                       <p className="pt-4 text-sm leading-relaxed text-zinc-400">{f.a}</p>
                     </div>
                   ) : null}
-                </div>
+                </SpotlightSurface>
               );
             })}
           </div>

@@ -24,6 +24,7 @@ export default function ContactPageLayout() {
               {contactPageStats.map((s) => (
                 <GlassCard
                   key={s.label}
+                  spotlight
                   className="border-white/10 bg-zinc-900/50 text-center dark:bg-zinc-900/50"
                 >
                   <p className="font-display text-3xl font-semibold text-white md:text-4xl">{s.value}</p>
@@ -33,7 +34,7 @@ export default function ContactPageLayout() {
             </div>
 
             <div className="mt-10 grid gap-8 lg:grid-cols-2 lg:gap-12">
-              <GlassCard className="border-white/10 bg-zinc-900/50 dark:bg-zinc-900/50">
+              <GlassCard spotlight className="border-white/10 bg-zinc-900/50 dark:bg-zinc-900/50">
                 <div className="flex items-start gap-4">
                   <div
                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500/30 to-fuchsia-500/20 text-sm font-semibold text-white"

@@ -52,7 +52,10 @@ export default function WhyChooseMeSection() {
                 ease: [0.22, 1, 0.36, 1],
               }}
             >
-              <GlassCard className="h-full border-zinc-200/90 p-6 shadow-[0_20px_70px_-24px_rgba(0,0,0,0.4)] md:p-8 dark:border-white/[0.12] dark:bg-[#0d0d12]/[0.92] dark:shadow-[0_28px_90px_-28px_rgba(0,0,0,0.65)]">
+              <GlassCard
+                spotlight
+                className="h-full border-zinc-200/90 p-6 shadow-[0_20px_70px_-24px_rgba(0,0,0,0.4)] md:p-8 dark:border-white/[0.12] dark:bg-[#0d0d12]/[0.92] dark:shadow-[0_28px_90px_-28px_rgba(0,0,0,0.65)]"
+              >
                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.4em] text-zinc-400 dark:text-white/35">
                   {String(i + 1).padStart(2, "0")}
                 </p>

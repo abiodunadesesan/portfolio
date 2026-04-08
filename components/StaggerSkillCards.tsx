@@ -37,7 +37,7 @@ export function StaggerSkillCards({ groups }: { groups: readonly SkillGroup[] })
     >
       {groups.map((group) => (
         <motion.div key={group.label} variants={card}>
-          <GlassCard>
+          <GlassCard spotlight>
             <h3 className="font-display text-sm font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-white/45">
               {group.label}
             </h3>

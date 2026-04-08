@@ -248,7 +248,7 @@ export default function AboutPageLayout() {
             <div className="mt-10 grid gap-6 sm:grid-cols-2">
               {caseStudies.slice(0, 4).map((c) => (
                 <Link key={c.href} href="/projects" className="group block" data-cursor="view-project">
-                  <GlassCard className="h-full transition group-hover:border-violet-300/50">
+                  <GlassCard spotlight className="h-full transition group-hover:border-violet-300/50">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-white/45">
                       {c.category} · {c.year}
                     </p>

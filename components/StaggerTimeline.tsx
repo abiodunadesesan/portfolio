@@ -38,7 +38,7 @@ export function StaggerTimeline({ items }: { items: readonly ExperienceItem[] })
             className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full bg-violet-600 shadow-[0_0_12px_rgba(109,40,217,0.45)] dark:bg-violet-400 dark:shadow-[0_0_12px_rgba(167,139,250,0.6)] md:-left-[25px]"
             aria-hidden
           />
-          <GlassCard className="relative overflow-hidden">
+          <GlassCard spotlight className="relative overflow-hidden">
             <div className="flex flex-col gap-2 gap-y-1 md:flex-row md:items-start md:justify-between">
               <p className="font-display text-lg font-semibold text-zinc-900 md:text-xl dark:text-white">{item.title}</p>
               <NanoChip className="shrink-0 self-start md:mt-0.5">{item.period}</NanoChip>

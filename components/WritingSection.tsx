@@ -33,7 +33,7 @@ export default function WritingSection() {
           {posts.map((p) => {
             const isLink = !!p.href;
             const card = (
-              <GlassCard className={isLink ? "group cursor-pointer" : ""}>
+              <GlassCard spotlight className={isLink ? "group cursor-pointer" : ""}>
                 <div className="flex items-start justify-between gap-6">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">

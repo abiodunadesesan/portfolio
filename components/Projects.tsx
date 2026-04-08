@@ -38,7 +38,7 @@ export default function Projects() {
 
         <div className="grid gap-6 lg:gap-8">
           {caseStudies.map((c) => (
-            <GlassCard key={c.href} className="group" data-cursor="view-project">
+            <GlassCard key={c.href} spotlight className="group" data-cursor="view-project">
               <details className="group/details">
                 <summary className="cursor-pointer list-none select-none">
                   <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-6">

@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { GlassCard } from "@/components/ui/GlassCard";
 import { NanoChip } from "@/components/ui/NanoChip";
 import { processSteps } from "@/lib/site-content";
 
@@ -25,24 +26,26 @@ export default function ProcessSection() {
           </p>
         </div>
 
-        <ol className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <ol className="grid list-none gap-4 p-0 md:grid-cols-2 lg:grid-cols-4">
           {processSteps.map((s) => (
-            <li
-              key={s.step}
-              className="rounded-2xl border border-zinc-200/70 bg-zinc-50/60 p-6 shadow-sm shadow-zinc-900/5 backdrop-blur-sm dark:border-white/10 dark:bg-white/[0.03] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
-            >
-              <div className="flex items-center justify-between gap-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
-                  Step {s.step}
+            <li key={s.step} className="h-full list-none">
+              <GlassCard
+                spotlight
+                className="h-full border-zinc-200/70 bg-zinc-50/60 p-6 shadow-sm shadow-zinc-900/5 backdrop-blur-sm dark:border-white/10 dark:bg-white/[0.03] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
+                    Step {s.step}
+                  </p>
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-500/70 dark:bg-violet-300/70" aria-hidden />
+                </div>
+                <p className="font-display mt-3 text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">
+                  {s.title}
                 </p>
-                <span className="h-1.5 w-1.5 rounded-full bg-violet-500/70 dark:bg-violet-300/70" aria-hidden />
-              </div>
-              <p className="font-display mt-3 text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">
-                {s.title}
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-white/55">
-                {s.body}
-              </p>
+                <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-white/55">
+                  {s.body}
+                </p>
+              </GlassCard>
             </li>
           ))}
         </ol>
@@ -50,4 +53,3 @@ export default function ProcessSection() {
     </AnimatedSection>
   );
 }
-

@@ -2,7 +2,9 @@
 
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { NanoChip } from "@/components/ui/NanoChip";
-import { connectOffers, links } from "@/lib/site-content";
+import { SpotlightSurface } from "@/components/ui/SpotlightSurface";
+import { VerbCrossFade } from "@/components/VerbCrossFade";
+import { connectOffers, connectVerbs, links } from "@/lib/site-content";
 import { Calendar, FolderGit2 } from "lucide-react";
 
 export default function LetsConnectSection() {
@@ -23,7 +25,9 @@ export default function LetsConnectSection() {
                 id="lets-connect-heading"
                 className="font-display mt-5 text-3xl font-semibold tracking-tight text-white md:text-4xl lg:text-[2.75rem]"
               >
-                <span className="text-white">Let&apos;s grow</span>{" "}
+                <span className="text-white">Let&apos;s </span>
+                <VerbCrossFade verbs={connectVerbs} className="align-baseline" />
+                <span className="text-white"> incredible products </span>
                 <span className="text-zinc-500">together.</span>
               </h2>
               <p className="mt-4 text-sm leading-relaxed text-zinc-400 md:text-base">
@@ -32,10 +36,7 @@ export default function LetsConnectSection() {
 
               <div className="mt-8 space-y-6">
                 {connectOffers.map((o) => (
-                  <div
-                    key={o.title}
-                    className="rounded-2xl border border-white/10 bg-black/30 p-5 md:p-6"
-                  >
+                  <SpotlightSurface key={o.title} variant="dark" className="rounded-2xl border border-white/10 bg-black/30 p-5 md:p-6">
                     <div className="flex flex-wrap items-baseline justify-between gap-3">
                       <p className="font-display text-lg font-semibold text-white md:text-xl">
                         {o.title}
@@ -45,7 +46,7 @@ export default function LetsConnectSection() {
                       </span>
                     </div>
                     <p className="mt-2 text-sm leading-relaxed text-zinc-400">{o.description}</p>
-                  </div>
+                  </SpotlightSurface>
                 ))}
               </div>
 

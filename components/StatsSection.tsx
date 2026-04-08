@@ -25,7 +25,7 @@ export default function StatsSection() {
 
         <div className="grid gap-6 md:grid-cols-3 lg:gap-8">
           {proofStats.map((s) => (
-            <GlassCard key={s.label} className="h-full">
+            <GlassCard key={s.label} spotlight className="h-full">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
                 {s.label}
               </p>

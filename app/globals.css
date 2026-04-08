@@ -6,10 +6,10 @@ html {
   scroll-padding-top: 6rem;
 }
 
-/* Custom cursor (see CustomCursor.tsx) — fine pointers only, class toggled client-side */
-@media (pointer: fine) {
-  html.custom-cursor-active,
-  html.custom-cursor-active * {
+/* Custom cursor — hide system cursor only once we have a position (custom-cursor-ready). */
+@media (any-pointer: fine) {
+  html.custom-cursor-active.custom-cursor-ready,
+  html.custom-cursor-active.custom-cursor-ready * {
     cursor: none !important;
   }
 }

@@ -41,7 +41,7 @@ export function StaggerProjectCards({ items }: { items: readonly ProjectItem[] }
             data-cursor="view-project"
             className="block h-full outline-none ring-violet-500/40 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#08080c]"
           >
-            <GlassCard className="group h-full cursor-pointer">
+            <GlassCard spotlight className="group h-full cursor-pointer">
               <div className="flex flex-col gap-3">
                 <NanoChip>{p.tag}</NanoChip>
                 <h3 className="font-display text-xl font-semibold text-zinc-900 transition-colors group-hover:text-violet-800 md:text-2xl dark:text-white dark:group-hover:text-violet-100">

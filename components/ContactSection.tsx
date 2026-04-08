@@ -75,7 +75,7 @@ export default function ContactSection() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
-          <GlassCard className="h-full">
+          <GlassCard spotlight className="h-full">
             <form
               className="space-y-4"
               onSubmit={(e) => {
@@ -154,7 +154,7 @@ export default function ContactSection() {
           </GlassCard>
 
           <div className="space-y-6">
-            <GlassCard>
+            <GlassCard spotlight>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
                 Prefer direct email?
               </p>
@@ -172,7 +172,7 @@ export default function ContactSection() {
               </a>
             </GlassCard>
 
-            <GlassCard>
+            <GlassCard spotlight>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
                 Availability
               </p>

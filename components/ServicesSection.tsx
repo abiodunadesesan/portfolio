@@ -32,7 +32,7 @@ export default function ServicesSection() {
 
         <div className="grid gap-6 md:grid-cols-3 lg:gap-8">
           {services.map((s) => (
-            <GlassCard key={s.title} className="group h-full">
+            <GlassCard key={s.title} spotlight className="group h-full">
               <div className="flex h-full flex-col gap-4">
                 <div className="flex items-center justify-between gap-4">
                   <p className="font-display text-xl font-semibold tracking-tight text-zinc-900 dark:text-white">

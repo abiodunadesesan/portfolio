@@ -45,7 +45,7 @@ export default function RecentProjectsSection() {
               data-cursor="view-project"
               className="block outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#08080c]"
             >
-              <GlassCard className="group h-full cursor-pointer">
+              <GlassCard spotlight className="group h-full cursor-pointer">
                 <div className="flex h-full flex-col gap-4">
                   <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-200/70 bg-gradient-to-br from-violet-500/20 via-fuchsia-500/10 to-transparent dark:border-white/10 dark:from-violet-500/20 dark:via-fuchsia-500/10">
                     <div className="h-full w-full bg-[radial-gradient(ellipse_80%_70%_at_30%_20%,rgba(255,255,255,0.35),transparent_55%)] opacity-40 dark:opacity-15" />

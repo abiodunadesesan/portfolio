@@ -28,7 +28,7 @@ export default function TestimonialsSection() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
           {testimonials.map((t, i) => (
-            <GlassCard key={`${t.name}-${i}`} className="h-full">
+            <GlassCard key={`${t.name}-${i}`} spotlight className="h-full">
               <div className="flex h-full flex-col gap-4">
                 <p className="text-[15px] leading-relaxed text-zinc-700 dark:text-white/80">
                   “{t.quote}”

@@ -63,7 +63,7 @@ export default function ProjectsPage() {
         </h2>
         <div className="mt-6 grid gap-6 lg:gap-8">
           {caseStudies.map((c) => (
-            <GlassCard key={c.href} className="group" data-cursor="view-project">
+            <GlassCard key={c.href} spotlight className="group" data-cursor="view-project">
               <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-6">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
@@ -147,7 +147,7 @@ export default function ProjectsPage() {
               data-cursor="view-project"
               className="block outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#08080c]"
             >
-              <GlassCard className="group h-full cursor-pointer">
+              <GlassCard spotlight className="group h-full cursor-pointer">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
                   {p.tag}
                 </p>

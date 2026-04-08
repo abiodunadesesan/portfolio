@@ -385,6 +385,9 @@ export const faqs: { q: string; a: string }[] = [
 ];
 
 /** “Let’s Grow Together” style offers (starting-from; adjust to your real rates). */
+/** Rotating CTA verbs (Let’s ___ …) — see LetsConnectSection + VerbCrossFade. */
+export const connectVerbs = ["build", "design", "ship"] as const;
+
 export const connectOffers: {
   title: string;
   priceLabel: string;

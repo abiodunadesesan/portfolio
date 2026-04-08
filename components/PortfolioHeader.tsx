@@ -50,7 +50,7 @@ export default function PortfolioHeader() {
         <div className="pointer-events-auto flex w-full max-w-3xl items-center gap-1.5 rounded-full border border-zinc-200/70 bg-white/60 py-2 pl-4 pr-2 font-sans shadow-[0_14px_48px_rgba(15,15,18,0.14)] backdrop-blur-2xl backdrop-saturate-150 dark:border-white/[0.12] dark:bg-black/60 dark:shadow-[0_18px_64px_rgba(0,0,0,0.72)] md:gap-2.5 md:pl-6 md:pr-2.5">
           <Link
             href="/"
-            className="shrink-0 py-0.5 text-[1.3rem] font-normal leading-none tracking-[-0.02em] text-zinc-900 transition-colors hover:text-zinc-700 md:text-[1.6rem] dark:text-white dark:hover:text-white/90"
+            className="shrink-0 py-0.5 text-[1.45rem] font-normal leading-none tracking-[-0.02em] text-zinc-900 transition-colors hover:text-zinc-700 md:text-[1.8rem] dark:text-white dark:hover:text-white/90"
             style={{ fontFamily: "var(--font-nav-serif), ui-serif, Georgia, serif" }}
             aria-label="Home"
             onClick={() => setMenuOpen(false)}

@@ -30,6 +30,8 @@ function buildMailto({ name, email, message }: ContactState) {
 export default function ContactSection() {
   const [state, setState] = useState<ContactState>({ name: "", email: "", message: "" });
   const [didCopy, setDidCopy] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
 
   const mailtoHref = useMemo(() => buildMailto(state), [state]);
 
@@ -78,9 +80,32 @@ export default function ContactSection() {
           <GlassCard spotlight className="h-full">
             <form
               className="space-y-4"
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                window.location.href = mailtoHref;
+                setStatus("sending");
+                setError(null);
+                try {
+                  const res = await fetch("/api/contact", {
+                    method: "POST",
+                    headers: { "content-type": "application/json" },
+                    body: JSON.stringify({
+                      name: state.name,
+                      email: state.email,
+                      message: state.message,
+                    }),
+                  });
+                  const data = (await res.json()) as { ok?: boolean; error?: string };
+                  if (!res.ok || !data.ok) {
+                    setStatus("error");
+                    setError(data.error || "Failed to send. Please try again.");
+                    return;
+                  }
+                  setStatus("sent");
+                  setState({ name: "", email: "", message: "" });
+                } catch {
+                  setStatus("error");
+                  setError("Failed to send. Please try again.");
+                }
               }}
             >
               <div className="grid gap-4 sm:grid-cols-2">
@@ -126,10 +151,11 @@ export default function ContactSection() {
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <button
                   type="submit"
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-violet-600 px-6 text-sm font-semibold text-white transition hover:bg-violet-500 hover:shadow-[0_0_24px_-4px_rgba(139,92,246,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 dark:bg-violet-500 dark:hover:bg-violet-400"
+                  disabled={status === "sending"}
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-violet-600 px-6 text-sm font-semibold text-white transition hover:bg-violet-500 hover:shadow-[0_0_24px_-4px_rgba(139,92,246,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
                 >
                   <Send className="h-4 w-4" aria-hidden />
-                  Send
+                  {status === "sending" ? "Sending…" : "Send"}
                 </button>
 
                 <button
@@ -150,6 +176,24 @@ export default function ContactSection() {
                   {didCopy ? "Copied" : "Copy message"}
                 </button>
               </div>
+
+              {status === "sent" ? (
+                <p className="pt-2 text-sm font-medium text-emerald-600 dark:text-emerald-300">
+                  Message sent. I’ll get back to you soon.
+                </p>
+              ) : null}
+              {status === "error" && error ? (
+                <div className="pt-2">
+                  <p className="text-sm font-medium text-rose-600 dark:text-rose-300">{error}</p>
+                  <p className="mt-1 text-xs text-zinc-500 dark:text-white/45">
+                    If this keeps failing, use{" "}
+                    <a className="underline underline-offset-4" href={mailtoHref}>
+                      email
+                    </a>
+                    .
+                  </p>
+                </div>
+              ) : null}
             </form>
           </GlassCard>
 

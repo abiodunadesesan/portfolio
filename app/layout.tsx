@@ -1,11 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Great_Vibes, Instrument_Serif, Manrope, Space_Grotesk } from "next/font/google";
+import { Great_Vibes, Instrument_Serif, Manrope, Orbitron, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import PortfolioHeader from "@/components/PortfolioHeader";
 import VerticalScrollIndicator from "@/components/VerticalScrollIndicator";
-import { CustomCursor } from "@/components/CustomCursor";
 import { MotionProvider } from "@/components/MotionProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { getHeroPreloadFrameUrls } from "@/lib/sequence";
@@ -21,6 +20,13 @@ const display = Space_Grotesk({
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+// Futuristic UI accent font (Vecteezy “Futured” vibe) — used sparingly for chips/HUD labels.
+const tech = Orbitron({
+  subsets: ["latin"],
+  variable: "--font-tech",
   display: "swap",
 });
 
@@ -104,7 +110,7 @@ export default function RootLayout({
         ))}
       </head>
       <body
-        className={`${display.variable} ${manrope.variable} ${footerSignature.variable} ${navSerif.variable} liquid-glass-body font-sans antialiased`}
+        className={`${display.variable} ${manrope.variable} ${tech.variable} ${footerSignature.variable} ${navSerif.variable} liquid-glass-body font-sans antialiased`}
       >
         <div
           className="pointer-events-none fixed inset-0 -z-10 bg-[#f5f4f1] transition-colors duration-700 dark:bg-[#050505]"
@@ -129,7 +135,6 @@ export default function RootLayout({
           Skip to main content
         </a>
 
-        <CustomCursor />
         <ThemeProvider>
           {/* Isolate stacking so the sticky nav paints above the hero canvas; hero stays full-bleed under the pill. */}
           <div className="relative isolate min-h-0">

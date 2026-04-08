@@ -16,6 +16,13 @@ html {
   }
 }
 
+/* Futuristic accent font for HUD labels/chips (loaded as --font-tech). */
+.font-tech {
+  font-family: var(--font-tech), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
+  letter-spacing: 0.18em;
+}
+
 /* Sci‑fi binary layer (subtle watermark) */
 .binary-matrix {
   position: relative;
@@ -47,14 +54,6 @@ html {
   text-shadow:
     0 0 18px rgba(228, 228, 231, 0.26),
     0 0 52px rgba(255, 255, 255, 0.12);
-}
-
-/* Custom cursor — hide system cursor only once we have a position (custom-cursor-ready). */
-@media (any-pointer: fine) {
-  html.custom-cursor-active.custom-cursor-ready,
-  html.custom-cursor-active.custom-cursor-ready * {
-    cursor: none !important;
-  }
 }
 
 /* overflow-x: clip prevents horizontal overflow without creating a scroll container,

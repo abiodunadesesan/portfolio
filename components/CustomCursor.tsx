@@ -43,7 +43,6 @@ export function CustomCursor() {
 
   const [mounted, setMounted] = useState(false);
   const [active, setActive] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [mode, setMode] = useState<CursorMode>("default");
 
   useEffect(() => {
@@ -52,11 +51,16 @@ export function CustomCursor() {
 
   useEffect(() => {
     if (!mounted) return;
-    // Safari / hybrid devices can misreport pointer capabilities.
-    // Only skip on truly touch-only environments (no fine pointer detected at all).
+    // Robust desktop detection across Safari/Chrome:
+    // Enable if the device can hover (desktop/trackpad) OR reports any fine pointer.
+    // Disable only on touch-only environments.
+    const canHover = window.matchMedia("(hover: hover)").matches;
     const anyFine = window.matchMedia("(any-pointer: fine)").matches;
-    const anyCoarse = window.matchMedia("(any-pointer: coarse)").matches;
-    if (anyCoarse && !anyFine) return;
+    const isTouchOnly =
+      ((typeof navigator !== "undefined" && navigator.maxTouchPoints > 0) || "ontouchstart" in window) &&
+      !canHover &&
+      !anyFine;
+    if (isTouchOnly) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const lerpRing = reduce ? 0.45 : 0.12;
@@ -77,7 +81,8 @@ export function CustomCursor() {
     if (dotRef.current) {
       dotRef.current.style.transform = `translate3d(${initialX}px, ${initialY}px, 0) translate(-50%, -50%) scale(1)`;
     }
-    setVisible(true);
+    // Mark ready immediately (prevents “default cursor only” perception).
+    document.documentElement.classList.add("custom-cursor-ready");
 
     const onMove = (e: PointerEvent | MouseEvent) => {
       document.documentElement.classList.add("custom-cursor-ready");
@@ -98,24 +103,15 @@ export function CustomCursor() {
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%) scale(${dotScale})`;
       }
-      setVisible(true);
     };
-    const onLeave = () => {
-      setVisible(false);
-      modeRef.current = "default";
-      setMode("default");
-    };
-    const onEnter = () => {
-      document.documentElement.classList.add("custom-cursor-ready");
-      setVisible(true);
-    };
+    // Avoid hiding on leave; some browsers fire mouseleave unexpectedly (making the cursor disappear).
+    const onLeave = () => {};
 
     const moveOpts = { passive: true } as const;
     const onMouseMove = (e: MouseEvent) => onMove(e);
     window.addEventListener("pointermove", onMove, moveOpts);
     window.addEventListener("mousemove", onMouseMove, moveOpts);
     window.addEventListener("mouseleave", onLeave);
-    window.addEventListener("mouseenter", onEnter);
 
     let rafId = 0;
     const tick = () => {
@@ -142,7 +138,6 @@ export function CustomCursor() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseleave", onLeave);
-      window.removeEventListener("mouseenter", onEnter);
       cancelAnimationFrame(rafId);
     };
   }, [mounted]);
@@ -156,18 +151,18 @@ export function CustomCursor() {
   return (
     <div
       className="pointer-events-none fixed inset-0 z-[100000] overflow-hidden"
-      style={{ opacity: visible ? 1 : 0, transition: "opacity 0.25s ease" }}
+      style={{ opacity: 1 }}
       aria-hidden
     >
       <div
         ref={ringRef}
-        className={`absolute left-0 top-0 h-11 w-11 rounded-full border border-zinc-900/25 bg-zinc-900/[0.06] shadow-[0_0_20px_rgba(0,0,0,0.12)] will-change-transform transition-opacity duration-200 dark:border-white/30 dark:bg-white/[0.06] dark:shadow-[0_0_24px_rgba(255,255,255,0.08)] ${
+        className={`absolute left-0 top-0 h-11 w-11 rounded-full border border-zinc-900/30 bg-zinc-900/[0.07] shadow-[0_0_22px_rgba(0,0,0,0.14)] mix-blend-difference will-change-transform transition-opacity duration-200 dark:border-white/45 dark:bg-white/[0.08] dark:shadow-[0_0_34px_rgba(255,255,255,0.12)] ${
           project ? "opacity-0" : "opacity-100"
         }`}
       />
       <div
         ref={dotRef}
-        className={`absolute left-0 top-0 h-2.5 w-2.5 rounded-full bg-zinc-900 shadow-[0_0_14px_4px_rgba(0,0,0,0.4)] ring-2 ring-white/25 will-change-transform transition-opacity duration-200 dark:bg-white dark:shadow-[0_0_20px_6px_rgba(255,255,255,0.5)] dark:ring-white/20 ${
+        className={`absolute left-0 top-0 h-2.5 w-2.5 rounded-full bg-zinc-900 shadow-[0_0_16px_5px_rgba(0,0,0,0.45)] ring-2 ring-white/25 mix-blend-difference will-change-transform transition-opacity duration-200 dark:bg-white dark:shadow-[0_0_26px_8px_rgba(255,255,255,0.6)] dark:ring-white/25 ${
           project ? "opacity-0" : "opacity-100"
         }`}
       />

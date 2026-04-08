@@ -45,10 +45,9 @@ export default function ScrollyCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
   const sizeRef = useRef<SizeState>({ cssW: 0, cssH: 0, dpr: 1 });
   const rafRef = useRef<number | null>(null);
-  const [imagesReady, setImagesReady] = useState(false);
   const [firstFrameReady, setFirstFrameReady] = useState(false);
   const reduceMotion = useReducedMotion();
 
@@ -64,32 +63,26 @@ export default function ScrollyCanvas() {
   });
 
   useEffect(() => {
-    const images: HTMLImageElement[] = [];
-    let settled = 0;
-
     const preloadSet = new Set<number>(HERO_PRELOAD_FRAME_INDICES);
-    for (let i = 0; i < SEQUENCE_FRAME_COUNT; i++) {
+    imagesRef.current = Array.from({ length: SEQUENCE_FRAME_COUNT }, () => null);
+
+    // Load only the critical frames up-front. Everything else loads on-demand while scrolling.
+    const load = (idx: number, priority: "high" | "low" = "low") => {
+      if (idx < 0 || idx >= SEQUENCE_FRAME_COUNT) return;
+      if (imagesRef.current[idx]) return;
       const img = new Image();
       img.decoding = "async";
-      if (preloadSet.has(i)) {
-        img.fetchPriority = "high";
-      }
-      img.src = getFrameSrc(i);
-      images.push(img);
-    }
-    imagesRef.current = images;
-
-    const mark = () => {
-      settled++;
-      if (settled >= SEQUENCE_FRAME_COUNT) setImagesReady(true);
-    };
-    images.forEach((img, idx) => {
+      img.fetchPriority = priority;
+      img.src = getFrameSrc(idx);
+      imagesRef.current[idx] = img;
       img.onload = () => {
-        mark();
         if (idx === 0) setFirstFrameReady(true);
       };
-      img.onerror = mark;
-    });
+    };
+
+    // Always load first frame so the hero paints quickly.
+    load(0, "high");
+    HERO_PRELOAD_FRAME_INDICES.forEach((i) => load(i, "high"));
 
     return () => {
       imagesRef.current = [];
@@ -157,6 +150,26 @@ export default function ScrollyCanvas() {
 
     const max = SEQUENCE_FRAME_COUNT - 1;
     const idx = Math.min(max, Math.max(0, Math.round(progress * max)));
+
+    // On-demand image loading + lookahead to keep scrolling smooth.
+    const loadAround = (center: number) => {
+      for (let k = -2; k <= 6; k++) {
+        const i = center + k;
+        if (i < 0 || i >= SEQUENCE_FRAME_COUNT) continue;
+        if (!imagesRef.current[i]) {
+          const img = new Image();
+          img.decoding = "async";
+          img.fetchPriority = k === 0 ? "high" : "low";
+          img.src = getFrameSrc(i);
+          imagesRef.current[i] = img;
+          img.onload = () => {
+            if (i === 0) setFirstFrameReady(true);
+          };
+        }
+      }
+    };
+    loadAround(idx);
+
     paintFrame(ctx, idx, cssW, cssH);
   }, [ensureCanvasSize, paintFrame, smoothProgress, reduceMotion]);
 
@@ -189,11 +202,6 @@ export default function ScrollyCanvas() {
   }, [ensureCanvasSize, renderFrame]);
 
   useMotionValueEvent(smoothProgress, "change", scheduleRender);
-
-  useEffect(() => {
-    if (!imagesReady) return;
-    scheduleRender();
-  }, [imagesReady, scheduleRender]);
 
   useEffect(() => {
     if (!firstFrameReady) return;

@@ -94,13 +94,21 @@ export default function ContactSection() {
                       message: state.message,
                     }),
                   });
-                  const data = (await res.json()) as { ok?: boolean; error?: string };
+                  const data = (await res.json()) as {
+                    ok?: boolean;
+                    error?: string;
+                    warned?: boolean;
+                    warning?: string;
+                  };
                   if (!res.ok || !data.ok) {
                     setStatus("error");
                     setError(data.error || "Failed to send. Please try again.");
                     return;
                   }
                   setStatus("sent");
+                  if (data.warned && data.warning) {
+                    setError(data.warning);
+                  }
                   setState({ name: "", email: "", message: "" });
                 } catch {
                   setStatus("error");
@@ -178,9 +186,14 @@ export default function ContactSection() {
               </div>
 
               {status === "sent" ? (
-                <p className="pt-2 text-sm font-medium text-emerald-600 dark:text-emerald-300">
-                  Message sent. I’ll get back to you soon.
-                </p>
+                <div className="pt-2">
+                  <p className="text-sm font-medium text-emerald-600 dark:text-emerald-300">
+                    Message saved. I’ll get back to you soon.
+                  </p>
+                  {error ? (
+                    <p className="mt-1 text-xs text-amber-600 dark:text-amber-300">{error}</p>
+                  ) : null}
+                </div>
               ) : null}
               {status === "error" && error ? (
                 <div className="pt-2">

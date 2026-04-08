@@ -78,7 +78,12 @@ export async function POST(req: Request) {
       `Email: ${email || "-"}`,
     ].join("\n");
 
-    const from = process.env.RESEND_FROM ?? "onboarding@resend.dev";
+    const fromCandidate = process.env.RESEND_FROM?.trim();
+    // Resend requires a verified sender/domain. A raw personal mailbox (e.g. gmail.com) often fails.
+    const from =
+      fromCandidate && !/@gmail\.com\s*$/i.test(fromCandidate)
+        ? fromCandidate
+        : `Caleb <onboarding@resend.dev>`;
 
     const { error: mailError } = await resend.emails.send({
       from,
@@ -91,7 +96,12 @@ export async function POST(req: Request) {
     if (mailError) {
       // Saved to DB already; still return ok but report mail issue.
       return NextResponse.json(
-        { ok: true, warned: true, warning: "Saved your message, but email delivery failed." },
+        {
+          ok: true,
+          warned: true,
+          warning:
+            "Saved your message, but email delivery failed. (Tip: verify a sender domain in Resend and set RESEND_FROM.)",
+        },
         { status: 200 },
       );
     }

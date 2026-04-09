@@ -24,8 +24,7 @@ export default function ServicesSection() {
               How I can help
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-zinc-600 md:text-base dark:text-white/55">
-              A focused set of offers that map to what recruiters and clients actually need: shipped work, clear communication,
-              and reliable execution.
+              Choose the lane you need—product build, UI polish, or an AI/ML prototype—then we scope it into a clean, shippable plan.
             </p>
           </div>
         </div>

@@ -35,7 +35,7 @@ export default function WhyChooseMeSection() {
             Why partner with me
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-zinc-600 md:text-base dark:text-white/55">
-            The mix recruiters and clients want: strong execution, good taste, and a process that makes hiring low-risk.
+            What working together feels like: clear communication, strong UI taste, and delivery that stays fast and predictable.
           </p>
         </motion.div>
 

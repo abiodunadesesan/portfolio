@@ -5,13 +5,16 @@ import { NanoChip } from "@/components/ui/NanoChip";
 import { SpotlightSurface } from "@/components/ui/SpotlightSurface";
 import { VerbCrossFade } from "@/components/VerbCrossFade";
 import { connectOffers, connectVerbs, links, projects } from "@/lib/site-content";
-import { getProjectPreviewImageUrl } from "@/lib/preview";
+import { getFallbackPreviewDataUrl, getProjectPreviewImageUrl } from "@/lib/preview";
 import { Calendar, FolderGit2 } from "lucide-react";
 
 export default function LetsConnectSection() {
   const featured =
     projects.find((p) => typeof p.previewImage === "string" && p.previewImage.length > 0) ?? projects[0];
-  const featuredPreview = featured?.previewImage ?? (featured?.href ? getProjectPreviewImageUrl(featured.href) : null);
+  const featuredPreview =
+    featured?.previewImage ??
+    (featured?.href ? getProjectPreviewImageUrl(featured.href) : null) ??
+    getFallbackPreviewDataUrl(featured?.title ?? "Project");
 
   return (
     <AnimatedSection
@@ -91,6 +94,9 @@ export default function LetsConnectSection() {
                         src={featuredPreview}
                         alt={`${featured?.title ?? "Project"} preview`}
                         loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.src = getFallbackPreviewDataUrl(featured?.title ?? "Project");
+                        }}
                         className="absolute inset-0 h-full w-full object-cover opacity-95"
                       />
                       <div

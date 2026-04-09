@@ -2,7 +2,7 @@ import Link from "next/link";
 import { NanoChip } from "@/components/ui/NanoChip";
 import { GlassCard } from "@/components/ui/GlassCard";
 import SiteFooter from "@/components/SiteFooter";
-import { getProjectPreviewImageUrl } from "@/lib/preview";
+import { getFallbackPreviewDataUrl, getProjectPreviewImageUrl } from "@/lib/preview";
 import { caseStudies, links, projects, person } from "@/lib/site-content";
 import { ArrowUpRight, Calendar } from "lucide-react";
 
@@ -151,7 +151,8 @@ export default function ProjectsPage() {
               <GlassCard spotlight className="group h-full cursor-pointer">
                 <div className="relative mb-5 aspect-[16/10] w-full overflow-hidden rounded-2xl border border-zinc-200/70 bg-gradient-to-br from-violet-500/15 via-fuchsia-500/10 to-transparent dark:border-white/10">
                   {(() => {
-                    const preview = p.previewImage ?? getProjectPreviewImageUrl(p.href);
+                    const preview =
+                      p.previewImage ?? getProjectPreviewImageUrl(p.href) ?? getFallbackPreviewDataUrl(p.title);
                     return preview ? (
                       <>
                         <img

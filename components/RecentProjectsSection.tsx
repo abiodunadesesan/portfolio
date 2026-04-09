@@ -4,7 +4,7 @@ import { AnimatedSection } from "@/components/AnimatedSection";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NanoChip } from "@/components/ui/NanoChip";
 import { recentHighlights } from "@/lib/site-content";
-import { getProjectPreviewImageUrl } from "@/lib/preview";
+import { getFallbackPreviewDataUrl, getProjectPreviewImageUrl } from "@/lib/preview";
 import { ArrowUpRight } from "lucide-react";
 
 export default function RecentProjectsSection() {
@@ -57,6 +57,9 @@ export default function RecentProjectsSection() {
                             src={preview}
                             alt={`${p.title} preview`}
                             loading="lazy"
+                            onError={(e) => {
+                              e.currentTarget.src = getFallbackPreviewDataUrl(p.title);
+                            }}
                             className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
                           />
                           <div

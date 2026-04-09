@@ -19,7 +19,7 @@ import {
   recommendationsCredentialsSection,
   referencesAvailability,
 } from "@/lib/site-content";
-import { getProjectPreviewImageUrl } from "@/lib/preview";
+import { getFallbackPreviewDataUrl, getProjectPreviewImageUrl } from "@/lib/preview";
 import { ArrowUpRight, Calendar, GraduationCap, Quote } from "lucide-react";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -252,7 +252,10 @@ export default function AboutPageLayout() {
                   <GlassCard spotlight className="h-full transition group-hover:border-violet-300/50">
                     <div className="relative mb-5 aspect-[16/10] w-full overflow-hidden rounded-2xl border border-zinc-200/70 bg-gradient-to-br from-violet-500/15 via-fuchsia-500/10 to-transparent dark:border-white/10">
                       {(() => {
-                        const preview = c.previewImage ?? getProjectPreviewImageUrl(c.href);
+                        const preview =
+                          c.previewImage ??
+                          getProjectPreviewImageUrl(c.href) ??
+                          getFallbackPreviewDataUrl(c.title);
                         return preview ? (
                           <>
                             <img

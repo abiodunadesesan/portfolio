@@ -103,6 +103,7 @@ export const projects: ProjectItem[] = [
     blurb:
       "Full e-commerce site — catalog, flows, and server-side patterns in PHP for production-style delivery.",
     href: "https://github.com/abiodunadesesan/Ecommerce-website",
+    previewImage: "/previews/ecommerce.png",
   },
   {
     title: "Study Planner — Microservices",
@@ -110,6 +111,7 @@ export const projects: ProjectItem[] = [
     blurb:
       "Study planner built around microservices thinking — decomposition, services, and integration across the stack.",
     href: "https://github.com/abiodunadesesan/study-planner-micro-services-architecture-",
+    previewImage: "/previews/study-planner.png",
   },
   {
     title: "Contact Management",
@@ -117,6 +119,7 @@ export const projects: ProjectItem[] = [
     blurb:
       "Contact management system developed at a professional architecture level — featuring CRUD operations, record organization, and practical, production-ready UI.",
     href: "https://github.com/abiodunadesesan/contact-management",
+    previewImage: "/previews/contact-management.png",
   },
 ];
 

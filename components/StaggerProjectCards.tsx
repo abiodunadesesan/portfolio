@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NanoChip } from "@/components/ui/NanoChip";
 import type { ProjectItem } from "@/lib/site-content";
+import { getFallbackPreviewDataUrl, getProjectPreviewImageUrl } from "@/lib/preview";
 
 const container = {
   hidden: {},
@@ -34,6 +35,10 @@ export function StaggerProjectCards({ items }: { items: readonly ProjectItem[] }
     >
       {items.map((p) => (
         <motion.li key={p.href} variants={item} className="h-full">
+          {(() => {
+            const preview =
+              p.previewImage ?? getProjectPreviewImageUrl(p.href) ?? getFallbackPreviewDataUrl(p.title);
+            return (
           <a
             href={p.href}
             target="_blank"
@@ -42,6 +47,21 @@ export function StaggerProjectCards({ items }: { items: readonly ProjectItem[] }
             className="block h-full outline-none ring-violet-500/40 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#08080c]"
           >
             <GlassCard spotlight className="group h-full cursor-pointer">
+              <div className="relative mb-5 aspect-[16/10] w-full overflow-hidden rounded-2xl border border-zinc-200/70 bg-gradient-to-br from-violet-500/15 via-fuchsia-500/10 to-transparent dark:border-white/10">
+                <img
+                  src={preview}
+                  alt={`${p.title} preview`}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.src = getFallbackPreviewDataUrl(p.title);
+                  }}
+                  className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
+                />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent dark:from-black/55"
+                />
+              </div>
               <div className="flex flex-col gap-3">
                 <NanoChip>{p.tag}</NanoChip>
                 <h3 className="font-display text-xl font-semibold text-zinc-900 transition-colors group-hover:text-violet-800 md:text-2xl dark:text-white dark:group-hover:text-violet-100">
@@ -51,6 +71,8 @@ export function StaggerProjectCards({ items }: { items: readonly ProjectItem[] }
               </div>
             </GlassCard>
           </a>
+            );
+          })()}
         </motion.li>
       ))}
     </motion.ul>

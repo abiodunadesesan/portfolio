@@ -2,7 +2,7 @@ import { AnimatedSection } from "@/components/AnimatedSection";
 import { StaggerProjectCards } from "@/components/StaggerProjectCards";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NanoChip } from "@/components/ui/NanoChip";
-import { getProjectPreviewImageUrl } from "@/lib/preview";
+import { getFallbackPreviewDataUrl, getProjectPreviewImageUrl } from "@/lib/preview";
 import { caseStudies, links, projects } from "@/lib/site-content";
 import { ArrowUpRight } from "lucide-react";
 
@@ -56,7 +56,10 @@ export default function Projects() {
                     </div>
                     <div className="hidden shrink-0 md:block md:w-[15.5rem]">
                       {(() => {
-                        const preview = c.previewImage ?? getProjectPreviewImageUrl(c.href);
+                        const preview =
+                          c.previewImage ??
+                          getProjectPreviewImageUrl(c.href) ??
+                          getFallbackPreviewDataUrl(c.title);
                         return preview ? (
                           <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-zinc-200/70 bg-gradient-to-br from-violet-500/15 via-fuchsia-500/10 to-transparent shadow-sm shadow-zinc-900/5 dark:border-white/10">
                             <img

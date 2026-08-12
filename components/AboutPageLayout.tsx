@@ -258,10 +258,11 @@ export default function AboutPageLayout() {
                           getFallbackPreviewDataUrl(c.title);
                         return preview ? (
                           <>
-                            <img
+                            <Image
                               src={preview}
                               alt={`${c.title} preview`}
-                              loading="lazy"
+                              fill
+                              sizes="(max-width: 768px) 100vw, 50vw"
                               className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
                             />
                             <div

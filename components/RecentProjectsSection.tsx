@@ -1,10 +1,11 @@
 "use client";
 
 import { AnimatedSection } from "@/components/AnimatedSection";
+import Image from "next/image";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NanoChip } from "@/components/ui/NanoChip";
 import { recentHighlights } from "@/lib/site-content";
-import { getFallbackPreviewDataUrl, getProjectPreviewImageUrl } from "@/lib/preview";
+import { getProjectPreviewImageUrl } from "@/lib/preview";
 import { ArrowUpRight } from "lucide-react";
 
 export default function RecentProjectsSection() {
@@ -53,13 +54,11 @@ export default function RecentProjectsSection() {
                     <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-200/70 bg-gradient-to-br from-violet-500/20 via-fuchsia-500/10 to-transparent dark:border-white/10 dark:from-violet-500/20 dark:via-fuchsia-500/10">
                       {preview ? (
                         <>
-                          <img
+                          <Image
                             src={preview}
                             alt={`${p.title} preview`}
-                            loading="lazy"
-                            onError={(e) => {
-                              e.currentTarget.src = getFallbackPreviewDataUrl(p.title);
-                            }}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
                           />
                           <div

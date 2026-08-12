@@ -1,8 +1,10 @@
 "use client";
 
+import NextImage from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion, useScroll, useMotionValueEvent, useSpring } from "framer-motion";
 import { drawImageCover } from "@/lib/canvas-draw";
+import { useBreakpointTier } from "@/hooks/useBreakpointTier";
 import {
   getFrameSrc,
   HERO_PRELOAD_FRAME_INDICES,
@@ -42,11 +44,14 @@ function drawPlaceholder(
 type SizeState = { cssW: number; cssH: number; dpr: number };
 
 export default function ScrollyCanvas() {
+  const tier = useBreakpointTier();
+  const isMobile = tier === "mobile";
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
   const sizeRef = useRef<SizeState>({ cssW: 0, cssH: 0, dpr: 1 });
+  const lastFrameIndexRef = useRef<number>(-1);
   const rafRef = useRef<number | null>(null);
   const [firstFrameReady, setFirstFrameReady] = useState(false);
   const reduceMotion = useReducedMotion();
@@ -61,6 +66,7 @@ export default function ScrollyCanvas() {
     damping: 32,
     restDelta: 0.001
   });
+  const progressValue = isMobile ? scrollYProgress : smoothProgress;
 
   useEffect(() => {
     imagesRef.current = Array.from({ length: SEQUENCE_FRAME_COUNT }, () => null);
@@ -81,9 +87,27 @@ export default function ScrollyCanvas() {
 
     // Always load first frame so the hero paints quickly.
     load(0, "high");
-    HERO_PRELOAD_FRAME_INDICES.forEach((i) => load(i, "high"));
+    const idleToken: number | null =
+      typeof window.requestIdleCallback === "function"
+        ? window.requestIdleCallback(() => {
+            HERO_PRELOAD_FRAME_INDICES.forEach((i) => {
+              if (i !== 0) load(i, "low");
+            });
+          }, { timeout: 1200 })
+        : window.setTimeout(() => {
+            HERO_PRELOAD_FRAME_INDICES.forEach((i) => {
+              if (i !== 0) load(i, "low");
+            });
+          }, 600);
 
     return () => {
+      if (idleToken != null) {
+        if (typeof window.cancelIdleCallback === "function") {
+          window.cancelIdleCallback(idleToken);
+        } else {
+          clearTimeout(idleToken);
+        }
+      }
       imagesRef.current = [];
     };
   }, []);
@@ -116,7 +140,7 @@ export default function ScrollyCanvas() {
 
     const raw = window.devicePixelRatio || 1;
     /** Narrow screens: cap DPR to reduce canvas fill cost (still sharp on most phones). */
-    const dpr = cssW < 768 ? Math.min(raw, 1.5) : Math.min(raw, 2);
+    const dpr = cssW < 768 ? Math.min(raw, 1.25) : Math.min(raw, 2);
 
     const prev = sizeRef.current;
     if (prev.cssW === cssW && prev.cssH === cssH && prev.dpr === dpr) {
@@ -144,15 +168,19 @@ export default function ScrollyCanvas() {
 
     const { cssW, cssH } = sizeRef.current;
 
-    let progress = smoothProgress.get();
+    let progress = progressValue.get();
     if (reduceMotion) progress = 0.35;
 
     const max = SEQUENCE_FRAME_COUNT - 1;
     const idx = Math.min(max, Math.max(0, Math.round(progress * max)));
+    if (idx === lastFrameIndexRef.current) return;
+    lastFrameIndexRef.current = idx;
 
     // On-demand image loading + lookahead to keep scrolling smooth.
-    const loadAround = (center: number) => {
-      for (let k = -2; k <= 6; k++) {
+    const loadAround = (center: number, isMobile: boolean) => {
+      const start = isMobile ? -1 : -2;
+      const end = isMobile ? 3 : 6;
+      for (let k = start; k <= end; k++) {
         const i = center + k;
         if (i < 0 || i >= SEQUENCE_FRAME_COUNT) continue;
         if (!imagesRef.current[i]) {
@@ -167,10 +195,10 @@ export default function ScrollyCanvas() {
         }
       }
     };
-    loadAround(idx);
+    loadAround(idx, cssW < 768);
 
     paintFrame(ctx, idx, cssW, cssH);
-  }, [ensureCanvasSize, paintFrame, smoothProgress, reduceMotion]);
+  }, [ensureCanvasSize, paintFrame, progressValue, reduceMotion]);
 
   const scheduleRender = useCallback(() => {
     if (rafRef.current != null) return;
@@ -200,10 +228,12 @@ export default function ScrollyCanvas() {
     };
   }, [ensureCanvasSize, renderFrame]);
 
-  useMotionValueEvent(smoothProgress, "change", scheduleRender);
+  useMotionValueEvent(progressValue, "change", scheduleRender);
 
   useEffect(() => {
     if (!firstFrameReady) return;
+    // Repaint frame 0 after poster removal; avoids getting stuck on placeholder.
+    lastFrameIndexRef.current = -1;
     scheduleRender();
   }, [firstFrameReady, scheduleRender]);
 
@@ -211,18 +241,30 @@ export default function ScrollyCanvas() {
     <section
       id="hero"
       ref={containerRef}
-      className="relative z-0 w-full h-[180vh]"
+      className="relative z-0 h-[150vh] w-full md:h-[180vh]"
       aria-label="Hero: cinematic scroll sequence. Scroll down to advance frames; text and controls sit above the canvas."
     >
       <div
         ref={stickyRef}
-        className="sticky top-0 z-0 h-[100dvh] min-h-[100svh] w-full overflow-visible bg-zinc-100 transition-colors duration-500 dark:bg-[#121212]"
+        className="relative sticky top-0 z-0 h-[100dvh] min-h-[100svh] w-full overflow-visible bg-zinc-100 transition-colors duration-500 dark:bg-[#121212]"
       >
         <canvas
           ref={canvasRef}
           className="absolute inset-0 z-0 h-full w-full touch-pan-y"
           aria-hidden
         />
+        {!firstFrameReady ? (
+          <div className="absolute inset-0 z-[1]">
+            <NextImage
+              src="/sequence/poster.webp"
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="h-full w-full object-cover"
+            />
+          </div>
+        ) : null}
         <HeroAtmosphere
           scrollYProgress={smoothProgress}
           reduceMotion={!!reduceMotion}

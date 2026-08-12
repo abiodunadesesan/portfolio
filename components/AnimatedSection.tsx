@@ -19,12 +19,11 @@ export function AnimatedSection({
   return (
     <motion.section
       className={className}
-      initial={reduce ? false : { opacity: 0, y: 32, scale: 0.985 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-6%", amount: 0.12 }}
+      initial={false}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{
-        duration: 0.6,
-        delay: reduce ? 0 : delay * 0.38,
+        duration: 0.28,
+        delay: reduce ? 0 : delay * 0.18,
         ease: [0.22, 1, 0.36, 1] as const,
       }}
       {...rest}

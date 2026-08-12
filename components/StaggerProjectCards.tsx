@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NanoChip } from "@/components/ui/NanoChip";
@@ -48,13 +49,11 @@ export function StaggerProjectCards({ items }: { items: readonly ProjectItem[] }
           >
             <GlassCard spotlight className="group h-full cursor-pointer">
               <div className="relative mb-5 aspect-[16/10] w-full overflow-hidden rounded-2xl border border-zinc-200/70 bg-gradient-to-br from-violet-500/15 via-fuchsia-500/10 to-transparent dark:border-white/10">
-                <img
+                <Image
                   src={preview}
                   alt={`${p.title} preview`}
-                  loading="lazy"
-                  onError={(e) => {
-                    e.currentTarget.src = getFallbackPreviewDataUrl(p.title);
-                  }}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
                 />
                 <div

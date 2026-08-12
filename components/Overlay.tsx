@@ -31,8 +31,8 @@ function introCfg(tier: BreakpointTier) {
         glowDur: 2.2,
         cuePulse: 1.75,
         cueWheel: 1.15,
-        wordBlurHidden: 6,
-        subBlurHidden: 4,
+        wordBlurHidden: 0,
+        subBlurHidden: 0,
       };
     case "tablet":
       return {
@@ -231,6 +231,7 @@ export default function Overlay({
   const tier = useBreakpointTier();
   const ic = introCfg(tier);
   const sc = scrollCfg(tier);
+  const isMobile = tier === "mobile";
 
   const { introContainer, nameReveal, subReveal } = useMemo(
     () => ({
@@ -296,6 +297,7 @@ export default function Overlay({
   });
   const scaleHero = useTransform(scrollYProgress, (v) => {
     if (reduceMotion) return 1;
+    if (isMobile) return 1 - 0.035 * Math.min(1, v / sc.scaleSpan);
     const t = Math.min(1, v / sc.scaleSpan);
     return 1 - 0.07 * Math.pow(t, 0.82);
   });
@@ -327,7 +329,7 @@ export default function Overlay({
             opacity: opHero,
             y: yHero,
             scale: scaleHero,
-            filter: reduceMotion ? "none" : heroFilter,
+            filter: reduceMotion || isMobile ? "none" : heroFilter,
           }}
           className="relative w-full max-w-[min(100%,72rem)] px-3 text-center [perspective:1200px] sm:px-4 md:px-6"
         >
@@ -350,7 +352,9 @@ export default function Overlay({
             >
               <motion.span
                 variants={nameReveal}
-                className="block w-full max-w-full whitespace-nowrap bg-gradient-to-br from-white via-zinc-100 to-zinc-200 bg-clip-text px-4 pb-2 font-sans text-[clamp(1.2rem,5.5vw,4.25rem)] font-bold tracking-tighter text-transparent [filter:drop-shadow(0_2px_28px_rgba(255,255,255,0.12))]"
+                className={`block w-full max-w-full text-balance max-sm:whitespace-normal sm:whitespace-nowrap bg-gradient-to-br from-white via-zinc-100 to-zinc-200 bg-clip-text px-4 pb-2 font-sans text-[clamp(1.2rem,5.5vw,4.25rem)] font-bold tracking-tighter text-transparent ${
+                  isMobile ? "" : "[filter:drop-shadow(0_2px_28px_rgba(255,255,255,0.12))]"
+                }`}
               >
                 {person.displayName}
               </motion.span>
@@ -360,7 +364,7 @@ export default function Overlay({
 
               <motion.span
                 variants={subReveal}
-                className="mt-3 block w-full whitespace-nowrap px-4 pb-2 text-[clamp(0.45rem,2.4vw,1.1rem)] font-medium leading-snug text-white/92 max-sm:text-white md:mt-4"
+                className="mt-3 block w-full text-balance max-sm:whitespace-normal sm:whitespace-nowrap px-4 pb-2 text-[clamp(0.8rem,2.8vw,1.1rem)] font-medium leading-snug text-white/92 max-sm:text-white md:mt-4"
               >
                 <span className="bg-gradient-to-r from-violet-200 via-fuchsia-200 to-violet-200 bg-clip-text pr-2 font-display text-transparent max-sm:from-violet-100 max-sm:to-fuchsia-100">
                   Software Engineer &nbsp;|&nbsp; Machine Learning &nbsp;|&nbsp; Artificial Intelligence
@@ -374,7 +378,7 @@ export default function Overlay({
 
         <motion.div
           style={{ opacity: opMid, y: yMid }}
-          className="absolute left-4 top-1/2 max-w-[min(100%,28rem)] -translate-y-1/2 text-left md:left-12 lg:left-16"
+          className="absolute left-4 top-1/2 hidden max-w-[min(100%,28rem)] -translate-y-1/2 text-left md:left-12 md:block lg:left-16"
         >
           <div className="relative">
             <motion.span
@@ -389,7 +393,7 @@ export default function Overlay({
 
         <motion.div
           style={{ opacity: opEnd, y: yEnd }}
-          className="absolute right-4 top-1/2 max-w-[min(100%,28rem)] -translate-y-1/2 text-right md:right-12 lg:right-16"
+          className="absolute right-4 top-1/2 hidden max-w-[min(100%,28rem)] -translate-y-1/2 text-right md:right-12 md:block lg:right-16"
         >
           <div className="relative">
             <motion.span

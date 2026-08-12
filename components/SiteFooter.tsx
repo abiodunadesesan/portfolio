@@ -153,7 +153,7 @@ export default function SiteFooter() {
               <motion.div variants={fadeUp} className="pt-4">
                 <a
                   href="/cv.pdf"
-                  download
+                  download="adesesan caleb abiodun cv.pdf"
                   className="inline-flex h-12 flex-none items-center justify-center rounded-full bg-violet-600 px-7 font-sans text-sm font-semibold text-white transition-all hover:bg-violet-500 hover:shadow-[0_0_24px_-4px_rgba(139,92,246,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 dark:bg-violet-500 dark:hover:bg-violet-400"
                 >
                   Download my CV

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { NanoChip } from "@/components/ui/NanoChip";
 import { GlassCard } from "@/components/ui/GlassCard";
 import SiteFooter from "@/components/SiteFooter";
@@ -155,10 +156,11 @@ export default function ProjectsPage() {
                       p.previewImage ?? getProjectPreviewImageUrl(p.href) ?? getFallbackPreviewDataUrl(p.title);
                     return preview ? (
                       <>
-                        <img
+                        <Image
                           src={preview}
                           alt={`${p.title} preview`}
-                          loading="lazy"
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
                         />
                         <div

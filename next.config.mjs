@@ -7,6 +7,18 @@ const nextConfig = {
    * (e.g. `~/package-lock.json`) which can break tracing and spam warnings.
    */
   outputFileTracingRoot: new URL(".", import.meta.url).pathname,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "opengraph.githubassets.com",
+      },
+      {
+        protocol: "https",
+        hostname: "image.thum.io",
+      },
+    ],
+  },
 };
 
 const withBundleAnalyzer = bundleAnalyzer({

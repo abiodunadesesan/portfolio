@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatedSection } from "@/components/AnimatedSection";
+import Image from "next/image";
 import { NanoChip } from "@/components/ui/NanoChip";
 import { SpotlightSurface } from "@/components/ui/SpotlightSurface";
 import { VerbCrossFade } from "@/components/VerbCrossFade";
@@ -90,13 +91,11 @@ export default function LetsConnectSection() {
                   />
                   {featuredPreview ? (
                     <>
-                      <img
+                      <Image
                         src={featuredPreview}
                         alt={`${featured?.title ?? "Project"} preview`}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.currentTarget.src = getFallbackPreviewDataUrl(featured?.title ?? "Project");
-                        }}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 32rem"
                         className="absolute inset-0 h-full w-full object-cover opacity-95"
                       />
                       <div

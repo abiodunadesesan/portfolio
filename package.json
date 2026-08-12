@@ -11,7 +11,11 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .next",
-    "generate:sequence": "node scripts/generate-sequence.cjs"
+    "generate:sequence": "node scripts/generate-sequence.cjs",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test:e2e": "playwright test",
+    "test:load": "node scripts/load-test.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.102.1",
@@ -27,15 +31,31 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^15.1.0",
+    "@playwright/test": "^1.62.1",
+    "@storybook/nextjs": "^10.5.7",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "autocannon": "^8.0.0",
     "eslint": "^8",
     "eslint-config-next": "^15.5.14",
+    "playwright": "^1.62.1",
     "postcss": "^8",
     "sharp": "^0.34.5",
+    "storybook": "^10.5.7",
     "tailwindcss": "^4.2.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "@storybook/nextjs-vite": "^10.5.7",
+    "@chromatic-com/storybook": "latest",
+    "@storybook/addon-vitest": "^10.5.7",
+    "@storybook/addon-a11y": "^10.5.7",
+    "@storybook/addon-docs": "^10.5.7",
+    "@storybook/addon-mcp": "latest",
+    "vite": "latest",
+    "eslint-plugin-storybook": "^10.5.7",
+    "vitest": "latest",
+    "@vitest/browser-playwright": "latest",
+    "@vitest/coverage-v8": "latest"
   }
 }

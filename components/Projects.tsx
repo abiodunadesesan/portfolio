@@ -1,4 +1,5 @@
 import { AnimatedSection } from "@/components/AnimatedSection";
+import Image from "next/image";
 import { StaggerProjectCards } from "@/components/StaggerProjectCards";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NanoChip } from "@/components/ui/NanoChip";
@@ -62,10 +63,11 @@ export default function Projects() {
                           getFallbackPreviewDataUrl(c.title);
                         return preview ? (
                           <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-zinc-200/70 bg-gradient-to-br from-violet-500/15 via-fuchsia-500/10 to-transparent shadow-sm shadow-zinc-900/5 dark:border-white/10">
-                            <img
+                            <Image
                               src={preview}
                               alt={`${c.title} preview`}
-                              loading="lazy"
+                              fill
+                              sizes="(max-width: 1024px) 100vw, 15.5rem"
                               className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
                             />
                             <div

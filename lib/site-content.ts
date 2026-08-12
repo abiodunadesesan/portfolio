@@ -60,6 +60,22 @@ export type CaseStudy = {
 /** Pinned / highlighted repos — aligned with GitHub showcase */
 export const projects: ProjectItem[] = [
   {
+    title: "eFinny (Live App)",
+    tag: "Next.js 16 · Dating/BFF/Bizz Platform",
+    blurb:
+      "Dating, BFF, and Bizz networking in one product. Includes verification-first onboarding, matching flows, and cross-mode social experiences.",
+    href: "https://efinny.vercel.app",
+    previewImage: "/previews/efinny.png",
+  },
+  {
+    title: "Aproko AI (Live App)",
+    tag: "AI Knowledge Workspace",
+    blurb:
+      "AI operating system for knowledge work with library-aware chat, memory timeline, citations, and study workflows in one interface.",
+    href: "https://aprokoai.vercel.app",
+    previewImage: "/previews/aproko-ai.png",
+  },
+  {
     title: "Paris American International University",
     tag: "Professional Client Work · WordPress · Elementor",
     blurb:
@@ -125,6 +141,52 @@ export const projects: ProjectItem[] = [
 
 /** Recruiter/client-friendly narrative case studies (3–5). */
 export const caseStudies: CaseStudy[] = [
+  {
+    title: "eFinny",
+    year: "2026",
+    category: "Consumer Social Platform",
+    href: "https://efinny.vercel.app",
+    previewImage: "/previews/efinny.png",
+    problem:
+      "Build a single product that supports dating, friendship, and professional networking while keeping trust and safety central to user onboarding.",
+    approach: [
+      "Designed mode-based discovery journeys (Date, BFF, Bizz) with shared account identity.",
+      "Integrated verification-first UX and trust cues across discovery and profile surfaces.",
+      "Shipped responsive web flows for onboarding, matching, and multi-context conversations.",
+    ],
+    challenges: [
+      "Balancing flexible networking modes without overwhelming first-time users.",
+      "Maintaining a smooth UX while enforcing safety and verification checkpoints.",
+    ],
+    outcomes: [
+      "Unified networking experience with clear mode switching and consistent trust language.",
+      "Production-ready deployment with scalable architecture for iterative growth.",
+    ],
+    tech: ["Next.js 16", "Clerk", "Prisma", "Supabase", "Redis"],
+  },
+  {
+    title: "Aproko AI",
+    year: "2026",
+    category: "AI Productivity SaaS",
+    href: "https://aprokoai.vercel.app",
+    previewImage: "/previews/aproko-ai.png",
+    problem:
+      "Create a workspace where users can upload knowledge sources and get grounded AI answers with citations, memory, and study outputs in one flow.",
+    approach: [
+      "Structured the product as an AI-first workspace with library, chat, and memory primitives.",
+      "Designed citation-aware answer UX to keep outputs trustworthy and verifiable.",
+      "Implemented multi-app/monorepo foundations to scale feature modules independently.",
+    ],
+    challenges: [
+      "Keeping latency and UX smooth across retrieval-heavy AI workflows.",
+      "Designing a cohesive interface across chat, research, memory, and study modules.",
+    ],
+    outcomes: [
+      "A clear AI operating system experience optimized for sustained knowledge work.",
+      "Extensible architecture for rapid feature iteration across multiple app surfaces.",
+    ],
+    tech: ["Next.js", "Monorepo architecture", "AI workflows", "Knowledge retrieval UX"],
+  },
   {
     title: "Paris American International University",
     year: "2026",

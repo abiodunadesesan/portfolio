@@ -82,7 +82,7 @@ export default function Projects() {
                       href={c.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-3 inline-flex w-fit items-center gap-2 rounded-full border border-zinc-200/80 bg-white/70 px-4 py-2 text-sm font-semibold text-zinc-900 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition hover:border-violet-300/60 hover:bg-violet-50/60 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:border-violet-400/25 dark:hover:bg-violet-500/[0.08] md:mt-0"
+                      className="mt-3 inline-flex w-fit items-center gap-2 rounded-full border border-violet-500/35 bg-violet-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-violet-900/20 backdrop-blur-sm transition hover:border-violet-500/55 hover:bg-violet-500 dark:border-violet-400/35 dark:bg-violet-500 dark:hover:border-violet-400/55 dark:hover:bg-violet-400 md:mt-0"
                     >
                       Open
                       <ArrowUpRight className="h-4 w-4 opacity-70" aria-hidden />

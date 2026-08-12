@@ -19,7 +19,160 @@ export const links = {
   whatsapp: "https://wa.me/905338448449",
   /** Calendly — 30 min discovery */
   bookCall: "https://calendly.com/abiodunadesesan/30min",
+  /** Primary Spotify playlist for turntable section. */
+  spotifyPlaylist:
+    "https://open.spotify.com/playlist/4dKfueZamWOz5gc0ppbRnK?si=fa05b225da1d4f30",
 } as const;
+
+export type TurntableTrack = {
+  title: string;
+  artist: string;
+  length: string;
+  href: string;
+};
+
+export type TurntablePlaylist = {
+  title: string;
+  vibe: string;
+  href: string;
+  embedUrl: string;
+  tracks: TurntableTrack[];
+};
+
+export const turntablePlaylists: TurntablePlaylist[] = [
+  {
+    title: "calma",
+    vibe: "RnB · Blues · Classics",
+    href: "https://open.spotify.com/playlist/4dKfueZamWOz5gc0ppbRnK?si=fa05b225da1d4f30",
+    embedUrl:
+      "https://open.spotify.com/embed/playlist/4dKfueZamWOz5gc0ppbRnK?utm_source=generator",
+    tracks: [
+      {
+        title: "Dandelions",
+        artist: "Ruth B.",
+        length: "3:56",
+        href: "https://open.spotify.com/playlist/4dKfueZamWOz5gc0ppbRnK?si=fa05b225da1d4f30",
+      },
+      {
+        title: "Cheyenne",
+        artist: "Jason Derulo",
+        length: "3:25",
+        href: "https://open.spotify.com/playlist/4dKfueZamWOz5gc0ppbRnK?si=fa05b225da1d4f30",
+      },
+      {
+        title: "Try Everything",
+        artist: "Shakira",
+        length: "3:16",
+        href: "https://open.spotify.com/playlist/4dKfueZamWOz5gc0ppbRnK?si=fa05b225da1d4f30",
+      },
+      {
+        title: "All the Time",
+        artist: "Tatiana Manaois",
+        length: "3:22",
+        href: "https://open.spotify.com/playlist/4dKfueZamWOz5gc0ppbRnK?si=fa05b225da1d4f30",
+      },
+    ],
+  },
+  {
+    title: "hippie jumpie",
+    vibe: "Hip hop · Rap",
+    href: "https://open.spotify.com/playlist/2OIdnhsaAFdvfvLv1oN0zE?si=4b4d3d12f30e45cb",
+    embedUrl:
+      "https://open.spotify.com/embed/playlist/2OIdnhsaAFdvfvLv1oN0zE?utm_source=generator",
+    tracks: [
+      {
+        title: "My Life",
+        artist: "The Game, Lil Wayne",
+        length: "5:21",
+        href: "https://open.spotify.com/playlist/2OIdnhsaAFdvfvLv1oN0zE?si=4b4d3d12f30e45cb",
+      },
+      {
+        title: "GOD DID",
+        artist: "DJ Khaled, Rick Ross, Lil Wayne, JAY-Z",
+        length: "8:31",
+        href: "https://open.spotify.com/playlist/2OIdnhsaAFdvfvLv1oN0zE?si=4b4d3d12f30e45cb",
+      },
+      {
+        title: "John",
+        artist: "Lil Wayne, Rick Ross",
+        length: "4:46",
+        href: "https://open.spotify.com/playlist/2OIdnhsaAFdvfvLv1oN0zE?si=4b4d3d12f30e45cb",
+      },
+      {
+        title: "Dead And Gone",
+        artist: "T.I., Justin Timberlake",
+        length: "4:11",
+        href: "https://open.spotify.com/playlist/2OIdnhsaAFdvfvLv1oN0zE?si=4b4d3d12f30e45cb",
+      },
+    ],
+  },
+  {
+    title: "9ja",
+    vibe: "Naija · Afro beats",
+    href: "https://open.spotify.com/playlist/6lpFsTTwzmlrVcV7fiSFhX?si=a6b6b2e2b9b04d1e",
+    embedUrl:
+      "https://open.spotify.com/embed/playlist/6lpFsTTwzmlrVcV7fiSFhX?utm_source=generator",
+    tracks: [
+      {
+        title: "Good Or Bad (Oway)",
+        artist: "J. Martins, Timaya",
+        length: "4:16",
+        href: "https://open.spotify.com/playlist/6lpFsTTwzmlrVcV7fiSFhX?si=a6b6b2e2b9b04d1e",
+      },
+      {
+        title: "Cool Temper",
+        artist: "J. Martins",
+        length: "4:27",
+        href: "https://open.spotify.com/playlist/6lpFsTTwzmlrVcV7fiSFhX?si=a6b6b2e2b9b04d1e",
+      },
+      {
+        title: "Touching Body",
+        artist: "J. Martins, DJ Arafat",
+        length: "4:19",
+        href: "https://open.spotify.com/playlist/6lpFsTTwzmlrVcV7fiSFhX?si=a6b6b2e2b9b04d1e",
+      },
+      {
+        title: "Jupa",
+        artist: "J. Martins, Fally Ipupa",
+        length: "4:12",
+        href: "https://open.spotify.com/playlist/6lpFsTTwzmlrVcV7fiSFhX?si=a6b6b2e2b9b04d1e",
+      },
+    ],
+  },
+  {
+    title: "old skol",
+    vibe: "Disco · Soul · Oldies",
+    href: "https://open.spotify.com/playlist/6NVopjcjRUB52eqGiIosPe?si=12980bd4a7324c44",
+    embedUrl:
+      "https://open.spotify.com/embed/playlist/6NVopjcjRUB52eqGiIosPe?utm_source=generator",
+    tracks: [
+      {
+        title: "Stayin Alive",
+        artist: "Bee Gees",
+        length: "4:45",
+        href: "https://open.spotify.com/playlist/6NVopjcjRUB52eqGiIosPe?si=12980bd4a7324c44",
+      },
+      {
+        title: "Get Down On It",
+        artist: "Kool & The Gang",
+        length: "4:57",
+        href: "https://open.spotify.com/playlist/6NVopjcjRUB52eqGiIosPe?si=12980bd4a7324c44",
+      },
+      {
+        title: "Shake Your Body",
+        artist: "The Jacksons",
+        length: "8:00",
+        href: "https://open.spotify.com/playlist/6NVopjcjRUB52eqGiIosPe?si=12980bd4a7324c44",
+      },
+      {
+        title: "Hot Stuff",
+        artist: "Donna Summer",
+        length: "5:14",
+        href: "https://open.spotify.com/playlist/6NVopjcjRUB52eqGiIosPe?si=12980bd4a7324c44",
+      },
+    ],
+  },
+];
 
 /** Footer intro — paired with signature + role */
 export const footerBio = {
@@ -291,33 +444,6 @@ export const experience: ExperienceItem[] = [
     org: "Microservices study planner",
     detail:
       "Designing planner workflows across services — practical introduction to service boundaries and integration.",
-  },
-];
-
-export const skillGroups: { label: string; items: string[] }[] = [
-  {
-    label: "Languages",
-    items: ["TypeScript", "JavaScript", "Python", "PHP"],
-  },
-  {
-    label: "Web & UI",
-    items: [
-      "React",
-      "Next.js",
-      "Tailwind CSS",
-      "HTML5 Canvas",
-      "Framer Motion",
-      "WordPress",
-      "Elementor"
-    ],
-  },
-  {
-    label: "ML & data",
-    items: ["Hugging Face Transformers", "PEFT / LoRA", "Jupyter", "NLP workflows"],
-  },
-  {
-    label: "Practices",
-    items: ["Microservices", "REST APIs", "Git / GitHub", "Performance-aware UI"],
   },
 ];
 

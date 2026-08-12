@@ -179,7 +179,7 @@ export default function ContactSection() {
                       // ignore
                     }
                   }}
-                  className="inline-flex h-12 items-center justify-center rounded-full border border-zinc-200/80 bg-white/70 px-6 text-sm font-semibold text-zinc-900 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition hover:border-violet-200/70 hover:bg-violet-50/45 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:border-violet-400/30 dark:hover:bg-violet-500/[0.1]"
+                  className="inline-flex h-12 items-center justify-center rounded-full border border-zinc-200/80 bg-white/70 px-6 text-sm font-semibold text-zinc-900 shadow-sm shadow-zinc-900/5 backdrop-blur-sm transition hover:border-violet-200/70 hover:bg-violet-50/45 dark:border-violet-400/25 dark:bg-zinc-900/80 dark:text-violet-100 dark:hover:border-violet-400/45 dark:hover:bg-violet-500/15"
                 >
                   {didCopy ? "Copied" : "Copy message"}
                 </button>

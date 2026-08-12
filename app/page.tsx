@@ -16,6 +16,7 @@ import RecentProjectsSection from "@/components/RecentProjectsSection";
 import WhyChooseMeSection from "@/components/WhyChooseMeSection";
 import FaqSection from "@/components/FaqSection";
 import LetsConnectSection from "@/components/LetsConnectSection";
+import TurntableSection from "@/components/TurntableSection";
 
 const ScrollyCanvas = dynamic(() => import("@/components/ScrollyCanvas"), {
   ssr: true,
@@ -45,6 +46,7 @@ export default function Home() {
       <Experience />
       <Skills />
       <WritingSection />
+      <TurntableSection />
       <FaqSection />
       <LetsConnectSection />
       <ContactSection />

@@ -102,7 +102,7 @@ export default function TurntableSection() {
   return (
     <AnimatedSection
       id="turntable"
-      className="relative z-20 scroll-mt-24 border-t border-zinc-200/60 bg-gradient-to-b from-zinc-50 via-stone-100/80 to-zinc-100 px-6 py-24 dark:border-white/10 dark:from-[#09090d] dark:via-[#0a0a10] dark:to-[#060608] md:scroll-mt-28 md:px-12 md:py-28"
+      className="relative z-20 scroll-mt-24 overflow-x-clip border-t border-zinc-200/60 bg-gradient-to-b from-zinc-50 via-stone-100/80 to-zinc-100 px-4 py-20 dark:border-white/10 dark:from-[#09090d] dark:via-[#0a0a10] dark:to-[#060608] sm:px-6 md:scroll-mt-28 md:px-12 md:py-28"
       aria-labelledby="turntable-heading"
     >
       <div className="mx-auto max-w-6xl">
@@ -110,20 +110,20 @@ export default function TurntableSection() {
           <NanoChip>On the turntable</NanoChip>
           <h2
             id="turntable-heading"
-            className="font-display mt-4 text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl dark:text-white"
+            className="font-display mt-4 text-3xl font-semibold tracking-tight text-zinc-900 max-[379px]:text-[1.65rem] dark:text-white md:text-4xl"
           >
             Recently spinning
           </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-600 md:text-base dark:text-white/55">
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-600 max-[379px]:text-[13px] max-[379px]:leading-snug md:text-base dark:text-white/55">
             A retro-inspired music corner styled to match this portfolio. Live Spotify links are wired in.
           </p>
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="-mx-1 mt-4 flex gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
             {turntablePlaylists.map((item, i) => (
               <button
                 key={item.href}
                 type="button"
                 onClick={() => setActivePlaylist(i)}
-                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all duration-300 ${
+                className={`inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all duration-300 max-[379px]:gap-1.5 max-[379px]:px-2.5 max-[379px]:py-1 ${
                   i === activePlaylist
                     ? "border-violet-500/55 bg-violet-100/80 text-violet-800 dark:border-violet-400/55 dark:bg-violet-500/20 dark:text-violet-200"
                     : "border-zinc-200/80 bg-white/80 text-zinc-700 hover:border-violet-300/60 hover:text-violet-700 dark:border-white/10 dark:bg-zinc-900/80 dark:text-white/75 dark:hover:border-violet-400/35 dark:hover:text-violet-200"
@@ -131,7 +131,7 @@ export default function TurntableSection() {
                 aria-pressed={i === activePlaylist}
               >
                 <span className="capitalize">{item.title}</span>
-                <span className="text-zinc-500 dark:text-white/40">· {item.vibe}</span>
+                <span className="hidden text-zinc-500 dark:text-white/40 sm:inline">· {item.vibe}</span>
               </button>
             ))}
           </div>
@@ -143,35 +143,37 @@ export default function TurntableSection() {
               Last played · Spotify
             </p>
 
-            <div className="mt-4 rounded-3xl border border-zinc-200/80 bg-zinc-100/70 p-4 dark:border-white/10 dark:bg-[#0f0f14]">
+            <div className="mt-4 rounded-3xl border border-zinc-200/80 bg-zinc-100/70 p-3 sm:p-4 dark:border-white/10 dark:bg-[#0f0f14]">
               <div className="rounded-2xl border border-zinc-300/80 bg-[#111] p-3 dark:border-white/10">
                 <div className="rounded-xl bg-zinc-50 px-3 py-2 dark:bg-zinc-900/90">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-white/50">
                     Side A · Spotify · Playlist mode
                   </p>
-                  <p className="mt-2 text-base font-semibold text-zinc-900 dark:text-white">
+                  <p className="mt-2 text-base font-semibold text-zinc-900 max-[379px]:text-[15px] dark:text-white">
                     {currentTrack.title}
                   </p>
-                  <p className="text-xs uppercase tracking-[0.16em] text-zinc-500 dark:text-white/50">
+                  <p className="text-xs uppercase tracking-[0.16em] text-zinc-500 max-[379px]:tracking-[0.12em] dark:text-white/50">
                     {currentTrack.artist}
                   </p>
                 </div>
-                <div className="mt-3 flex items-center justify-between rounded-xl border border-zinc-800 bg-black px-6 py-4">
+                <div className="mt-3 flex items-center justify-between rounded-xl border border-zinc-800 bg-black px-3 py-3.5 sm:px-6 sm:py-4">
                   <span className="h-8 w-8 rounded-full border border-zinc-500 bg-zinc-100 shadow-[inset_0_0_0_6px_rgba(0,0,0,0.9)]" />
-                  <span className="h-px flex-1 bg-zinc-600/80 mx-4" />
+                  <span className="mx-2 h-px flex-1 bg-zinc-600/80 sm:mx-4" />
                   <span className="h-8 w-8 rounded-full border border-zinc-500 bg-zinc-100 shadow-[inset_0_0_0_6px_rgba(0,0,0,0.9)]" />
                 </div>
               </div>
 
               <div className="mt-5">
-                <div className="flex items-end gap-[3px]">
+                <div className="overflow-hidden">
+                  <div className="flex items-end gap-[2px] sm:gap-[3px]">
                   {waveform.map((h, i) => (
                     <span
                       key={`${h}-${i}`}
-                      className="w-[3px] rounded-full bg-zinc-800/90 dark:bg-zinc-300/80"
+                      className="w-[2px] rounded-full bg-zinc-800/90 sm:w-[3px] dark:bg-zinc-300/80"
                       style={{ height: `${h}px`, opacity: i / waveform.length <= progress ? 1 : 0.35 }}
                     />
                   ))}
+                  </div>
                 </div>
                 <div className="mt-2 flex items-center justify-between text-xs font-medium text-zinc-600 dark:text-white/55">
                   <span>{toClock(elapsed)}</span>
@@ -265,10 +267,10 @@ export default function TurntableSection() {
                     />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-lg font-semibold text-zinc-900 dark:text-white">
+                  <span className="block truncate text-lg font-semibold text-zinc-900 max-[379px]:text-base dark:text-white">
                       {track.title}
                     </span>
-                    <span className="block truncate text-xs uppercase tracking-[0.16em] text-zinc-500 dark:text-white/50">
+                  <span className="block truncate text-xs uppercase tracking-[0.16em] text-zinc-500 max-[379px]:tracking-[0.12em] dark:text-white/50">
                       {track.artist} · {track.length}
                     </span>
                   </span>

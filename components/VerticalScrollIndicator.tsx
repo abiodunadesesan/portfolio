@@ -1,11 +1,11 @@
 "use client";
 
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { ChevronUp } from "lucide-react";
 
 const SECTIONS = [
-  { id: "hero", label: "Zenith" },
+  { id: "hero", label: "Hero" },
   { id: "about", label: "About" },
   { id: "work", label: "Work" },
   { id: "services", label: "Services" },
@@ -26,34 +26,37 @@ const SECTIONS = [
 export default function VerticalScrollIndicator() {
   const { scrollYProgress } = useScroll();
   const [activeSection, setActiveSection] = useState("hero");
+  const [hovered, setHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [enabled, setEnabled] = useState(false);
+  const hideTimerRef = useRef<number | null>(null);
 
-  // Desktop-only: show on devices with a fine pointer (mouse/trackpad).
-  useEffect(() => {
-    const anyFine = window.matchMedia("(any-pointer: fine)").matches;
-    const anyCoarse = window.matchMedia("(any-pointer: coarse)").matches;
-    setEnabled(anyFine || !anyCoarse);
+  const showThenAutoHide = useCallback((delay = 1200) => {
+    setIsVisible(true);
+    if (hideTimerRef.current != null) {
+      window.clearTimeout(hideTimerRef.current);
+    }
+    hideTimerRef.current = window.setTimeout(() => {
+      setIsVisible(false);
+    }, delay);
   }, []);
 
-  // Auto-hide logic: show on scroll, hide after 2 seconds of inactivity
   useEffect(() => {
-    if (!enabled) return;
-    let timeout: NodeJS.Timeout;
-    const handleScroll = () => {
-      setIsVisible(true);
-      clearTimeout(timeout);
-      timeout = setTimeout(() => setIsVisible(false), 2000);
+    const onScroll = () => {
+      showThenAutoHide(1200);
     };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [enabled]);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (hideTimerRef.current != null) {
+        window.clearTimeout(hideTimerRef.current);
+      }
+    };
+  }, [showThenAutoHide]);
 
   const scrollToId = useCallback((id: string) => {
     const element = document.getElementById(id);
     if (!element) return;
-    
+
     const offset = 80; // Accounting for sticky header
     const bodyRect = document.body.getBoundingClientRect().top;
     const elementRect = element.getBoundingClientRect().top;
@@ -68,7 +71,6 @@ export default function VerticalScrollIndicator() {
 
   // Update active section based on scroll position
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (!enabled) return;
     const sectionIndex = Math.min(
       Math.floor(latest * SECTIONS.length),
       SECTIONS.length - 1
@@ -76,78 +78,93 @@ export default function VerticalScrollIndicator() {
     setActiveSection(SECTIONS[sectionIndex].id);
   });
 
-  if (!enabled) return null;
-
   return (
-    <motion.div
+    <aside
+      className="z-[9000] hidden transition-opacity duration-300 lg:block"
       style={{
         position: "fixed",
-        right: "12px",
-
-
-
-
+        right: "14px",
         top: "50%",
         transform: "translateY(-50%)",
-        zIndex: 9000,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        opacity: isVisible ? 1 : 0,
-        transition: "opacity 0.4s ease",
-        pointerEvents: isVisible ? "auto" : "none"
+        width: "fit-content",
+        opacity: isVisible || hovered ? 1 : 0,
+        pointerEvents: isVisible || hovered ? "auto" : "none",
       }}
-      className="hidden gap-8 lg:flex"
       aria-hidden="true"
     >
-      {/* The Track & Beads */}
-      <div className="relative flex h-[320px] w-[2px] flex-col items-center justify-between py-2">
-        {/* Glass Track */}
-        <div className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-md dark:bg-white/5 border border-white/10" />
-
-        {/* Section Beads */}
-        {SECTIONS.map((section) => (
-          <button
-            key={section.id}
-            onClick={() => scrollToId(section.id)}
-            className="group relative z-10 flex h-3 w-3 items-center justify-center focus:outline-none"
-            aria-label={`Scroll to ${section.label}`}
-          >
-            {/* The Bead */}
-            <div 
-              className={`h-1.5 w-1.5 rounded-full transition-all duration-500 ${
-                activeSection === section.id 
-                ? "bg-white scale-125 shadow-[0_0_8px_rgba(255,255,255,0.6)]" 
-                : "bg-white/10 group-hover:bg-white/40"
-              }`} 
-            />
-            
-            {/* Label Tooltip */}
-            <span className="absolute right-8 origin-right scale-0 text-[10px] font-bold uppercase tracking-widest text-white/40 transition-all duration-300 group-hover:scale-100">
-              {section.label}
-            </span>
-          </button>
-        ))}
-      </div>
-
-      {/* Zenith Controller (Back to Top) */}
-      <motion.button
-        whileHover={{ scale: 1.1, y: -2 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => scrollToId("hero")}
-        className="group relative flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white/30 shadow-lg backdrop-blur-xl transition-all duration-500 hover:border-white/30 hover:text-white/80"
+      <div
+        className="pointer-events-auto flex items-start gap-3"
+        onMouseEnter={() => {
+          setHovered(true);
+          showThenAutoHide(2400);
+        }}
+        onMouseLeave={() => {
+          setHovered(false);
+          showThenAutoHide(500);
+        }}
       >
-        {/* Glow Ring */}
-        <div className="absolute inset-0 scale-75 rounded-2xl bg-white/0 blur-xl transition-all duration-500 group-hover:scale-110 group-hover:bg-white/5" />
-        
-        <ChevronUp className="relative h-5 w-5" />
-        
-        {/* "Zenith" Label */}
-        <span className="absolute -top-6 text-[8px] font-black uppercase tracking-[0.2em] opacity-0 transition-opacity duration-300 group-hover:opacity-30">
-          Zenith
-        </span>
-      </motion.button>
-    </motion.div>
+        <motion.div
+          initial={false}
+          animate={{ opacity: hovered ? 1 : 0, x: hovered ? 0 : 8 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          className="hidden rounded-xl border border-zinc-700/45 bg-zinc-900/80 px-3 py-2 shadow-xl backdrop-blur md:block"
+        >
+          <ul className="space-y-1.5">
+            {SECTIONS.map((section) => (
+              <li key={`label-${section.id}`}>
+                <button
+                  onClick={() => scrollToId(section.id)}
+                  onFocus={() => showThenAutoHide(2400)}
+                  className={`text-left text-[10px] font-semibold uppercase tracking-[0.14em] transition ${
+                    activeSection === section.id
+                      ? "text-white"
+                      : "text-zinc-400 hover:text-zinc-200"
+                  }`}
+                  aria-label={`Scroll to ${section.label}`}
+                >
+                  {section.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+
+        <div className="flex flex-col items-end">
+          <div className="relative flex h-[248px] w-6 flex-col items-center justify-between py-1.5 sm:h-[276px] lg:h-[296px]">
+            {SECTIONS.map((section) => (
+              <button
+                key={section.id}
+                onClick={() => scrollToId(section.id)}
+                className="group relative z-10 flex h-4 w-6 items-center justify-end focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/55"
+                aria-label={`Scroll to ${section.label}`}
+              >
+                <span
+                  className={`h-[1px] w-[18px] rounded-full transition-all duration-300 ${
+                    activeSection === section.id
+                      ? "bg-white shadow-[0_0_10px_rgba(255,255,255,0.92)]"
+                      : "bg-zinc-500/60 group-hover:bg-zinc-300/80 dark:bg-zinc-500/55 dark:group-hover:bg-zinc-300/75"
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+
+          <motion.button
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            onFocus={() => setHovered(true)}
+            onBlur={() => setHovered(false)}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={() => scrollToId("hero")}
+            className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-[0.7rem] border border-zinc-700/42 bg-zinc-900/64 text-zinc-400 backdrop-blur-md transition hover:border-zinc-400/42 hover:text-zinc-200 dark:border-zinc-600/40 dark:bg-zinc-900/76 dark:text-zinc-300 dark:hover:border-zinc-300/42 dark:hover:text-white sm:h-8 sm:w-8 sm:rounded-[0.8rem]"
+            aria-label="Back to top"
+          >
+            <ChevronUp className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+          </motion.button>
+        </div>
+      </div>
+    </aside>
   );
 }
 

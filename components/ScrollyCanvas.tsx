@@ -53,7 +53,9 @@ export default function ScrollyCanvas() {
   const sizeRef = useRef<SizeState>({ cssW: 0, cssH: 0, dpr: 1 });
   const lastFrameIndexRef = useRef<number>(-1);
   const rafRef = useRef<number | null>(null);
+  const scheduleRenderRef = useRef<() => void>(() => {});
   const [firstFrameReady, setFirstFrameReady] = useState(false);
+  const [canvasPrimed, setCanvasPrimed] = useState(false);
   const reduceMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
@@ -78,11 +80,14 @@ export default function ScrollyCanvas() {
       const img = new Image();
       img.decoding = "async";
       img.fetchPriority = priority;
-      img.src = getFrameSrc(idx);
-      imagesRef.current[idx] = img;
       img.onload = () => {
         if (idx === 0) setFirstFrameReady(true);
+        // Force repaint when a frame arrives; prevents temporary blank/placeholder stalls.
+        lastFrameIndexRef.current = -1;
+        scheduleRenderRef.current();
       };
+      img.src = getFrameSrc(idx);
+      imagesRef.current[idx] = img;
     };
 
     // Always load first frame so the hero paints quickly.
@@ -173,8 +178,6 @@ export default function ScrollyCanvas() {
 
     const max = SEQUENCE_FRAME_COUNT - 1;
     const idx = Math.min(max, Math.max(0, Math.round(progress * max)));
-    if (idx === lastFrameIndexRef.current) return;
-    lastFrameIndexRef.current = idx;
 
     // On-demand image loading + lookahead to keep scrolling smooth.
     const loadAround = (center: number, isMobile: boolean) => {
@@ -187,18 +190,42 @@ export default function ScrollyCanvas() {
           const img = new Image();
           img.decoding = "async";
           img.fetchPriority = k === 0 ? "high" : "low";
-          img.src = getFrameSrc(i);
-          imagesRef.current[i] = img;
           img.onload = () => {
             if (i === 0) setFirstFrameReady(true);
+            lastFrameIndexRef.current = -1;
+            scheduleRenderRef.current();
           };
+          img.src = getFrameSrc(i);
+          imagesRef.current[i] = img;
         }
       }
     };
     loadAround(idx, cssW < 768);
 
-    paintFrame(ctx, idx, cssW, cssH);
-  }, [ensureCanvasSize, paintFrame, progressValue, reduceMotion]);
+    const frameAtIndex = imagesRef.current[idx];
+    const hasTarget = !!frameAtIndex?.complete && frameAtIndex.naturalWidth > 0;
+
+    if (idx === lastFrameIndexRef.current && hasTarget) return;
+
+    // If target frame isn't ready yet, render nearest loaded frame instead of blank placeholder.
+    let drawIdx = idx;
+    if (!hasTarget) {
+      let nearest = -1;
+      for (let d = 1; d <= 8 && nearest === -1; d++) {
+        const left = idx - d;
+        const right = idx + d;
+        const leftImg = left >= 0 ? imagesRef.current[left] : null;
+        const rightImg = right <= max ? imagesRef.current[right] : null;
+        if (leftImg?.complete && leftImg.naturalWidth > 0) nearest = left;
+        else if (rightImg?.complete && rightImg.naturalWidth > 0) nearest = right;
+      }
+      if (nearest !== -1) drawIdx = nearest;
+    }
+
+    lastFrameIndexRef.current = idx;
+    paintFrame(ctx, drawIdx, cssW, cssH);
+    if (!canvasPrimed) setCanvasPrimed(true);
+  }, [canvasPrimed, ensureCanvasSize, paintFrame, progressValue, reduceMotion]);
 
   const scheduleRender = useCallback(() => {
     if (rafRef.current != null) return;
@@ -207,6 +234,10 @@ export default function ScrollyCanvas() {
       renderFrame();
     });
   }, [renderFrame]);
+
+  useEffect(() => {
+    scheduleRenderRef.current = scheduleRender;
+  }, [scheduleRender]);
 
   useEffect(() => {
     const host = stickyRef.current;
@@ -219,8 +250,21 @@ export default function ScrollyCanvas() {
     ro.observe(host);
     ensureCanvasSize();
     renderFrame();
+    // Mobile browsers sometimes report transient zero/placeholder sizes at first paint.
+    const rafA = window.requestAnimationFrame(() => {
+      ensureCanvasSize();
+      lastFrameIndexRef.current = -1;
+      renderFrame();
+    });
+    const rafB = window.requestAnimationFrame(() => {
+      ensureCanvasSize();
+      lastFrameIndexRef.current = -1;
+      renderFrame();
+    });
     return () => {
       ro.disconnect();
+      cancelAnimationFrame(rafA);
+      cancelAnimationFrame(rafB);
       if (rafRef.current != null) {
         cancelAnimationFrame(rafRef.current);
         rafRef.current = null;
@@ -253,7 +297,7 @@ export default function ScrollyCanvas() {
           className="absolute inset-0 z-0 h-full w-full touch-pan-y"
           aria-hidden
         />
-        {!firstFrameReady ? (
+        {!firstFrameReady || !canvasPrimed ? (
           <div className="absolute inset-0 z-[1]">
             <NextImage
               src="/sequence/poster.webp"

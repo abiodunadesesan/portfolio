@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 
 type Dial = {
@@ -25,38 +25,50 @@ const INITIAL_DIALS: Dial[] = [
 export default function Skills() {
   const [dials, setDials] = useState<Dial[]>(INITIAL_DIALS);
   const dragStateRef = useRef<{ index: number; startY: number; startValue: number } | null>(null);
+  const detachDragListenersRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    return () => {
+      detachDragListenersRef.current?.();
+    };
+  }, []);
 
   const onDialPointerDown = (idx: number, dial: Dial, e: React.PointerEvent<HTMLDivElement>) => {
     if (dial.locked) return;
     e.preventDefault();
-    dragStateRef.current = {
+    const startState = {
       index: idx,
       startY: e.clientY,
       startValue: dials[idx]?.value ?? 0,
     };
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
+    dragStateRef.current = startState;
+    detachDragListenersRef.current?.();
 
-  const onDialPointerMove = (idx: number, e: React.PointerEvent<HTMLDivElement>) => {
-    const drag = dragStateRef.current;
-    if (!drag || drag.index !== idx) return;
-    e.preventDefault();
-    const delta = Math.round((drag.startY - e.clientY) * 0.42);
-    const next = Math.max(0, Math.min(100, drag.startValue + delta));
-    setDials((prev) => {
-      const copy = [...prev];
-      copy[idx] = { ...copy[idx]!, value: next };
-      return copy;
-    });
-  };
+    const onMove = (ev: PointerEvent) => {
+      const drag = dragStateRef.current;
+      if (!drag || drag.index !== idx) return;
+      ev.preventDefault();
+      const delta = Math.round((drag.startY - ev.clientY) * 0.42);
+      const next = Math.max(0, Math.min(100, drag.startValue + delta));
+      setDials((prev) => {
+        const copy = [...prev];
+        copy[idx] = { ...copy[idx]!, value: next };
+        return copy;
+      });
+    };
 
-  const onDialPointerEnd = (idx: number, e: React.PointerEvent<HTMLDivElement>) => {
-    const drag = dragStateRef.current;
-    if (!drag || drag.index !== idx) return;
-    dragStateRef.current = null;
-    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    }
+    const onEnd = () => {
+      dragStateRef.current = null;
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onEnd);
+      window.removeEventListener("pointercancel", onEnd);
+      detachDragListenersRef.current = null;
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: false });
+    window.addEventListener("pointerup", onEnd);
+    window.addEventListener("pointercancel", onEnd);
+    detachDragListenersRef.current = onEnd;
   };
 
   return (
@@ -88,9 +100,6 @@ export default function Skills() {
               <div key={item.label} className="flex flex-col items-center text-center">
                 <div
                   onPointerDown={(e) => onDialPointerDown(index, item, e)}
-                  onPointerMove={(e) => onDialPointerMove(index, e)}
-                  onPointerUp={(e) => onDialPointerEnd(index, e)}
-                  onPointerCancel={(e) => onDialPointerEnd(index, e)}
                   aria-label={item.label}
                   className={`relative h-20 w-20 touch-none select-none rounded-full transition-transform duration-150 active:scale-[0.97] ${
                     item.accent

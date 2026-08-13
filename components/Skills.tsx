@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 "use client";
 
-import { useMemo, useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 
 type Dial = {
@@ -24,40 +24,40 @@ const INITIAL_DIALS: Dial[] = [
 
 export default function Skills() {
   const [dials, setDials] = useState<Dial[]>(INITIAL_DIALS);
+  const dragStateRef = useRef<{ index: number; startY: number; startValue: number } | null>(null);
 
-  const dragHandlers = useMemo(
-    () =>
-      dials.map((dial, idx) => ({
-        onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => {
-          if (dial.locked) return;
-          const startY = e.clientY;
-          const start = dials[idx]?.value ?? 0;
-          const el = e.currentTarget;
-          el.setPointerCapture(e.pointerId);
+  const onDialPointerDown = (idx: number, dial: Dial, e: React.PointerEvent<HTMLDivElement>) => {
+    if (dial.locked) return;
+    e.preventDefault();
+    dragStateRef.current = {
+      index: idx,
+      startY: e.clientY,
+      startValue: dials[idx]?.value ?? 0,
+    };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
 
-          const onMove = (ev: PointerEvent) => {
-            const delta = Math.round((startY - ev.clientY) * 0.42);
-            const next = Math.max(0, Math.min(100, start + delta));
-            setDials((prev) => {
-              const copy = [...prev];
-              copy[idx] = { ...copy[idx]!, value: next };
-              return copy;
-            });
-          };
+  const onDialPointerMove = (idx: number, e: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragStateRef.current;
+    if (!drag || drag.index !== idx) return;
+    e.preventDefault();
+    const delta = Math.round((drag.startY - e.clientY) * 0.42);
+    const next = Math.max(0, Math.min(100, drag.startValue + delta));
+    setDials((prev) => {
+      const copy = [...prev];
+      copy[idx] = { ...copy[idx]!, value: next };
+      return copy;
+    });
+  };
 
-          const onUp = () => {
-            el.removeEventListener("pointermove", onMove);
-            el.removeEventListener("pointerup", onUp);
-            el.removeEventListener("pointercancel", onUp);
-          };
-
-          el.addEventListener("pointermove", onMove);
-          el.addEventListener("pointerup", onUp);
-          el.addEventListener("pointercancel", onUp);
-        },
-      })),
-    [dials]
-  );
+  const onDialPointerEnd = (idx: number, e: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragStateRef.current;
+    if (!drag || drag.index !== idx) return;
+    dragStateRef.current = null;
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+  };
 
   return (
     <AnimatedSection
@@ -87,38 +87,44 @@ export default function Skills() {
             return (
               <div key={item.label} className="flex flex-col items-center text-center">
                 <div
-                  {...dragHandlers[index]}
-                  role="slider"
+                  onPointerDown={(e) => onDialPointerDown(index, item, e)}
+                  onPointerMove={(e) => onDialPointerMove(index, e)}
+                  onPointerUp={(e) => onDialPointerEnd(index, e)}
+                  onPointerCancel={(e) => onDialPointerEnd(index, e)}
                   aria-label={item.label}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={item.value}
-                  className={`relative h-20 w-20 touch-none select-none rounded-full border shadow-sm transition-transform duration-150 active:scale-[0.97] ${
+                  className={`relative h-20 w-20 touch-none select-none rounded-full transition-transform duration-150 active:scale-[0.97] ${
                     item.accent
-                      ? "border-violet-500/40 bg-gradient-to-br from-violet-500 via-fuchsia-500 to-violet-400 text-white shadow-violet-900/30"
-                      : "cursor-ns-resize border-zinc-300 bg-gradient-to-br from-white to-zinc-100 dark:border-white/15 dark:from-zinc-800 dark:to-zinc-900"
+                      ? "border border-orange-500/40 bg-gradient-to-br from-[#ff7850] via-[#ff5c43] to-[#f24d3d] shadow-[0_8px_20px_rgba(241,76,57,0.35)] dark:border-violet-400/35 dark:from-[#d76cff] dark:via-[#c657ff] dark:to-[#b23cff] dark:shadow-[0_8px_20px_rgba(147,51,234,0.35)]"
+                      : "cursor-ns-resize border border-zinc-300 bg-gradient-to-br from-[#f8f5ea] via-[#efe9dc] to-[#ddd7c9] shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_8px_16px_rgba(26,26,26,0.12)] dark:border-white/15 dark:from-[#2f2f3a] dark:via-[#262630] dark:to-[#1b1b24] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_16px_rgba(0,0,0,0.45)]"
                   }`}
                 >
                   {Array.from({ length: 16 }).map((_, i) => (
                     <span
                       key={`${item.label}-tick-${i}`}
-                      className={`absolute left-1/2 top-1/2 h-[1px] w-2 origin-left ${
-                        item.accent ? "bg-black/25 dark:bg-white/35" : "bg-zinc-400/60 dark:bg-white/30"
+                      className={`absolute left-1/2 top-1/2 h-[1.5px] w-1.5 origin-left rounded-full ${
+                        item.accent ? "bg-black/20 dark:bg-white/45" : "bg-zinc-500/45 dark:bg-white/35"
                       }`}
                       style={{
-                        transform: `translate(-50%, -50%) rotate(${i * 22.5}deg) translateX(33px)`,
+                        transform: `translate(-50%, -50%) rotate(${i * 22.5}deg) translateX(32px)`,
                       }}
                     />
                   ))}
                   <span
-                    className={`absolute left-1/2 top-1/2 h-6 w-[2px] -translate-x-1/2 -translate-y-[85%] rounded-full ${
-                      item.accent ? "bg-white" : "bg-zinc-900 dark:bg-white/85"
+                    className={`absolute inset-[6px] rounded-full ${
+                      item.accent
+                        ? "bg-black/5 dark:bg-white/5"
+                        : "bg-white/55 shadow-[inset_0_1px_0_rgba(255,255,255,0.95)] dark:bg-black/15 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
                     }`}
-                    style={{ transform: `translate(-50%, -85%) rotate(${turn}deg)` }}
                   />
                   <span
-                    className={`absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full ${
-                      item.accent ? "bg-zinc-900" : "bg-zinc-900"
+                    className={`absolute left-1/2 top-1/2 h-[2.5px] w-7 origin-left -translate-y-1/2 rounded-full ${
+                      item.accent ? "bg-white/95 dark:bg-zinc-950/90" : "bg-zinc-900 dark:bg-white/90"
+                    }`}
+                    style={{ transform: `translate(-12%, -50%) rotate(${turn}deg)` }}
+                  />
+                  <span
+                    className={`absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full ${
+                      item.accent ? "bg-zinc-950 dark:bg-zinc-900" : "bg-zinc-950 dark:bg-zinc-100/95"
                     }`}
                   />
                 </div>

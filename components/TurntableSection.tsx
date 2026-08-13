@@ -102,7 +102,7 @@ export default function TurntableSection() {
   return (
     <AnimatedSection
       id="turntable"
-      className="relative z-20 scroll-mt-24 overflow-x-clip border-t border-zinc-200/60 bg-gradient-to-b from-zinc-50 via-stone-100/80 to-zinc-100 px-4 py-20 dark:border-white/10 dark:from-[#09090d] dark:via-[#0a0a10] dark:to-[#060608] sm:px-6 md:scroll-mt-28 md:px-12 md:py-28"
+      className="relative z-20 scroll-mt-24 overflow-x-hidden border-t border-zinc-200/60 bg-gradient-to-b from-zinc-50 via-stone-100/80 to-zinc-100 px-4 py-20 dark:border-white/10 dark:from-[#09090d] dark:via-[#0a0a10] dark:to-[#060608] sm:px-6 md:scroll-mt-28 md:px-12 md:py-28"
       aria-labelledby="turntable-heading"
     >
       <div className="mx-auto max-w-6xl">
@@ -138,12 +138,12 @@ export default function TurntableSection() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
-          <GlassCard spotlight className="relative overflow-hidden">
+          <GlassCard spotlight className="relative min-w-0 overflow-hidden">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
               Last played · Spotify
             </p>
 
-            <div className="mt-4 rounded-3xl border border-zinc-200/80 bg-zinc-100/70 p-3 sm:p-4 dark:border-white/10 dark:bg-[#0f0f14]">
+            <div className="mt-4 min-w-0 rounded-3xl border border-zinc-200/80 bg-zinc-100/70 p-3 sm:p-4 dark:border-white/10 dark:bg-[#0f0f14]">
               <div className="rounded-2xl border border-zinc-300/80 bg-[#111] p-3 dark:border-white/10">
                 <div className="rounded-xl bg-zinc-50 px-3 py-2 dark:bg-zinc-900/90">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-white/50">
@@ -165,7 +165,7 @@ export default function TurntableSection() {
 
               <div className="mt-5">
                 <div className="overflow-hidden">
-                  <div className="flex items-end gap-[2px] sm:gap-[3px]">
+                  <div className="flex min-w-0 items-end gap-[2px] sm:gap-[3px]">
                   {waveform.map((h, i) => (
                     <span
                       key={`${h}-${i}`}
@@ -227,7 +227,7 @@ export default function TurntableSection() {
               <div
                 ref={embedWrapRef}
                 tabIndex={-1}
-                className="mt-4 overflow-hidden rounded-2xl border border-zinc-200/70 bg-zinc-950/80 outline-none dark:border-white/10"
+                className="mt-4 min-w-0 overflow-hidden rounded-2xl border border-zinc-200/70 bg-zinc-950/80 outline-none dark:border-white/10"
               >
                 <iframe
                   title={`${playlist.title} Spotify player`}
@@ -242,7 +242,7 @@ export default function TurntableSection() {
             </div>
           </GlassCard>
 
-          <div className="space-y-3">
+          <div className="min-w-0 space-y-3">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:text-white/45">
               Recently spinning · from Spotify
             </p>

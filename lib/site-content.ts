@@ -214,7 +214,7 @@ export type CaseStudy = {
 export const projects: ProjectItem[] = [
   {
     title: "eFinny (Live App)",
-    tag: "Next.js 16 · Dating/BFF/Bizz Platform",
+    tag: "Dating/BFF/Bizz/Platform",
     blurb:
       "Dating, BFF, and Bizz networking in one product. Includes verification-first onboarding, matching flows, and cross-mode social experiences.",
     href: "https://efinny.vercel.app",
@@ -519,6 +519,7 @@ export const posts: { title: string; date: string; blurb: string; href?: string 
 ];
 
 export const proofStats: { label: string; value: string; detail?: string }[] = [
+  { label: "Years shipping", value: "03+", detail: "Building products end-to-end" },
   { label: "Shipped sites", value: "10+", detail: "Client + personal builds" },
   { label: "Featured case studies", value: "4", detail: "Problem → approach → outcomes" },
   { label: "Response time", value: "24–48h", detail: "Typical reply window" },
@@ -607,13 +608,41 @@ export const connectOffers: {
   },
 ];
 
-export const recentHighlights = caseStudies.slice(0, 4).map((c) => ({
-  title: c.title,
-  year: c.year,
-  category: c.category,
-  href: c.href,
-  previewImage: c.previewImage,
-}));
+export const recentHighlights: {
+  title: string;
+  year: string;
+  category: string;
+  href: string;
+  previewImage?: string;
+}[] = [
+  {
+    title: "Study Planner — Microservices",
+    year: "2026",
+    category: "Architecture Build",
+    href: "https://github.com/abiodunadesesan/study-planner-micro-services-architecture-",
+    previewImage: "/previews/study-planner.png",
+  },
+  {
+    title: "Gourmet Bakes",
+    year: "2025",
+    category: "Commerce UI",
+    href: "https://github.com/abiodunadesesan/gourmetbakes-more",
+    previewImage: "/previews/gourmetbakes.png",
+  },
+  {
+    title: "Contact Management",
+    year: "2025",
+    category: "Product System",
+    href: "https://github.com/abiodunadesesan/contact-management",
+    previewImage: "/previews/contact-management.png",
+  },
+  {
+    title: "FinLogger Dashboard",
+    year: "2025",
+    category: "Data UI",
+    href: "https://github.com/abiodunadesesan/finlogger-dashboard",
+  },
+];
 
 /** About page — Tricia-style hero copy (adapt to your story anytime). */
 export const aboutPage = {

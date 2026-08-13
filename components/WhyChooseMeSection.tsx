@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useReducedMotion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NanoChip } from "@/components/ui/NanoChip";
+import { useBreakpointTier } from "@/hooks/useBreakpointTier";
 import { reasons } from "@/lib/site-content";
 
 /**
@@ -12,11 +13,12 @@ import { reasons } from "@/lib/site-content";
  */
 export default function WhyChooseMeSection() {
   const reduce = useReducedMotion();
+  const tier = useBreakpointTier();
 
   return (
     <section
       id="why"
-      className="relative z-20 scroll-mt-24 border-t border-zinc-200/60 bg-white px-6 py-24 dark:border-white/10 dark:bg-[#0a0a10] md:scroll-mt-28 md:px-12 md:py-28"
+      className="relative z-20 scroll-mt-24 overflow-x-clip border-t border-zinc-200/60 bg-white px-6 py-24 dark:border-white/10 dark:bg-[#0a0a10] md:scroll-mt-28 md:px-12 md:py-28"
       aria-labelledby="why-heading"
     >
       <div className="mx-auto max-w-6xl">
@@ -49,7 +51,7 @@ export default function WhyChooseMeSection() {
           <div className="space-y-[-18px] lg:space-y-[-28px]">
             {reasons.map((r, i) => {
               const left = i % 2 === 0;
-              const fromX = left ? 90 : -90; // start “closer to center”
+              const fromX = tier === "desktop" ? (left ? 90 : -90) : 0; // avoid off-canvas overflow on small screens
               const toX = 0; // settle at side alignment
               return (
                 <div key={r.title} className="relative">

@@ -4,10 +4,13 @@ import { StaggerProjectCards } from "@/components/StaggerProjectCards";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NanoChip } from "@/components/ui/NanoChip";
 import { getFallbackPreviewDataUrl, getProjectPreviewImageUrl } from "@/lib/preview";
-import { caseStudies, links, projects } from "@/lib/site-content";
+import { caseStudies, links, projects, recentHighlights } from "@/lib/site-content";
 import { ArrowUpRight } from "lucide-react";
 
 export default function Projects() {
+  const recentHighlightHrefs = new Set(recentHighlights.map((item) => item.href));
+  const nonOverlappingProjects = projects.filter((project) => !recentHighlightHrefs.has(project.href));
+
   return (
     <AnimatedSection
       id="work"
@@ -156,7 +159,7 @@ export default function Projects() {
               Additional repos and builds. I keep this list curated—quality over quantity.
             </p>
           </div>
-          <StaggerProjectCards items={projects} />
+          <StaggerProjectCards items={nonOverlappingProjects} />
         </div>
       </div>
     </AnimatedSection>
